@@ -12,7 +12,7 @@ function getFirstDayOfWeek(year: number, month: number) {
 
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-export const Calendar: React.FC = () => {
+export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] }) => {
   const today = new Date();
   const year = today.getFullYear();
   const month = today.getMonth();
@@ -43,21 +43,41 @@ export const Calendar: React.FC = () => {
         ))}
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4 }}>
-        {days.map((d, i) => (
-          <div key={i} style={{
-            height: 32,
-            textAlign: 'center',
-            lineHeight: '32px',
-            borderRadius: 6,
-            background: d === today.getDate() ? '#e0f7fa' : 'transparent',
-            color: d === today.getDate() ? '#00796b' : '#333',
-            fontWeight: d === today.getDate() ? 700 : 400,
-            opacity: d ? 1 : 0.3,
-            fontSize: 15,
-          }}>
-            {d || ''}
-          </div>
-        ))}
+        {days.map((d, i) => {
+          const isToday = d === today.getDate();
+          const hasEntry = d !== null && entryDates.includes(d);
+          let background = 'transparent';
+          let color = '#333';
+          let fontWeight = 400;
+          if (hasEntry && isToday) {
+            background = 'linear-gradient(90deg, #43e97b 0%, #38f9d7 100%)';
+            color = '#fff';
+            fontWeight = 700;
+          } else if (hasEntry) {
+            background = '#e0f7fa';
+            color = '#00796b';
+            fontWeight = 600;
+          } else if (isToday) {
+            background = '#ffe082';
+            color = '#b26a00';
+            fontWeight = 700;
+          }
+          return (
+            <div key={i} style={{
+              height: 32,
+              textAlign: 'center',
+              lineHeight: '32px',
+              borderRadius: 6,
+              background,
+              color,
+              fontWeight,
+              opacity: d ? 1 : 0.3,
+              fontSize: 15,
+            }}>
+              {d || ''}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import viteLogo from '/vite.svg';
 import {
   initDataRaw as _initDataRaw,
@@ -33,6 +33,40 @@ export const IndexPage = () => {
 
   // State for which banner item is selected
   const [selected, setSelected] = useState<'streak' | 'settings'>('streak');
+
+  // State for calendar entry dates
+  const [entryDates, setEntryDates] = useState<number[]>([]);
+  const [loadingDates, setLoadingDates] = useState(false);
+  const [datesError, setDatesError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!initDataRaw || !user) return;
+    const fetchEntryDates = async () => {
+      setLoadingDates(true);
+      setDatesError(null);
+      try {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth() + 1; // JS months are 0-based, API expects 1-based
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL || 'https://your-api-url'}\/api\/user/${user.id}/expenses/dates?year=${year}&month=${month}`,
+          {
+            headers: {
+              Authorization: `tma ${initDataRaw}`
+            }
+          }
+        );
+        if (!res.ok) throw new Error('Failed to fetch entry dates');
+        const data = await res.json();
+        setEntryDates(Array.isArray(data.days) ? data.days : []);
+      } catch (err: any) {
+        setDatesError(err.message || 'Unknown error');
+      } finally {
+        setLoadingDates(false);
+      }
+    };
+    fetchEntryDates();
+  }, [initDataRaw, user]);
 
   if (!initDataRaw || !user) {
     return (
@@ -85,7 +119,13 @@ export const IndexPage = () => {
         borderBottom: '1px solid #eee'
       }}>
         {/* Central content goes here (blank for now) */}
-        <Calendar />
+        {loadingDates ? (
+          <div style={{ color: '#888', fontSize: 16 }}>Loading calendar...</div>
+        ) : datesError ? (
+          <div style={{ color: '#e74c3c', fontSize: 16 }}>Error loading calendar: {datesError}</div>
+        ) : (
+          <Calendar entryDates={entryDates} />
+        )}
       </div>
 
       {/* Bottom Banner */}
