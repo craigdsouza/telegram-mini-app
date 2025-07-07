@@ -61,18 +61,17 @@ export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] 
           let background = 'transparent';
           let color = '#333';
           let fontWeight = 400;
-          if (hasEntry && isToday) {
-            background = 'linear-gradient(90deg, #43e97b 0%, #38f9d7 100%)';
-            color = '#fff';
-            fontWeight = 700;
-          } else if (hasEntry) {
-            background = '#FFD700'; // gold
+          let border = 'none';
+          if (hasEntry) {
+            background = '#FFD700'; // gold fill
             color = '#7a5a00'; // dark gold text
             fontWeight = 700;
+            border = 'none';
           } else if (isToday) {
-            background = '#ffe082';
-            color = '#b26a00';
+            background = 'transparent';
+            color = '#FFD700'; // gold outline color for text
             fontWeight = 700;
+            border = '2px solid #FFD700';
           }
           return (
             <div key={i} style={{
@@ -85,6 +84,8 @@ export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] 
               fontWeight,
               opacity: d ? 1 : 0.3,
               fontSize: 15,
+              border,
+              boxSizing: 'border-box',
             }}>
               {d || ''}
             </div>
