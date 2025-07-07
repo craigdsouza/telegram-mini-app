@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import viteLogo from '/vite.svg';
 import { retrieveLaunchParams } from '@telegram-apps/sdk';
 
-const { initDataRaw, initData } = retrieveLaunchParams();
-
 // TypeScript declaration for Telegram WebApp API
 declare global {
   interface Window {
@@ -39,28 +37,42 @@ export const IndexPage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        console.log('🔍 Starting to fetch user data with server validation...');
         
-        // Get user ID from Telegram WebApp API
-        const telegramUser = initData?.user;
+        // Get init data from Telegram SDK
+        const { initDataRaw } = retrieveLaunchParams();
+        console.log('🔍 Init data raw:', initDataRaw);
         
-        if (!telegramUser?.id) {
-          setError('Could not get user ID from Telegram');
+        if (!initDataRaw) {
+          setError('Could not get init data from Telegram');
           setLoading(false);
           return;
         }
 
-        // Call your API to get user data
-        const apiUrl = 'https://telegram-api-production-b3ef.up.railway.app/api/user/' + telegramUser.id;
-        const response = await fetch(apiUrl);
+        // Send init data to our API for validation
+        const apiUrl = 'https://telegram-api-production-b3ef.up.railway.app/api/user/validate';
+        console.log('🔗 Calling API for validation:', apiUrl);
+        
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `tma ${initDataRaw}`
+          }
+        });
+        
+        console.log('📡 API response status:', response.status);
         
         if (!response.ok) {
-          throw new Error(`API request failed: ${response.status}`);
+          const errorData = await response.json();
+          throw new Error(errorData.error || `API request failed: ${response.status}`);
         }
         
         const userData: User = await response.json();
+        console.log('✅ Validated user data from API:', userData);
         setUser(userData);
       } catch (err) {
-        console.error('Error fetching user data:', err);
+        console.error('❌ Error fetching user data:', err);
         setError('Failed to load user data');
       } finally {
         setLoading(false);
@@ -110,7 +122,6 @@ export const IndexPage = () => {
       <div style={{ color: '#666', fontSize: 14, textAlign: 'center' }}>
         <p>User ID: {user?.telegram_user_id}</p>
         <p>Member since: {user?.created_at ? new Date(user.created_at).toLocaleDateString() : 'Unknown'}</p>
-
       </div>
     </div>
   );
