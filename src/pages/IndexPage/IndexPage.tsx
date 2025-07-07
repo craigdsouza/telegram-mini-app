@@ -1,10 +1,11 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import viteLogo from '/vite.svg';
 import {
   initDataRaw as _initDataRaw,
   initDataState as _initDataState,
   useSignal,
 } from '@telegram-apps/sdk-react';
+
 
 // TypeScript declaration for Telegram WebApp API
 declare global {
@@ -27,9 +28,10 @@ declare global {
 export const IndexPage = () => {
   const initDataRaw = useSignal(_initDataRaw);
   const initDataState = useSignal(_initDataState);
-
-  // Memoize user data
   const user = useMemo(() => initDataState?.user, [initDataState]);
+
+  // State for which banner item is selected
+  const [selected, setSelected] = useState<'streak' | 'settings'>('streak');
 
   if (!initDataRaw || !user) {
     return (
@@ -45,18 +47,74 @@ export const IndexPage = () => {
 
   return (
     <div style={{
-      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#f9f9f9'
+      display: 'flex', flexDirection: 'column', minHeight: '100vh', background: '#f9f9f9'
     }}>
-      <img src={viteLogo} alt="Vite logo" style={{ width: 120, marginBottom: 24 }} />
-      <h1 style={{ color: '#333', fontSize: 32, fontWeight: 700, marginBottom: 16 }}>
-        Hi {user.first_name || 'there'}! 👋
-      </h1>
-      <p style={{ color: '#888', fontSize: 16, marginBottom: 32 }}>
-        Welcome to your expense tracking app
-      </p>
-      <div style={{ color: '#666', fontSize: 14, textAlign: 'center' }}>
-        <p>User ID: {user.id}</p>
-        <p>Username: {user.username || 'N/A'}</p>
+      {/* Top Header */}
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'flex-start', height: 64, padding: '0 24px', background: '#fff', borderBottom: '1px solid #eee', boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
+      }}>
+        <img src={viteLogo} alt="Logo" style={{ width: 40, height: 40, marginRight: 16 }} />
+        <span style={{ fontSize: 22, fontWeight: 600, color: '#333' }}>Hi {user.first_name}!</span>
+      </div>
+
+      {/* Central Large Div */}
+      <div style={{
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: 0,
+        background: '#f9f9f9',
+        borderBottom: '1px solid #eee'
+      }}>
+        {/* Central content goes here (blank for now) */}
+      </div>
+
+      {/* Bottom Banner */}
+      <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        height: 64,
+        background: '#fff',
+        borderTop: '1px solid #eee',
+        boxShadow: '0 -2px 8px rgba(0,0,0,0.02)'
+      }}>
+        <button
+          onClick={() => setSelected('streak')}
+          style={{
+            background: selected === 'streak' ? '#e0f7fa' : 'transparent',
+            border: 'none',
+            fontSize: 18,
+            fontWeight: 500,
+            color: selected === 'streak' ? '#00796b' : '#333',
+            padding: '8px 24px',
+            borderRadius: 12,
+            cursor: 'pointer',
+            outline: 'none',
+            transition: 'background 0.2s'
+          }}
+        >
+          🏆 Streak
+        </button>
+        <button
+          onClick={() => setSelected('settings')}
+          style={{
+            background: selected === 'settings' ? '#e0f7fa' : 'transparent',
+            border: 'none',
+            fontSize: 18,
+            fontWeight: 500,
+            color: selected === 'settings' ? '#00796b' : '#333',
+            padding: '8px 24px',
+            borderRadius: 12,
+            cursor: 'pointer',
+            outline: 'none',
+            transition: 'background 0.2s'
+          }}
+        >
+          ⚙️ Settings
+        </button>
       </div>
     </div>
   );
