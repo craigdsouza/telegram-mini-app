@@ -35,7 +35,7 @@ export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] 
   }
 
   // For debugging: log each day and check if it's in entryDates
-  days.forEach((d, i) => {
+  days.forEach((d) => {
     if (d !== null) {
       console.log(`Day: ${d}, typeof: ${typeof d}, in entryDates:`, entryDates.includes(d));
     }
