@@ -54,9 +54,9 @@ export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] 
             color = '#fff';
             fontWeight = 700;
           } else if (hasEntry) {
-            background = '#e0f7fa';
-            color = '#00796b';
-            fontWeight = 600;
+            background = '#FFD700'; // gold
+            color = '#7a5a00'; // dark gold text
+            fontWeight = 700;
           } else if (isToday) {
             background = '#ffe082';
             color = '#b26a00';
