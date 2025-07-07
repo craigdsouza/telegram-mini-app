@@ -24,15 +24,6 @@ declare global {
   }
 }
 
-interface User {
-  id: number;
-  telegram_user_id: number;
-  first_name: string;
-  last_name: string;
-  created_at: string;
-  last_active: string;
-}
-
 export const IndexPage = () => {
   const initDataRaw = useSignal(_initDataRaw);
   const initDataState = useSignal(_initDataState);
