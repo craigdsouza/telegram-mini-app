@@ -14,6 +14,7 @@ function getFirstDayOfWeek(year: number, month: number) {
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] }) => {
+  console.log('entryDates prop:', entryDates, 'types:', entryDates.map(e => typeof e));
   const today = new Date();
   const year = today.getFullYear();
   const month = today.getMonth();
@@ -32,6 +33,13 @@ export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] 
   while (days.length % 7 !== 0) {
     days.push(null);
   }
+
+  // For debugging: log each day and check if it's in entryDates
+  days.forEach((d, i) => {
+    if (d !== null) {
+      console.log(`Day: ${d}, typeof: ${typeof d}, in entryDates:`, entryDates.includes(d));
+    }
+  });
 
   return (
     <div style={{ width: '100%', maxWidth: 340, margin: '0 auto', background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', padding: 16 }}>
