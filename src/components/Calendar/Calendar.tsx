@@ -21,6 +21,9 @@ export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] 
   const daysInMonth = getDaysInMonth(year, month);
   const firstDayOfWeek = getFirstDayOfWeek(year, month);
 
+  // Convert entryDates to numbers for robust comparison
+  const entryDatesSet = new Set(entryDates.map(Number));
+
   // Build calendar grid
   const days: (number | null)[] = [];
   for (let i = 0; i < firstDayOfWeek; i++) {
@@ -37,7 +40,7 @@ export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] 
   // For debugging: log each day and check if it's in entryDates
   days.forEach((d) => {
     if (d !== null) {
-      console.log(`Day: ${d}, typeof: ${typeof d}, in entryDates:`, entryDates.includes(d));
+      console.log(`Day: ${d}, typeof: ${typeof d}, in entryDates:`, entryDatesSet.has(d));
     }
   });
 
@@ -54,7 +57,7 @@ export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4 }}>
         {days.map((d, i) => {
           const isToday = d === today.getDate();
-          const hasEntry = d !== null && entryDates.includes(d);
+          const hasEntry = d !== null && entryDatesSet.has(d);
           let background = 'transparent';
           let color = '#333';
           let fontWeight = 400;
