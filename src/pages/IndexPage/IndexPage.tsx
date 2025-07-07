@@ -5,6 +5,7 @@ import {
   initDataState as _initDataState,
   useSignal,
 } from '@telegram-apps/sdk-react';
+import { Calendar } from '../../components/Calendar/Calendar';
 
 
 // TypeScript declaration for Telegram WebApp API
@@ -84,6 +85,7 @@ export const IndexPage = () => {
         borderBottom: '1px solid #eee'
       }}>
         {/* Central content goes here (blank for now) */}
+        <Calendar />
       </div>
 
       {/* Bottom Banner */}
