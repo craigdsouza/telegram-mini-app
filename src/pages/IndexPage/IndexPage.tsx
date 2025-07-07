@@ -57,6 +57,22 @@ export const IndexPage = () => {
         <span style={{ fontSize: 22, fontWeight: 600, color: '#333' }}>Hi {user.first_name}!</span>
       </div>
 
+      {/* Congratulatory Banner */}
+      <div style={{
+        width: '100%',
+        background: 'linear-gradient(90deg, #43e97b 0%, #38f9d7 100%)',
+        color: '#155724',
+        fontWeight: 600,
+        fontSize: 16,
+        textAlign: 'center',
+        padding: '12px 0',
+        boxShadow: '0 2px 8px rgba(67,233,123,0.08)',
+        borderBottom: '1px solid #b2f2e5',
+        letterSpacing: 0.2,
+      }}>
+        Congratulations on taking a big step forward towards responsible finance!
+      </div>
+
       {/* Central Large Div */}
       <div style={{
         flex: 1,
