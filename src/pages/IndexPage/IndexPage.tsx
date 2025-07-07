@@ -49,7 +49,7 @@ export const IndexPage = () => {
         const year = today.getFullYear();
         const month = today.getMonth() + 1; // JS months are 0-based, API expects 1-based
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL || 'https://your-api-url'}\/api\/user/${user.id}/expenses/dates?year=${year}&month=${month}`,
+          `${import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app'}\/api\/user/${user.id}/expenses/dates?year=${year}&month=${month}`,
           {
             headers: {
               Authorization: `tma ${initDataRaw}`
