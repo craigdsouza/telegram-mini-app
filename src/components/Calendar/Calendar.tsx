@@ -1,4 +1,5 @@
 import React from 'react';
+import { EntrySummary } from './EntrySummary';
 
 // Helper to get days in month
 function getDaysInMonth(year: number, month: number) {
@@ -34,8 +35,8 @@ export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] 
 
   return (
     <div style={{ width: '100%', maxWidth: 340, margin: '0 auto', background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', padding: 16 }}>
-      <div style={{ textAlign: 'center', fontWeight: 600, fontSize: 18, marginBottom: 8 }}>
-        {today.toLocaleString('default', { month: 'long' })} {year}
+      <div style={{ textAlign: 'center', fontWeight: 700, fontSize: 20, marginBottom: 12, letterSpacing: 0.2 }}>
+        {today.toLocaleString('default', { month: 'long' })}, {year}
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4, marginBottom: 4 }}>
         {WEEKDAYS.map((wd) => (
@@ -79,6 +80,11 @@ export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] 
           );
         })}
       </div>
+      <EntrySummary
+        entryCount={entryDates.length}
+        totalDays={daysInMonth}
+        monthName={today.toLocaleString('default', { month: 'long' })}
+      />
     </div>
   );
 }; 
