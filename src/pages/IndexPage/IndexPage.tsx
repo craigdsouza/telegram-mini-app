@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 import viteLogo from '/vite.svg';
+import { retrieveLaunchParams } from '@telegram-apps/sdk';
+
+const { initDataRaw, initData } = retrieveLaunchParams();
 
 // TypeScript declaration for Telegram WebApp API
 declare global {
@@ -36,8 +39,9 @@ export const IndexPage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        
         // Get user ID from Telegram WebApp API
-        const telegramUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+        const telegramUser = initData?.user;
         
         if (!telegramUser?.id) {
           setError('Could not get user ID from Telegram');
