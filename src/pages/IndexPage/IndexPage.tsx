@@ -133,7 +133,13 @@ export const IndexPage = () => {
   if (!initDataRaw || !user) {
     return (
       <div style={{
-        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#f9f9f9'
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        background: '#f9f9f9',
+        letterSpacing: 0.2,
       }}>
         <img src={viteLogo} alt="Vite logo" style={{ width: 120, marginBottom: 24 }} />
         <h2 style={{ color: '#e74c3c', fontSize: 24, fontWeight: 600 }}>Error</h2>
@@ -148,7 +154,15 @@ export const IndexPage = () => {
     }}>
       {/* Top Header */}
       <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'flex-start', height: 64, padding: '0 24px', background: '#fff', borderBottom: '1px solid #eee', boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        height: 64,
+        padding: '0 24px',
+        background: '#fff',
+        borderBottom: '1px solid #eee',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.02)',
+        letterSpacing: 0.2,
       }}>
         <img src={viteLogo} alt="Logo" style={{ width: 40, height: 40, marginRight: 16 }} />
         <span style={{ fontSize: 22, fontWeight: 600, color: '#333' }}>Hi {user.first_name}!</span>

@@ -27,16 +27,16 @@ export const MissionCard: React.FC<MissionCardProps> = ({
   return (
     <div style={{
       background: isCompleted ? 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)' : 
-                 isUnlocked ? 'linear-gradient(135deg, #2196F3 0%, #1976D2 100%)' :
+                 isUnlocked ? 'linear-gradient(135deg,rgb(255, 255, 255) 0%, rgb(255, 255, 255) 100%)' :
                  'linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%)',
       borderRadius: 16,
       padding: 20,
       marginBottom: 16,
       boxShadow: isCompleted ? '0 4px 12px rgba(76, 175, 80, 0.3)' :
-                 isUnlocked ? '0 4px 12px rgba(33, 150, 243, 0.3)' :
+                 isUnlocked ? '0 4px 12px rgba(255, 255, 255, 0.3)' :
                  '0 2px 8px rgba(0,0,0,0.1)',
       border: isCompleted ? '2px solid #4CAF50' :
-              isUnlocked ? '2px solid #2196F3' :
+              isUnlocked ? '2px solidrgb(0, 0, 0)' :
               '2px solid #e0e0e0',
       transition: 'all 0.3s ease',
       position: 'relative',

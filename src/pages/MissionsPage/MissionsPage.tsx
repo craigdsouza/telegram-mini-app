@@ -75,19 +75,77 @@ export const MissionsPage = () => {
       setLoading(true);
       setError(null);
       try {
-        // For now, we'll use mock data until the API is implemented
-        // TODO: Replace with actual API call
-        const mockProgress = {
-          babySteps: 1, // Mock: user has recorded expenses for 1 day
-          juniorAnalyst: 3 // Mock: user has used 3 different categories
-        };
+        console.log('📱 [FRONTEND] Starting mission progress fetch');
+        console.log('📱 [FRONTEND] User data:', user);
+        console.log('📱 [FRONTEND] Init data raw length:', initDataRaw?.length);
         
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 500));
+        const apiUrl = import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app';
+        const requestUrl = `${apiUrl}/api/user/${user.id}/missions`;
         
-        setMissionProgress(mockProgress);
+        console.log('📱 [FRONTEND] Request URL:', requestUrl);
+        console.log('📱 [FRONTEND] Authorization header present:', !!initDataRaw);
+        
+        const startTime = Date.now();
+        console.log('📱 [FRONTEND] Starting fetch request at:', new Date(startTime).toISOString());
+        
+        // Create an AbortController for timeout handling
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => {
+          console.log('📱 [FRONTEND] Request timeout after 30 seconds');
+          controller.abort();
+        }, 30000); // 30 second timeout
+        
+        try {
+          const response = await fetch(requestUrl, {
+            headers: {
+              Authorization: `tma ${initDataRaw}`
+            },
+            signal: controller.signal
+          });
+          
+          clearTimeout(timeoutId);
+          
+          const endTime = Date.now();
+          const duration = endTime - startTime;
+          console.log('📱 [FRONTEND] Fetch completed in:', duration, 'ms');
+          console.log('📱 [FRONTEND] Response status:', response.status);
+          console.log('📱 [FRONTEND] Response ok:', response.ok);
+          
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error('📱 [FRONTEND] Response not ok, error text:', errorText);
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
+          }
+          
+          const data = await response.json();
+          console.log('📱 [FRONTEND] Response data:', data);
+          
+          const progress = {
+            babySteps: data.babySteps || 0,
+            juniorAnalyst: data.juniorAnalyst || 0
+          };
+          
+          console.log('📱 [FRONTEND] Processed mission progress:', progress);
+          setMissionProgress(progress);
+          
+        } catch (fetchError: any) {
+          clearTimeout(timeoutId);
+          
+          if (fetchError.name === 'AbortError') {
+            console.error('📱 [FRONTEND] Request was aborted due to timeout');
+            throw new Error('Request timeout - please try again');
+          } else if (fetchError.name === 'TypeError' && fetchError.message.includes('fetch')) {
+            console.error('📱 [FRONTEND] Network error:', fetchError.message);
+            throw new Error('Network error - please check your connection');
+          } else {
+            console.error('📱 [FRONTEND] Fetch error:', fetchError);
+            throw fetchError;
+          }
+        }
       } catch (err: any) {
-        console.error('Error fetching mission progress:', err);
+        console.error('📱 [FRONTEND] Error fetching mission progress:', err);
+        console.error('📱 [FRONTEND] Error message:', err.message);
+        console.error('📱 [FRONTEND] Error stack:', err.stack);
         setError(err.message || 'Failed to load mission progress');
       } finally {
         setLoading(false);
@@ -139,14 +197,15 @@ export const MissionsPage = () => {
       {/* Welcome Banner */}
       <div style={{
         width: '100%',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        color: 'white',
+        background: 'linear-gradient(90deg, #43e97b 0%, #38f9d7 100%)',
+        color: '#155724',
         fontWeight: 600,
         fontSize: 16,
         textAlign: 'center',
-        padding: '16px 24px',
-        boxShadow: '0 2px 8px rgba(102,126,234,0.2)',
-        borderBottom: '1px solid #5a6fd8'
+        padding: '12px',
+        boxShadow: '0 2px 8px rgba(67,233,123,0.08)',
+        borderBottom: '1px solid #b2f2e5',
+        letterSpacing: 0.2,
       }}>
         🎯 Complete missions to unlock new features!
       </div>
@@ -181,7 +240,7 @@ export const MissionsPage = () => {
             color: '#666',
             lineHeight: 1.5
           }}>
-            Keep tracking your expenses to unlock powerful features and become a finance expert!
+            Keep tracking your expenses to unlock a future with more financial certainty!
           </p>
         </div>
 
