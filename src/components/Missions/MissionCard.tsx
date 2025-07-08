@@ -22,6 +22,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
   isUnlocked
 }) => {
   const progressPercentage = Math.min((progress / target) * 100, 100);
+  console.log(id, title, description, icon, progress, target, isCompleted, isUnlocked)
   
   return (
     <div style={{

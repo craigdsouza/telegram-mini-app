@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import viteLogo from '/vite.svg';
 import {
   initDataRaw as _initDataRaw,
