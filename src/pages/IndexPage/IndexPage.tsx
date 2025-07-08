@@ -42,27 +42,89 @@ export const IndexPage = () => {
   useEffect(() => {
     if (!initDataRaw || !user) return;
     const fetchEntryDates = async () => {
+      console.log('📱 [FRONTEND] Starting calendar data fetch');
+      console.log('📱 [FRONTEND] User data:', user);
+      console.log('📱 [FRONTEND] Init data raw length:', initDataRaw?.length);
+      
       setLoadingDates(true);
       setDatesError(null);
       try {
         const today = new Date();
         const year = today.getFullYear();
         const month = today.getMonth() + 1; // JS months are 0-based, API expects 1-based
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app'}\/api\/user/${user.id}/expenses/dates?year=${year}&month=${month}`,
-          {
+        
+        console.log('📱 [FRONTEND] Date parameters:', { year, month });
+        
+        const apiUrl = import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app';
+        const requestUrl = `${apiUrl}/api/user/${user.id}/expenses/dates?year=${year}&month=${month}`;
+        
+        console.log('📱 [FRONTEND] Request URL:', requestUrl);
+        console.log('📱 [FRONTEND] Authorization header present:', !!initDataRaw);
+        
+        const startTime = Date.now();
+        console.log('📱 [FRONTEND] Starting fetch request at:', new Date(startTime).toISOString());
+        
+        // Create an AbortController for timeout handling
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => {
+          console.log('📱 [FRONTEND] Request timeout after 30 seconds');
+          controller.abort();
+        }, 30000); // 30 second timeout
+        
+        try {
+          const response = await fetch(requestUrl, {
             headers: {
               Authorization: `tma ${initDataRaw}`
-            }
+            },
+            signal: controller.signal
+          });
+          
+          clearTimeout(timeoutId);
+          
+          const endTime = Date.now();
+          const duration = endTime - startTime;
+          console.log('📱 [FRONTEND] Fetch completed in:', duration, 'ms');
+          console.log('📱 [FRONTEND] Response status:', response.status);
+          console.log('📱 [FRONTEND] Response ok:', response.ok);
+          console.log('📱 [FRONTEND] Response headers:', Object.fromEntries(response.headers.entries()));
+          
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error('📱 [FRONTEND] Response not ok, error text:', errorText);
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
           }
-        );
-        if (!res.ok) throw new Error('Failed to fetch entry dates');
-        const data = await res.json();
-        setEntryDates(Array.isArray(data.days) ? data.days : []);
+          
+          const data = await response.json();
+          console.log('📱 [FRONTEND] Response data:', data);
+          console.log('📱 [FRONTEND] Days array:', data.days);
+          console.log('📱 [FRONTEND] Days array type:', typeof data.days);
+          console.log('📱 [FRONTEND] Days array is array:', Array.isArray(data.days));
+          
+          const processedDays = Array.isArray(data.days) ? data.days : [];
+          console.log('📱 [FRONTEND] Processed days:', processedDays);
+          
+          setEntryDates(processedDays);
+        } catch (fetchError: any) {
+          clearTimeout(timeoutId);
+          
+          if (fetchError.name === 'AbortError') {
+            console.error('📱 [FRONTEND] Request was aborted due to timeout');
+            setDatesError('Request timeout - please try again');
+          } else if (fetchError.name === 'TypeError' && fetchError.message.includes('fetch')) {
+            console.error('📱 [FRONTEND] Network error:', fetchError.message);
+            setDatesError('Network error - please check your connection');
+          } else {
+            console.error('📱 [FRONTEND] Fetch error:', fetchError);
+            setDatesError(fetchError.message || 'Unknown error');
+          }
+        } finally {
+          setLoadingDates(false);
+        }
       } catch (err: any) {
+        console.error('📱 [FRONTEND] Error fetching calendar data:', err);
+        console.error('📱 [FRONTEND] Error message:', err.message);
+        console.error('📱 [FRONTEND] Error stack:', err.stack);
         setDatesError(err.message || 'Unknown error');
-      } finally {
-        setLoadingDates(false);
       }
     };
     fetchEntryDates();
