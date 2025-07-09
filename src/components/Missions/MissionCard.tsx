@@ -82,7 +82,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
             margin: 0,
             fontSize: 18,
             fontWeight: 600,
-            color: isCompleted ? '#f9f9f9' : isUnlocked ? '#f9f9f9' : '#f9f9f9',
+            color: isCompleted ? '#333' : isUnlocked ? '#333' : '#333',
             marginBottom: 4
           }}>
             {title}
@@ -90,7 +90,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
           <p style={{
             margin: 0,
             fontSize: 14,
-            color: isCompleted ? '#f9f9f9' : isUnlocked ? '#f9f9f9' : '#f9f9f9',
+            color: isCompleted ? '#666' : isUnlocked ? '#666' : '#666',
             lineHeight: 1.4
           }}>
             {description}
@@ -100,14 +100,14 @@ export const MissionCard: React.FC<MissionCardProps> = ({
       
       {/* Progress Bar */}
       <div style={{
-        background: isCompleted ? '#f9f9f9' : '#e0e0e0',
+        background: isCompleted ? '#666' : '#e0e0e0',
         borderRadius: 8,
         height: 8,
         marginBottom: 8,
         overflow: 'hidden'
       }}>
         <div style={{
-          background: isCompleted ? '#f9f9f9' : isUnlocked ? '#2196F3' : '#ccc',
+          background: isCompleted ? '#666' : isUnlocked ? '#2196F3' : '#ccc',
           height: '100%',
           width: `${progressPercentage}%`,
           borderRadius: 8,
@@ -121,7 +121,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
         justifyContent: 'space-between',
         alignItems: 'center',
         fontSize: 14,
-        color: isCompleted ? '#f9f9f9' : isUnlocked ? '#f9f9f9' : '#f9f9f9'
+        color: isCompleted ? '#666' : isUnlocked ? '#666' : '#666'
       }}>
         <span>
           {isCompleted ? 'Completed!' : `${progress} / ${target}`}

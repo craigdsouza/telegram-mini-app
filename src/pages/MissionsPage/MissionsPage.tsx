@@ -187,7 +187,7 @@ export const MissionsPage = () => {
         height: 64, 
         padding: '0 24px', 
         background: '#fff', 
-        borderBottom: '1px solid #eee', 
+        borderBottom: '2px solid #ddd', 
         boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
       }}>
         <img src={viteLogo} alt="Logo" style={{ width: 40, height: 40, marginRight: 16 }} />
@@ -224,7 +224,7 @@ export const MissionsPage = () => {
           padding: 20,
           marginBottom: 24,
           boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-          border: '5px solid #eee'
+          border: '2px solid #eee'
         }}>
           <h2 style={{
             margin: 0,
@@ -346,7 +346,7 @@ export const MissionsPage = () => {
         <button style={{
           flex: 1,
           background: '#2196F3',
-          color: 'white',
+          color: '#333',
           border: 'none',
           borderRadius: 8,
           padding: '12px',
@@ -359,9 +359,9 @@ export const MissionsPage = () => {
         </button>
         <button style={{
           flex: 1,
-          background: '#f5f5f5',
-          color: '#666',
-          border: '1px solid #ddd',
+          background: '#f9f9f9',
+          color: '#333',
+          border: '2px solid #ddd',
           borderRadius: 8,
           padding: '12px',
           fontSize: 14,
