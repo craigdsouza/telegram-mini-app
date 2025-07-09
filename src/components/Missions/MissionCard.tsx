@@ -49,8 +49,8 @@ export const MissionCard: React.FC<MissionCardProps> = ({
           position: 'absolute',
           top: 12,
           right: 12,
-          background: '#4CAF50',
-          color: 'white',
+          background: '#f9f9f9',
+          color: '#333',
           borderRadius: '50%',
           width: 24,
           height: 24,
@@ -82,7 +82,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
             margin: 0,
             fontSize: 18,
             fontWeight: 600,
-            color: isCompleted ? 'white' : isUnlocked ? '#1976D2' : '#666',
+            color: isCompleted ? '#f9f9f9' : isUnlocked ? '#f9f9f9' : '#f9f9f9',
             marginBottom: 4
           }}>
             {title}
@@ -90,7 +90,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
           <p style={{
             margin: 0,
             fontSize: 14,
-            color: isCompleted ? 'rgba(255,255,255,0.9)' : isUnlocked ? '#666' : '#999',
+            color: isCompleted ? '#f9f9f9' : isUnlocked ? '#f9f9f9' : '#f9f9f9',
             lineHeight: 1.4
           }}>
             {description}
@@ -100,14 +100,14 @@ export const MissionCard: React.FC<MissionCardProps> = ({
       
       {/* Progress Bar */}
       <div style={{
-        background: isCompleted ? 'rgba(255,255,255,0.3)' : '#e0e0e0',
+        background: isCompleted ? '#f9f9f9' : '#e0e0e0',
         borderRadius: 8,
         height: 8,
         marginBottom: 8,
         overflow: 'hidden'
       }}>
         <div style={{
-          background: isCompleted ? 'white' : isUnlocked ? '#2196F3' : '#ccc',
+          background: isCompleted ? '#f9f9f9' : isUnlocked ? '#2196F3' : '#ccc',
           height: '100%',
           width: `${progressPercentage}%`,
           borderRadius: 8,
@@ -121,7 +121,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
         justifyContent: 'space-between',
         alignItems: 'center',
         fontSize: 14,
-        color: isCompleted ? 'white' : isUnlocked ? '#1976D2' : '#999'
+        color: isCompleted ? '#f9f9f9' : isUnlocked ? '#f9f9f9' : '#f9f9f9'
       }}>
         <span>
           {isCompleted ? 'Completed!' : `${progress} / ${target}`}
