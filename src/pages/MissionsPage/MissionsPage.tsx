@@ -195,35 +195,36 @@ export const MissionsPage = () => {
       </div>
 
       {/* Welcome Banner */}
-      <div style={{
+      {/* <div style={{
         width: '100%',
         background: 'linear-gradient(90deg, #43e97b 0%, #38f9d7 100%)',
         color: '#155724',
         fontWeight: 600,
         fontSize: 16,
         textAlign: 'center',
-        padding: '12px',
+        padding: '12px 0',
         boxShadow: '0 2px 8px rgba(67,233,123,0.08)',
         borderBottom: '1px solid #b2f2e5',
         letterSpacing: 0.2,
       }}>
         🎯 Complete missions to unlock new features!
-      </div>
+      </div> */}
 
       {/* Main Content */}
       <div style={{
         flex: 1,
         padding: '24px',
-        overflowY: 'auto'
+        overflowY: 'auto',
+        background: '#f9f9f9'
       }}>
         {/* User Greeting */}
         <div style={{
-          background: '#fff',
+          background: '#f9f9f9',
           borderRadius: 12,
           padding: 20,
           marginBottom: 24,
           boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-          border: '1px solid #eee'
+          border: '5px solid #eee'
         }}>
           <h2 style={{
             margin: 0,
@@ -307,12 +308,12 @@ export const MissionsPage = () => {
 
         {/* Motivational Footer */}
         <div style={{
-          background: 'linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%)',
+          background: '#f9f9f9',
           borderRadius: 12,
           padding: 20,
           marginTop: 24,
           textAlign: 'center',
-          border: '1px solid #ffcc02'
+          border: '5px solid #ffcc02'
         }}>
           <div style={{ fontSize: 24, marginBottom: 8 }}>🚀</div>
           <h4 style={{

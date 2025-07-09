@@ -150,7 +150,10 @@ export const IndexPage = () => {
 
   return (
     <div style={{
-      display: 'flex', flexDirection: 'column', minHeight: '100vh', background: '#f9f9f9'
+      display: 'flex',
+      flexDirection: 'column',
+      minHeight: '100vh',
+      background: '#f9f9f9'
     }}>
       {/* Top Header */}
       <div style={{
