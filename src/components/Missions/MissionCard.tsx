@@ -35,9 +35,9 @@ export const MissionCard: React.FC<MissionCardProps> = ({
       boxShadow: isCompleted ? '0 4px 12px solidrgb(255, 233, 143)' :
                  isUnlocked ? '0 4px 12px rgba(255, 255, 255, 0.3)' :
                  '0 2px 8px rgba(0,0,0,0.1)',
-      border: isCompleted ? '2px solidrgb(255, 233, 143)' :
-              isUnlocked ? '2px solidrgb(255, 233, 143)' :
-              '2px solid #e0e0e0',
+      border: isCompleted ? '2px solid #ddd' :
+              isUnlocked ? '2px solid #ddd' :
+              '2px solid #ddd',
       transition: 'all 0.3s ease',
       position: 'relative',
       overflow: 'hidden'
