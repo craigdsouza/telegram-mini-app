@@ -313,7 +313,7 @@ export const MissionsPage = () => {
           padding: 20,
           marginTop: 24,
           textAlign: 'center',
-          border: '5px solid #ffcc02'
+          border: '5px solidrgb(255, 233, 143)'
         }}>
           <div style={{ fontSize: 24, marginBottom: 8 }}>🚀</div>
           <h4 style={{

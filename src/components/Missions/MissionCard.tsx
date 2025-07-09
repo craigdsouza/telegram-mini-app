@@ -26,17 +26,17 @@ export const MissionCard: React.FC<MissionCardProps> = ({
   
   return (
     <div style={{
-      background: isCompleted ? '#9ffea3' : 
+      background: isCompleted ? 'solidrgb(255, 233, 143)' : 
                  isUnlocked ? '#f9f9f9' :
                  '#f5f5f5',
       borderRadius: 16,
       padding: 20,
       marginBottom: 16,
-      boxShadow: isCompleted ? '0 4px 12px rgba(65, 204, 69, 0.3)' :
+      boxShadow: isCompleted ? '0 4px 12px solidrgb(255, 233, 143)' :
                  isUnlocked ? '0 4px 12px rgba(255, 255, 255, 0.3)' :
                  '0 2px 8px rgba(0,0,0,0.1)',
-      border: isCompleted ? '2px solidrgb(65, 204, 69)' :
-              isUnlocked ? '2px solidrgb(0, 0, 0)' :
+      border: isCompleted ? '2px solidrgb(255, 233, 143)' :
+              isUnlocked ? '2px solidrgb(255, 233, 143)' :
               '2px solid #e0e0e0',
       transition: 'all 0.3s ease',
       position: 'relative',
