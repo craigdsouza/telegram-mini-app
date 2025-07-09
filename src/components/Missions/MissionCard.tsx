@@ -83,7 +83,10 @@ export const MissionCard: React.FC<MissionCardProps> = ({
             fontSize: 18,
             fontWeight: 600,
             color: isCompleted ? '#333' : isUnlocked ? '#333' : '#333',
-            marginBottom: 4
+            marginBottom: 4,
+            fontFamily: 'var(--font-primary)',
+            letterSpacing: 'var(--tracking-wide)',
+            lineHeight: 'var(--leading-tight)'
           }}>
             {title}
           </h3>
@@ -91,7 +94,9 @@ export const MissionCard: React.FC<MissionCardProps> = ({
             margin: 0,
             fontSize: 14,
             color: isCompleted ? '#666' : isUnlocked ? '#666' : '#666',
-            lineHeight: 1.4
+            lineHeight: 'var(--leading-relaxed)',
+            fontFamily: 'var(--font-primary)',
+            fontWeight: 'var(--font-normal)'
           }}>
             {description}
           </p>
@@ -123,10 +128,16 @@ export const MissionCard: React.FC<MissionCardProps> = ({
         fontSize: 14,
         color: isCompleted ? '#666' : isUnlocked ? '#666' : '#666'
       }}>
-        <span>
+        <span style={{
+          fontFamily: 'var(--font-primary)',
+          fontWeight: 'var(--font-medium)'
+        }}>
           {isCompleted ? 'Completed!' : `${progress} / ${target}`}
         </span>
-        <span style={{ fontWeight: 500 }}>
+        <span style={{ 
+          fontFamily: 'var(--font-primary)',
+          fontWeight: 'var(--font-semibold)'
+        }}>
           {Math.round(progressPercentage)}%
         </span>
       </div>

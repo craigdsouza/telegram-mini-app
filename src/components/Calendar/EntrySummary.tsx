@@ -29,10 +29,16 @@ export const EntrySummary: React.FC<EntrySummaryProps> = ({ entryCount, totalDay
       fontSize: 16,
       fontWeight: 500,
       color: '#7a5a00',
-      gap: 16
+      gap: 16,
+      fontFamily: 'var(--font-primary)'
     }}>
-      <span>{entryCount}/{totalDays} days in {monthName}</span>
-      <span style={{ fontSize: 15, fontWeight: 400, color: '#b26a00' }}>{message}</span>
+      <span style={{ fontFamily: 'var(--font-primary)' }}>{entryCount}/{totalDays} days in {monthName}</span>
+      <span style={{ 
+        fontSize: 15, 
+        fontWeight: 400, 
+        color: '#b26a00',
+        fontFamily: 'var(--font-primary)'
+      }}>{message}</span>
     </div>
   );
 }; 

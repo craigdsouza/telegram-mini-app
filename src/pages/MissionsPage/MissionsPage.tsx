@@ -191,7 +191,13 @@ export const MissionsPage = () => {
         boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
       }}>
         <img src={viteLogo} alt="Logo" style={{ width: 40, height: 40, marginRight: 16 }} />
-        <span style={{ fontSize: 22, fontWeight: 600, color: '#333' }}>Missions</span>
+        <span style={{ 
+          fontSize: 22, 
+          fontWeight: 600, 
+          color: '#333',
+          fontFamily: 'var(--font-primary)',
+          letterSpacing: 'var(--tracking-wide)'
+        }}>Missions</span>
       </div>
 
       {/* Welcome Banner */}
@@ -231,7 +237,10 @@ export const MissionsPage = () => {
             fontSize: 20,
             fontWeight: 600,
             color: '#333',
-            marginBottom: 8
+            marginBottom: 8,
+            fontFamily: 'var(--font-primary)',
+            letterSpacing: 'var(--tracking-wide)',
+            lineHeight: 'var(--leading-tight)'
           }}>
             Welcome back, {user.first_name}! 👋
           </h2>
@@ -239,7 +248,9 @@ export const MissionsPage = () => {
             margin: 0,
             fontSize: 14,
             color: '#666',
-            lineHeight: 1.5
+            lineHeight: 'var(--leading-relaxed)',
+            fontFamily: 'var(--font-primary)',
+            fontWeight: 'var(--font-normal)'
           }}>
             Keep tracking your expenses to unlock a future with more financial certainty!
           </p>
@@ -251,7 +262,9 @@ export const MissionsPage = () => {
             textAlign: 'center',
             padding: '40px 20px',
             color: '#666',
-            fontSize: 16
+            fontSize: 16,
+            fontFamily: 'var(--font-primary)',
+            fontWeight: 'var(--font-normal)'
           }}>
             Loading your mission progress...
           </div>
@@ -265,7 +278,9 @@ export const MissionsPage = () => {
             padding: 16,
             borderRadius: 8,
             marginBottom: 16,
-            border: '1px solid #ffcdd2'
+            border: '1px solid #ffcdd2',
+            fontFamily: 'var(--font-primary)',
+            fontWeight: 'var(--font-normal)'
           }}>
             Error: {error}
           </div>
@@ -279,7 +294,10 @@ export const MissionsPage = () => {
               fontSize: 18,
               fontWeight: 600,
               color: '#333',
-              marginBottom: 16
+              marginBottom: 16,
+              fontFamily: 'var(--font-primary)',
+              letterSpacing: 'var(--tracking-wide)',
+              lineHeight: 'var(--leading-tight)'
             }}>
               Your Missions
             </h3>
@@ -321,7 +339,10 @@ export const MissionsPage = () => {
             fontSize: 16,
             fontWeight: 600,
             color: '#e65100',
-            marginBottom: 8
+            marginBottom: 8,
+            fontFamily: 'var(--font-primary)',
+            letterSpacing: 'var(--tracking-wide)',
+            lineHeight: 'var(--leading-tight)'
           }}>
             Ready to level up?
           </h4>
@@ -329,7 +350,9 @@ export const MissionsPage = () => {
             margin: 0,
             fontSize: 14,
             color: '#bf360c',
-            lineHeight: 1.4
+            lineHeight: 'var(--leading-relaxed)',
+            fontFamily: 'var(--font-primary)',
+            fontWeight: 'var(--font-normal)'
           }}>
             Start tracking your expenses to unlock powerful features and insights!
           </p>
@@ -353,7 +376,9 @@ export const MissionsPage = () => {
           fontSize: 14,
           fontWeight: 600,
           cursor: 'pointer',
-          marginRight: 8
+          marginRight: 8,
+          fontFamily: 'var(--font-primary)',
+          letterSpacing: 'var(--tracking-wide)'
         }}>
           📝 Add Expense
         </button>
@@ -367,7 +392,9 @@ export const MissionsPage = () => {
           fontSize: 14,
           fontWeight: 600,
           cursor: 'pointer',
-          marginLeft: 8
+          marginLeft: 8,
+          fontFamily: 'var(--font-primary)',
+          letterSpacing: 'var(--tracking-wide)'
         }}>
           ⚙️ Settings
         </button>

@@ -142,8 +142,19 @@ export const IndexPage = () => {
         letterSpacing: 0.2,
       }}>
         <img src={viteLogo} alt="Vite logo" style={{ width: 120, marginBottom: 24 }} />
-        <h2 style={{ color: '#e74c3c', fontSize: 24, fontWeight: 600 }}>Error</h2>
-        <p style={{ color: '#666', fontSize: 16 }}>Could not get user data from Telegram</p>
+        <h2 style={{ 
+          color: '#e74c3c', 
+          fontSize: 24, 
+          fontWeight: 600,
+          fontFamily: 'var(--font-primary)',
+          letterSpacing: 'var(--tracking-wide)'
+        }}>Error</h2>
+        <p style={{ 
+          color: '#666', 
+          fontSize: 16,
+          fontFamily: 'var(--font-primary)',
+          fontWeight: 'var(--font-normal)'
+        }}>Could not get user data from Telegram</p>
       </div>
     );
   }
@@ -168,7 +179,13 @@ export const IndexPage = () => {
         letterSpacing: 0.2,
       }}>
         <img src={viteLogo} alt="Logo" style={{ width: 40, height: 40, marginRight: 16 }} />
-        <span style={{ fontSize: 22, fontWeight: 600, color: '#333' }}>Hi {user.first_name}!</span>
+        <span style={{ 
+          fontSize: 22, 
+          fontWeight: 600, 
+          color: '#333',
+          fontFamily: 'var(--font-primary)',
+          letterSpacing: 'var(--tracking-wide)'
+        }}>Hi {user.first_name}!</span>
       </div>
 
       {/* Congratulatory Banner */}
@@ -182,7 +199,8 @@ export const IndexPage = () => {
         padding: '12px 0',
         boxShadow: '0 2px 8px rgba(67,233,123,0.08)',
         borderBottom: '1px solid #b2f2e5',
-        letterSpacing: 0.2,
+        letterSpacing: 'var(--tracking-wide)',
+        fontFamily: 'var(--font-primary)'
       }}>
         Congratulations on taking a big step forward towards responsible finance!
       </div>
