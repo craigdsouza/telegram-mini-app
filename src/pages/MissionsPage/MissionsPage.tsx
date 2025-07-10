@@ -98,7 +98,8 @@ export const MissionsPage = () => {
         try {
           const response = await fetch(requestUrl, {
             headers: {
-              Authorization: `tma ${initDataRaw}`
+              Authorization: `tma ${initDataRaw}`,
+              ...(import.meta.env.DEV ? { 'X-Dev-Bypass': 'true' } : {})
             },
             signal: controller.signal
           });

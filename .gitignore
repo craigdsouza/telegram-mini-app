@@ -9,6 +9,8 @@ lerna-debug.log*
 
 # Environment variables
 .env
+.env.local
+
 
 # Build
 node_modules
