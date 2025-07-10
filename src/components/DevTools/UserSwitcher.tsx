@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { mockTelegramEnv } from '@telegram-apps/sdk-react';
 import { TEST_USERS, TestUser, DEV_CONFIG } from '@/config/dev';
 
 interface UserSwitcherProps {
