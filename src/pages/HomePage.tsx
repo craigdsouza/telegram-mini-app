@@ -2,20 +2,42 @@ import { useState } from 'react';
 import { Header } from '@/components/Header';
 import { BottomMenu } from '@/components/BottomMenu';
 import { MissionsPanel } from '@/components/Missions/MissionsPanel';
-import { CalendarPanel } from '@/components/Calendar/CalendarPanel';
+import { DashboardPanel } from '@/components/Dashboard/DashboardPanel';
 
 export const HomePage = () => {
-  const [activePanel, setActivePanel] = useState<'missions' | 'calendar' | 'settings'>('missions');
+  const [activePanel, setActivePanel] = useState<'missions' | 'dashboard' | 'add' | 'profile' | 'notifications'>('missions');
+
+  const panelTitles: Record<typeof activePanel, string> = {
+    missions: 'Missions',
+    dashboard: 'Dashboard',
+    add: 'Add Expense',
+    profile: 'Profile',
+    notifications: 'Notifications',
+  };
 
   let centralComponent = null;
   if (activePanel === 'missions') {
     centralComponent = <MissionsPanel />;
-  } else if (activePanel === 'calendar') {
-    centralComponent = <CalendarPanel />;
-  } else {
+  } else if (activePanel === 'dashboard') {
+    centralComponent = <DashboardPanel />;
+  }
+  else if (activePanel === 'add') {
     centralComponent = (
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888', fontSize: 18 }}>
-        Settings coming soon!
+        Add Expense form coming soon!
+      </div>
+    );
+  }
+  else if (activePanel === 'profile') {
+    centralComponent = (
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888', fontSize: 18 }}>
+        Profile coming soon!
+      </div>
+    );
+  } else if (activePanel === 'notifications') {
+    centralComponent = (
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888', fontSize: 18 }}>
+        Notifications coming soon!
       </div>
     );
   }
@@ -27,7 +49,7 @@ export const HomePage = () => {
       minHeight: '100vh',
       background: '#f9f9f9'
     }}>
-      <Header />
+      <Header title={panelTitles[activePanel]} />
       {centralComponent}
       <BottomMenu active={activePanel} onMenuSelect={setActivePanel} />
     </div>

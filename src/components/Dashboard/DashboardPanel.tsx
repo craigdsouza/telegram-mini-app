@@ -6,7 +6,7 @@ import {
 } from '@telegram-apps/sdk-react';
 import { Calendar } from './Calendar';
 
-export const CalendarPanel = () => {
+export const DashboardPanel = () => {
   const initDataRaw = useSignal(_initDataRaw);
   const initDataState = useSignal(_initDataState);
   const user = useMemo(() => initDataState?.user, [initDataState]);
@@ -58,10 +58,10 @@ export const CalendarPanel = () => {
   }
 
   if (loadingDates) {
-    return <div style={{ color: '#888', fontSize: 16, textAlign: 'center' }}>Loading calendar...</div>;
+    return <div style={{ color: '#888', fontSize: 16, textAlign: 'center' }}>Loading Dashboard...</div>;
   }
   if (datesError) {
-    return <div style={{ color: '#e74c3c', fontSize: 16, textAlign: 'center' }}>Error loading calendar: {datesError}</div>;
+    return <div style={{ color: '#e74c3c', fontSize: 16, textAlign: 'center' }}>Error loading Dashboard: {datesError}</div>;
   }
   return <Calendar entryDates={entryDates} />;
 }; 

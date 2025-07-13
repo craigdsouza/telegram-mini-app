@@ -31,10 +31,10 @@ export const MissionsPanel = () => {
     {
       id: 'juniorAnalyst',
       title: 'Junior Budget Analyst',
-      description: 'Use 7 different expense categories to unlock Category View',
+      description: 'Use /budget to specify your monthly budget and unlock Budget View',
       icon: '📊',
       target: 7,
-      featureUnlocked: 'Category View'
+      featureUnlocked: 'Budget View'
     }
   ];
 

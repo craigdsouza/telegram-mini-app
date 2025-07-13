@@ -27,8 +27,7 @@ export function Root() {
 
   return (
     <ErrorBoundary fallback={ErrorBoundaryError}>
-      
-        <App/>
+        <App />
         <UserSwitcher onUserChange={handleUserChange} />
     </ErrorBoundary>
   );
