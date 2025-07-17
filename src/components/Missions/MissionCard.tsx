@@ -1,4 +1,5 @@
 import React from 'react';
+import { Check, X, IndianRupee } from 'lucide-react';
 import babySquirrelSittingImg from '@/../assets/baby-squirrel-sitting.png';
 import studyingSquirrelImg from '@/../assets/studying-squirrel.png';
 
@@ -11,6 +12,7 @@ interface MissionCardProps {
   target: number;
   isCompleted: boolean;
   isUnlocked: boolean;
+  budgetSet?: boolean;
 }
 
 export const MissionCard: React.FC<MissionCardProps> = ({
@@ -21,7 +23,8 @@ export const MissionCard: React.FC<MissionCardProps> = ({
   progress,
   target,
   isCompleted,
-  isUnlocked
+  isUnlocked,
+  budgetSet
 }) => {
   const progressPercentage = Math.min((progress / target) * 100, 100);
 
@@ -41,7 +44,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
 
   return (
     <div style={{
-      background: isCompleted ? 'var(--color-secondary)' : isUnlocked ? 'var(--color-bg-light)' : 'var(--color-bg-light)',
+      background: isCompleted ? 'var(--color-bg-light)' : isUnlocked ? 'var(--color-bg-light)' : 'var(--color-bg-light)',
       borderRadius: 16,
       padding: 20,
       marginBottom: 16,
@@ -55,6 +58,47 @@ export const MissionCard: React.FC<MissionCardProps> = ({
       position: 'relative',
       overflow: 'hidden',
     }}>
+      {/* Budget Indicator (only for Junior Budget Analyst) */}
+      {id === 'juniorAnalyst' && (
+        <div style={{
+          position: 'absolute',
+          top: 12,
+          right: budgetSet ? 44 : 12, // Position to the left of completion checkmark if budget is set
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
+        }}>
+          {/* Budget Status Text */}
+          <span style={{
+            fontSize: 14,
+            color: 'var(--color-text-dark)',
+            fontFamily: 'var(--font-primary)',
+            fontWeight: 500,
+            whiteSpace: 'nowrap',
+          }}>
+            /budget
+          </span>
+          
+          {/* Budget Status Icon */}
+          <div style={{
+            background: budgetSet ? 'var(--color-primary)' : 'var(--color-secondary)',
+            color: budgetSet ? 'var(--color-text-dark)' : 'var(--color-text-light)',
+            borderRadius: '50%',
+            width: 26,
+            height: 26,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: 12,
+            fontWeight: 'bold',
+            border: '2px solid var(--color-text-dark)',
+            transition: 'all 0.3s ease',
+          }}>
+            {budgetSet ? <IndianRupee size={16} /> : <IndianRupee size={16} />}
+          </div>
+        </div>
+      )}
+
       {/* Completion Badge */}
       {isCompleted && (
         <div style={{
@@ -64,6 +108,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
           background: 'var(--color-bg-light)',
           color: 'var(--color-text-dark)',
           borderRadius: '50%',
+          border: '2px solid var(--color-text-dark)',
           width: 24,
           height: 24,
           display: 'flex',
@@ -72,7 +117,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
           fontSize: 12,
           fontWeight: 'bold',
         }}>
-          ✓
+          <Check size={16} />
         </div>
       )}
 
@@ -141,7 +186,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
       >
         <div
           style={{
-            background: isCompleted ? 'var(--color-text-dark)' : isUnlocked ? 'var(--color-primary)' : 'var(--color-bg-light)',
+            background: isCompleted ? 'var(--color-primary)' : isUnlocked ? 'var(--color-primary)' : 'var(--color-bg-light)',
             height: '100%',
             width: `${progressPercentage}%`,
             borderRadius: 8,

@@ -46,7 +46,7 @@ export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] 
 
   return (
     <div style={{ 
-      width: '100%', 
+      width: 'calc(100% - 36px)', 
       maxWidth: 340, 
       margin: '24px auto 0 auto', 
       background: 'var(--color-secondary)', 

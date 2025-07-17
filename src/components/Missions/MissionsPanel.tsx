@@ -14,16 +14,29 @@ export const MissionsPanel = () => {
 
   const [missionProgress, setMissionProgress] = useState({
     babySteps: 0,
-    juniorAnalyst: 0
+    juniorAnalyst: 0,
+    budgetSet: false
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Add summary logging whenever missionProgress changes
+  useEffect(() => {
+    console.log('📊 [MISSIONS SUMMARY] Current state:', {
+      missionProgress,
+      loading,
+      error,
+      user: user?.id,
+      hasUser: !!user,
+      hasInitData: !!initDataRaw
+    });
+  }, [missionProgress, loading, error, user, initDataRaw]);
 
   const missions = [
     {
       id: 'babySteps',
       title: 'Baby Steps',
-      description: 'Record expenses for 3 different days to unlock Calendar View',
+      description: 'Record expenses for 3+ days to unlock Calendar View',
       icon: '👶',
       target: 3,
       featureUnlocked: 'Calendar View'
@@ -31,9 +44,9 @@ export const MissionsPanel = () => {
     {
       id: 'juniorAnalyst',
       title: 'Junior Budget Analyst',
-      description: 'Use /budget to specify your monthly budget and unlock Budget View',
+      description: 'Record expenses for 7+ days AND set a monthly budget with /budget to unlock Budget View',
       icon: '📊',
-      target: 7,
+      target: 8, // 7 expense days + 1 budget task
       featureUnlocked: 'Budget View'
     }
   ];
@@ -46,6 +59,9 @@ export const MissionsPanel = () => {
       try {
         const apiUrl = import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app';
         const requestUrl = `${apiUrl}/api/user/${user.id}/missions`;
+        console.log('🔍 [MISSIONS] Fetching from URL:', requestUrl);
+        console.log('🔍 [MISSIONS] User ID:', user.id);
+        
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 30000);
         try {
@@ -57,19 +73,37 @@ export const MissionsPanel = () => {
             signal: controller.signal
           });
           clearTimeout(timeoutId);
-          if (!response.ok) throw new Error(await response.text());
+          
+          console.log('🔍 [MISSIONS] Response status:', response.status);
+          console.log('🔍 [MISSIONS] Response ok:', response.ok);
+          
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error('🔍 [MISSIONS] API Error:', errorText);
+            throw new Error(errorText);
+          }
+          
           const data = await response.json();
-          setMissionProgress({
+          console.log('🔍 [MISSIONS] Raw API response:', data);
+          
+          const newProgress = {
             babySteps: data.babySteps || 0,
-            juniorAnalyst: data.juniorAnalyst || 0
-          });
+            juniorAnalyst: data.juniorAnalyst || 0,
+            budgetSet: data.budgetSet || false
+          };
+          
+          console.log('🔍 [MISSIONS] Parsed progress:', newProgress);
+          setMissionProgress(newProgress);
+          
         } catch (fetchError: any) {
           clearTimeout(timeoutId);
+          console.error('🔍 [MISSIONS] Fetch error:', fetchError);
           setError(fetchError.message || 'Failed to load mission progress');
         } finally {
           setLoading(false);
         }
       } catch (err: any) {
+        console.error('🔍 [MISSIONS] General error:', err);
         setError(err.message || 'Failed to load mission progress');
       }
     };
@@ -98,7 +132,7 @@ export const MissionsPanel = () => {
       flex: 1,
       padding: '24px',
       overflowY: 'auto',
-      background: '#f9f9f9'
+      background: 'var(--color-bg-light)'
     }}>
       
       {/* Loading State */}
@@ -137,9 +171,39 @@ export const MissionsPanel = () => {
         gap: 24
       }}>
         {missions.map((mission) => {
-          const progress = missionProgress[mission.id as keyof typeof missionProgress] || 0;
-          const isCompleted = progress >= mission.target;
+          // Get progress values with proper typing
+          const babyStepsProgress = missionProgress.babySteps;
+          const juniorAnalystProgress = missionProgress.juniorAnalyst;
+          const budgetSet = missionProgress.budgetSet;
+          
+          // Mission completion logic
+          let isCompleted = false;
+          let progress = 0;
+          
+          if (mission.id === 'babySteps') {
+            progress = babyStepsProgress;
+            isCompleted = progress >= mission.target;
+          } else if (mission.id === 'juniorAnalyst') {
+            // Junior Budget Analyst: 7 expense days + 1 budget task = 8 total
+            const expenseProgress = Math.min(juniorAnalystProgress, 7); // Cap at 7
+            const budgetProgress = budgetSet ? 1 : 0;
+            progress = expenseProgress + budgetProgress;
+            isCompleted = progress >= mission.target;
+          }
+          
           const isUnlocked = mission.id === 'babySteps' || mission.id === 'juniorAnalyst' ? true : false; // adjust logic as needed
+          
+          // Add detailed logging for each mission
+          console.log(`🎯 [MISSION ${mission.id.toUpperCase()}]`, {
+            title: mission.title,
+            progress: progress,
+            target: mission.target,
+            budgetSet: budgetSet,
+            isCompleted: isCompleted,
+            isUnlocked: isUnlocked,
+            progressPercentage: Math.round((progress / mission.target) * 100)
+          });
+          
           return (
             <MissionCard
               key={mission.id}
@@ -151,6 +215,7 @@ export const MissionsPanel = () => {
               target={mission.target}
               isCompleted={isCompleted}
               isUnlocked={isUnlocked}
+              budgetSet={mission.id === 'juniorAnalyst' ? budgetSet : undefined}
             />
           );
         })}
