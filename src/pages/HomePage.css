@@ -1,0 +1,21 @@
+/* Root container */
+.homepage-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--color-bg-light);
+  font-family: var(--font-primary);
+}
+
+.coming-soon-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-dark);
+  font-size: var(--text-lg);
+  font-family: var(--font-primary);
+  font-weight: var(--font-medium);
+  text-align: center;
+  padding: 20px;
+} 

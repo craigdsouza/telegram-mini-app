@@ -5,7 +5,7 @@ import {
   useSignal,
 } from '@telegram-apps/sdk-react';
 import { MissionCard } from './MissionCard';
-import viteLogo from '/vite.svg';
+import excitedSquirrelImg from '@/../assets/excited-squirrel.png';
 
 export const MissionsPanel = () => {
   const initDataRaw = useSignal(_initDataRaw);
@@ -86,7 +86,7 @@ export const MissionsPanel = () => {
         minHeight: '100vh',
         background: '#f9f9f9'
       }}>
-        <img src={viteLogo} alt="Vite logo" style={{ width: 120, marginBottom: 24 }} />
+        <img src={excitedSquirrelImg} alt="Excited Squirrel" style={{ width: 120, marginBottom: 24 }} />
         <h2 style={{ color: '#e74c3c', fontSize: 24, fontWeight: 600 }}>Error</h2>
         <p style={{ color: '#666', fontSize: 16 }}>Could not get user data from Telegram</p>
       </div>

@@ -45,14 +45,23 @@ export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] 
   });
 
   return (
-    <div style={{ width: '100%', maxWidth: 340, margin: '0 auto', background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', padding: 16 }}>
+    <div style={{ 
+      width: '100%', 
+      maxWidth: 340, 
+      margin: '24px auto 0 auto', 
+      background: 'var(--color-secondary)', 
+      borderRadius: 12, 
+      boxShadow: '0 2px 8px rgba(0,0,0,0.04)', 
+      padding: 16 
+    }}>
       <div style={{ 
         textAlign: 'center', 
         fontWeight: 700, 
         fontSize: 20, 
         marginBottom: 12, 
         letterSpacing: 'var(--tracking-wide)',
-        fontFamily: 'var(--font-primary)'
+        fontFamily: 'var(--font-primary)',
+        color: 'var(--color-text-dark)'
       }}>
         {today.toLocaleString('default', { month: 'long' })}, {year}
       </div>
@@ -60,10 +69,11 @@ export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] 
         {WEEKDAYS.map((wd) => (
           <div key={wd} style={{ 
             textAlign: 'center', 
-            color: '#888', 
+            color: 'var(--color-text-dark)', 
             fontWeight: 500, 
             fontSize: 14,
-            fontFamily: 'var(--font-primary)'
+            fontFamily: 'var(--font-primary)',
+            opacity: 0.7
           }}>{wd}</div>
         ))}
       </div>
@@ -72,19 +82,19 @@ export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] 
           const isToday = d === today.getDate();
           const hasEntry = d !== null && entryDatesSet.has(d);
           let background = 'transparent';
-          let color = '#333';
+          let color = 'var(--color-text-dark)';
           let fontWeight = 400;
           let border = 'none';
           if (hasEntry) {
-            background = '#FFD700'; // gold fill
-            color = '#7a5a00'; // dark gold text
+            background = 'var(--color-primary)'; // squirrel orange fill
+            color = 'var(--color-text-light)'; // light text on orange
             fontWeight = 700;
             border = 'none';
           } else if (isToday) {
             background = 'transparent';
-            color = '#FFD700'; // gold outline color for text
+            color = 'var(--color-primary)'; // squirrel orange text
             fontWeight = 700;
-            border = '2px solid #FFD700';
+            border = '2px solid var(--color-primary)';
           }
           return (
             <div key={i} style={{

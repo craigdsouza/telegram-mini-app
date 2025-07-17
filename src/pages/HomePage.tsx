@@ -3,6 +3,7 @@ import { Header } from '@/components/Header';
 import { BottomMenu } from '@/components/BottomMenu';
 import { MissionsPanel } from '@/components/Missions/MissionsPanel';
 import { DashboardPanel } from '@/components/Dashboard/DashboardPanel';
+import './HomePage.css';
 
 export const HomePage = () => {
   const [activePanel, setActivePanel] = useState<'missions' | 'dashboard' | 'add' | 'profile' | 'notifications'>('missions');
@@ -23,32 +24,27 @@ export const HomePage = () => {
   }
   else if (activePanel === 'add') {
     centralComponent = (
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888', fontSize: 18 }}>
+      <div className="coming-soon-container">
         Add Expense form coming soon!
       </div>
     );
   }
   else if (activePanel === 'profile') {
     centralComponent = (
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888', fontSize: 18 }}>
+      <div className="coming-soon-container">
         Profile coming soon!
       </div>
     );
   } else if (activePanel === 'notifications') {
     centralComponent = (
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888', fontSize: 18 }}>
+      <div className="coming-soon-container">
         Notifications coming soon!
       </div>
     );
   }
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      minHeight: '100vh',
-      background: '#f9f9f9'
-    }}>
+    <div className="homepage-root">
       <Header title={panelTitles[activePanel]} />
       {centralComponent}
       <BottomMenu active={activePanel} onMenuSelect={setActivePanel} />

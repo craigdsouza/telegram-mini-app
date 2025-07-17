@@ -13,6 +13,8 @@ export const WelcomePage: React.FC = () => {
   const [displayedText, setDisplayedText] = useState('');
   const [typingDone, setTypingDone] = useState(false);
   const [bounce, setBounce] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
 
   useEffect(() => {
     if (displayedText.length < fullSubtitleText.length) {
@@ -32,6 +34,14 @@ export const WelcomePage: React.FC = () => {
     }
   }, [typingDone]);
 
+  const handleButtonClick = () => {
+    setIsClicked(true);
+    // Wait for the shrink animation to complete before navigating
+    setTimeout(() => {
+      navigate('/home');
+    }, 500); // 150ms matches the CSS animation duration
+  };
+
   return (
     <div className="welcome-root">
       <div className="welcome-flex1" />
@@ -48,8 +58,10 @@ export const WelcomePage: React.FC = () => {
       </p>
       <div className="welcome-flex2" />
       <button
-        onClick={() => navigate('/home')}
-        className={`welcome-go-btn ${bounce ? 'welcome-go-btn-bounce' : ''}`}
+        onClick={handleButtonClick}
+        className={`welcome-go-btn ${bounce ? 'welcome-go-btn-bounce' : ''} ${isHovered ? 'welcome-go-btn-hovered' : ''} ${isClicked ? 'welcome-go-btn-clicked' : ''}`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
         Let's go!
       </button>
