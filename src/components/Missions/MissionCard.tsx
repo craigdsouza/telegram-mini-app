@@ -67,6 +67,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
           display: 'flex',
           alignItems: 'center',
           gap: 8,
+          zIndex: 1, // Ensure it's above the text
         }}>
           {/* Budget Status Text */}
           <span style={{
@@ -76,7 +77,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
             fontWeight: 500,
             whiteSpace: 'nowrap',
           }}>
-            /budget
+            /budget set?
           </span>
           
           {/* Budget Status Icon */}
@@ -124,9 +125,9 @@ export const MissionCard: React.FC<MissionCardProps> = ({
       {/* Mission Header */}
       <div style={{
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-start', // Changed from center to allow description to extend
         marginBottom: 12,
-        paddingRight: id === 'juniorAnalyst' ? 120 : 0, // Add padding for budget indicator
+        position: 'relative', // For absolute positioning of budget indicator
       }}>
         <div
           style={{
@@ -159,6 +160,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
               lineHeight: 'var(--leading-tight)',
               wordWrap: 'break-word',
               overflowWrap: 'break-word',
+              paddingRight: id === 'juniorAnalyst' ? 120 : 0, // Add padding only to title
             }}
           >
             {title}
@@ -171,8 +173,6 @@ export const MissionCard: React.FC<MissionCardProps> = ({
               lineHeight: 'var(--leading-relaxed)',
               fontFamily: 'var(--font-primary)',
               fontWeight: 400,
-              wordWrap: 'break-word',
-              overflowWrap: 'break-word',
             }}
           >
             {description}
