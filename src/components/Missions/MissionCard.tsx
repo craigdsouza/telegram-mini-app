@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check, X, IndianRupee } from 'lucide-react';
+import { Check, IndianRupee } from 'lucide-react';
 import babySquirrelSittingImg from '@/../assets/baby-squirrel-sitting.png';
 import studyingSquirrelImg from '@/../assets/studying-squirrel.png';
 
