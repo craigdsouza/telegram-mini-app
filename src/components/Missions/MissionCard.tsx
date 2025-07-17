@@ -126,6 +126,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
         display: 'flex',
         alignItems: 'center',
         marginBottom: 12,
+        paddingRight: id === 'juniorAnalyst' ? 120 : 0, // Add padding for budget indicator
       }}>
         <div
           style={{
@@ -136,6 +137,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            flexShrink: 0, // Prevent image from shrinking
           }}
         >
           <img
@@ -144,7 +146,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
             style={{ width: '100%', height: '100%', objectFit: 'contain' }}
           />
         </div>
-        <div>
+        <div style={{ flex: 1, minWidth: 0 }}> {/* Allow text to wrap and shrink */}
           <h3
             style={{
               margin: 0,
@@ -155,6 +157,8 @@ export const MissionCard: React.FC<MissionCardProps> = ({
               fontFamily: 'var(--font-primary)',
               letterSpacing: 'var(--tracking-wide)',
               lineHeight: 'var(--leading-tight)',
+              wordWrap: 'break-word',
+              overflowWrap: 'break-word',
             }}
           >
             {title}
@@ -167,6 +171,8 @@ export const MissionCard: React.FC<MissionCardProps> = ({
               lineHeight: 'var(--leading-relaxed)',
               fontFamily: 'var(--font-primary)',
               fontWeight: 400,
+              wordWrap: 'break-word',
+              overflowWrap: 'break-word',
             }}
           >
             {description}
