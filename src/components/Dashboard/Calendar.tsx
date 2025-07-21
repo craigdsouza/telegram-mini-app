@@ -24,6 +24,11 @@ export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] 
   const initDataState = useSignal(_initDataState);
   const user = useMemo(() => initDataState?.user, [initDataState]);
 
+  // Debug logging for Telegram mini app issues
+  console.log('[DEBUG] initDataRaw:', initDataRaw);
+  console.log('[DEBUG] initDataState:', initDataState);
+  console.log('[DEBUG] user:', user);
+
   const [isBudgetExpanded, setIsBudgetExpanded] = useState(false);
   const [budgetData, setBudgetData] = useState<any>(null);
   const [loadingBudget, setLoadingBudget] = useState(false);
@@ -53,11 +58,11 @@ export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] 
   }
 
   // For debugging: log each day and check if it's in entryDates
-  days.forEach((d) => {
-    if (d !== null) {
-      console.log(`Day: ${d}, typeof: ${typeof d}, in entryDates:`, entryDatesSet.has(d));
-    }
-  });
+  // days.forEach((d) => {
+  //   if (d !== null) {
+  //     console.log(`Day: ${d}, typeof: ${typeof d}, in entryDates:`, entryDatesSet.has(d));
+  //   }
+  // });
 
   // Fetch budget data when expanded
   useEffect(() => {
