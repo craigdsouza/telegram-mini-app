@@ -6,7 +6,7 @@ import {
 } from '@telegram-apps/sdk-react';
 import { Calendar } from './Calendar';
 
-export const DashboardPanel = () => {
+export const ProfilePanel = () => {
   const initDataRaw = useSignal(_initDataRaw);
   const initDataState = useSignal(_initDataState);
   const user = useMemo(() => initDataState?.user, [initDataState]);

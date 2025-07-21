@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { Header } from '@/components/Header';
 import { BottomMenu } from '@/components/BottomMenu';
 import { MissionsPanel } from '@/components/Missions/MissionsPanel';
-// import { DashboardPanel } from '@/components/Dashboard/DashboardPanel';
-import { Calendar } from '@/components/Dashboard/Calendar';
+import { ProfilePanel } from '@/components/Dashboard/ProfilePanel';
 import { DashboardTable } from '@/components/Dashboard/DashboardTable';
 import './HomePage.css';
 
@@ -33,8 +32,7 @@ export const HomePage = () => {
     );
   }
   else if (activePanel === 'profile') {
-    // Move Calendar (with BudgetView inside) to Profile tab
-    centralComponent = <Calendar />;
+    centralComponent = <ProfilePanel />;
   } else if (activePanel === 'notifications') {
     centralComponent = (
       <div className="coming-soon-container">
