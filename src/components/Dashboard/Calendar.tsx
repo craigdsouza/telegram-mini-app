@@ -278,6 +278,8 @@ export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] 
               daysInMonth={budgetData?.daysInMonth || daysInMonth}
               budgetPercentage={budgetData?.budgetPercentage || 0}
               datePercentage={budgetData?.datePercentage || 0}
+              isFamily={budgetData?.isFamily || false}
+              familyMembers={budgetData?.familyMembers || 1}
             />
           )}
         </div>

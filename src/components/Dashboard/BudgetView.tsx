@@ -7,6 +7,8 @@ interface BudgetViewProps {
   daysInMonth: number;
   budgetPercentage: number;
   datePercentage: number;
+  isFamily?: boolean;
+  familyMembers?: number;
 //   currency: string;
 }
 
@@ -17,6 +19,8 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
   daysInMonth,
   budgetPercentage,
   datePercentage,
+  isFamily = false,
+  familyMembers = 1,
 //   currency
 }) => {
   if (!budget || budget <= 0) {
@@ -63,7 +67,13 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
           fontWeight: 600,
           color: 'var(--color-text-dark)'
         }}>
-          Budget Progress
+          {isFamily ? (
+            <>
+              👨‍👩‍👧‍👦 Family Budget{familyMembers > 1 ? ` (${familyMembers} members)` : ''}
+            </>
+          ) : (
+            <>Budget Progress</>
+          )}
         </h3>
         <span style={{
           fontSize: 14,
