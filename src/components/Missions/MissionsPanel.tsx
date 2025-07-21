@@ -162,6 +162,26 @@ export const MissionsPanel = () => {
           textAlign: 'center',
         }}>
           Error: {error}
+          <div style={{
+            marginTop: 12,
+            textAlign: 'left',
+            fontSize: 13,
+            color: '#b94a48',
+            background: '#fff6f6',
+            borderRadius: 8,
+            padding: 8,
+            wordBreak: 'break-all',
+            maxHeight: 200,
+            overflowY: 'auto',
+            marginLeft: 'auto',
+            marginRight: 'auto'
+          }}>
+            <b>Debug Info:</b><br/>
+            <b>initDataRaw:</b> <code style={{wordBreak:'break-all'}}>{String(initDataRaw)}</code><br/>
+            <b>initDataState:</b> <code style={{wordBreak:'break-all'}}>{JSON.stringify(initDataState)}</code><br/>
+            <b>user:</b> <code style={{wordBreak:'break-all'}}>{JSON.stringify(user)}</code><br/>
+            <b>API URL:</b> <code style={{wordBreak:'break-all'}}>{`${import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app'}/api/user/${user?.id}/missions`}</code><br/>
+          </div>
         </div>
       )}
       {/* Missions List */}

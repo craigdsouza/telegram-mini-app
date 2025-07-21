@@ -272,6 +272,26 @@ export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] 
               border: '2px solid #fcc'
             }}>
               Error: {budgetError}
+              <div style={{
+                marginTop: 12,
+                textAlign: 'left',
+                fontSize: 13,
+                color: '#b94a48',
+                background: '#fff6f6',
+                borderRadius: 8,
+                padding: 8,
+                wordBreak: 'break-all',
+                maxHeight: 200,
+                overflowY: 'auto',
+                marginLeft: 'auto',
+                marginRight: 'auto'
+              }}>
+                <b>Debug Info:</b><br/>
+                <b>initDataRaw:</b> <code style={{wordBreak:'break-all'}}>{String(initDataRaw)}</code><br/>
+                <b>initDataState:</b> <code style={{wordBreak:'break-all'}}>{JSON.stringify(initDataState)}</code><br/>
+                <b>user:</b> <code style={{wordBreak:'break-all'}}>{JSON.stringify(user)}</code><br/>
+                <b>API URL:</b> <code style={{wordBreak:'break-all'}}>{budgetData?.apiUrl || ''}</code><br/>
+              </div>
             </div>
           )}
           
