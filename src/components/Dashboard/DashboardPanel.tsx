@@ -26,6 +26,7 @@ export const DashboardPanel = () => {
         const month = today.getMonth() + 1;
         const apiUrl = import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app';
         const requestUrl = `${apiUrl}/api/user/${user.id}/expenses/dates?year=${year}&month=${month}`;
+        console.log('💰 [DATES] Fetching from URL:', requestUrl);
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 30000);
         try {

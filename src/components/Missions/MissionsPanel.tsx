@@ -19,6 +19,8 @@ export const MissionsPanel = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showParsed, setShowParsed] = useState(false);
+  const [copySuccess, setCopySuccess] = useState<string | null>(null);
 
   // Add summary logging whenever missionProgress changes
   useEffect(() => {
@@ -110,6 +112,35 @@ export const MissionsPanel = () => {
     fetchMissionProgress();
   }, [initDataRaw, user]);
 
+  // Helper to parse and pretty-print debug info
+  const prettyDebugInfo = useMemo(() => {
+    if (!error) return null;
+    try {
+      return (
+        <div style={{ fontSize: 14 }}>
+          <b>initDataRaw (decoded):</b> <pre style={{whiteSpace:'pre-wrap',wordBreak:'break-all',margin:0}}>{decodeURIComponent(String(initDataRaw))}</pre>
+          <b>initDataState:</b> <pre style={{whiteSpace:'pre-wrap',wordBreak:'break-all',margin:0}}>{JSON.stringify(initDataState, null, 2)}</pre>
+          <b>user:</b> <pre style={{whiteSpace:'pre-wrap',wordBreak:'break-all',margin:0}}>{JSON.stringify(user, null, 2)}</pre>
+          <b>API URL:</b> <pre style={{whiteSpace:'pre-wrap',wordBreak:'break-all',margin:0}}>{`${import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app'}/api/user/${user?.id}/missions`}</pre>
+        </div>
+      );
+    } catch (e) {
+      return <span>Failed to parse debug info.</span>;
+    }
+  }, [initDataRaw, initDataState, user, error]);
+
+  // Helper to copy debug info
+  const handleCopyDebug = () => {
+    const debugText = `initDataRaw: ${String(initDataRaw)}\ninitDataState: ${JSON.stringify(initDataState)}\nuser: ${JSON.stringify(user)}\nAPI URL: ${import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app'}/api/user/${user?.id}/missions`;
+    navigator.clipboard.writeText(debugText).then(() => {
+      setCopySuccess('Copied!');
+      setTimeout(() => setCopySuccess(null), 1500);
+    }, () => {
+      setCopySuccess('Failed to copy');
+      setTimeout(() => setCopySuccess(null), 1500);
+    });
+  };
+
   if (!initDataRaw || !user) {
     return (
       <div style={{
@@ -174,13 +205,23 @@ export const MissionsPanel = () => {
             maxHeight: 200,
             overflowY: 'auto',
             marginLeft: 'auto',
-            marginRight: 'auto'
+            marginRight: 'auto',
+            position: 'relative'
           }}>
-            <b>Debug Info:</b><br/>
-            <b>initDataRaw:</b> <code style={{wordBreak:'break-all'}}>{String(initDataRaw)}</code><br/>
-            <b>initDataState:</b> <code style={{wordBreak:'break-all'}}>{JSON.stringify(initDataState)}</code><br/>
-            <b>user:</b> <code style={{wordBreak:'break-all'}}>{JSON.stringify(user)}</code><br/>
-            <b>API URL:</b> <code style={{wordBreak:'break-all'}}>{`${import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app'}/api/user/${user?.id}/missions`}</code><br/>
+            <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+              <button onClick={handleCopyDebug} style={{ fontSize: 12, padding: '2px 8px', borderRadius: 4, border: '1px solid #b94a48', background: '#fff', color: '#b94a48', cursor: 'pointer' }}>Copy</button>
+              <button onClick={() => setShowParsed((v) => !v)} style={{ fontSize: 12, padding: '2px 8px', borderRadius: 4, border: '1px solid #b94a48', background: '#fff', color: '#b94a48', cursor: 'pointer' }}>{showParsed ? 'Raw' : 'Parse'}</button>
+              {copySuccess && <span style={{ fontSize: 12, color: '#388e3c', marginLeft: 8 }}>{copySuccess}</span>}
+            </div>
+            {showParsed ? prettyDebugInfo : (
+              <>
+                <b>Debug Info:</b><br/>
+                <b>initDataRaw:</b> <code style={{wordBreak:'break-all'}}>{String(initDataRaw)}</code><br/>
+                <b>initDataState:</b> <code style={{wordBreak:'break-all'}}>{JSON.stringify(initDataState)}</code><br/>
+                <b>user:</b> <code style={{wordBreak:'break-all'}}>{JSON.stringify(user)}</code><br/>
+                <b>API URL:</b> <code style={{wordBreak:'break-all'}}>{`${import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app'}/api/user/${user?.id}/missions`}</code><br/>
+              </>
+            )}
           </div>
         </div>
       )}
