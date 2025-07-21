@@ -31,11 +31,11 @@ export const BottomMenu: React.FC<BottomMenuProps> = ({ active, onMenuSelect }) 
       disabled: true,
     },
     {
-      label: 'Profile',
+      label: 'You', // relabel Profile to 'You'
       icon: '👤',
       key: 'profile',
       onClick: () => onMenuSelect('profile'),
-      disabled: true,
+      disabled: false, // enable the Profile/You tab
     },
     {
       label: 'Notifications',
