@@ -3,8 +3,6 @@ import { Header } from '@/panels/HeaderMenu/Header';
 import { BottomMenu } from '@/panels/BottomMenu/BottomMenu';
 import { MissionsPanel } from '@/panels/Missions/MissionsPanel';
 import { ProfilePanel } from '@/panels/Profile/ProfilePanel';
-import { ExpensesTable } from '@/components/TableView/ExpensesTable';
-import { BudgetView } from '@/components/BudgetView/BudgetView';
 import { DashboardPanel } from '@/panels/Dashboard/DashboardPanel';
 import './HomePage.css';
 

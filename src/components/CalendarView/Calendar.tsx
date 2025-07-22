@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import {
   initDataRaw as _initDataRaw,
   initDataState as _initDataState,
   useSignal,
 } from '@telegram-apps/sdk-react';
 import { EntrySummary } from './EntrySummary';
-import { BudgetView } from '../BudgetView/BudgetView';
 import './Calendar.css';
 
 // Helper to get days in month
