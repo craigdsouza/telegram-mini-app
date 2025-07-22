@@ -1,4 +1,5 @@
 import React from 'react';
+import './BudgetView.css';
 
 interface BudgetViewProps {
   totalExpenses: number;
@@ -25,48 +26,20 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
 }) => {
   if (!budget || budget <= 0) {
     return (
-      <div style={{
-        padding: '20px',
-        textAlign: 'center',
-        color: 'var(--color-text-dark)',
-        fontFamily: 'var(--font-primary)',
-        fontSize: 16,
-        fontWeight: 500,
-        background: 'var(--color-bg-light)',
-        borderRadius: 12,
-        margin: '16px 0',
-        border: '2px solid var(--color-secondary)'
-      }}>
+      <div className="budgetview-empty">
         No budget set. Use /budget to set your monthly budget.
       </div>
     );
   }
 
   const isOverBudget = budgetPercentage > 100;
-  const progressColor = isOverBudget ? '#e74c3c' : 'var(--color-primary)';
+  const progressColor = isOverBudget ? 'over' : 'normal';
 
   return (
-    <div style={{
-      padding: '20px',
-      background: 'var(--color-bg-light)',
-      borderRadius: 12,
-      margin: '16px 0',
-      border: '2px solid var(--color-secondary)',
-      fontFamily: 'var(--font-primary)'
-    }}>
+    <div className="budgetview-root">
       {/* Header */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '16px'
-      }}>
-        <h3 style={{
-          margin: 0,
-          fontSize: 18,
-          fontWeight: 600,
-          color: 'var(--color-text-dark)'
-        }}>
+      <div className="budgetview-header">
+        <h3 className="budgetview-title">
           {isFamily ? (
             <>
               👨‍👩‍👧‍👦 Family Budget{familyMembers > 1 ? ` (${familyMembers} members)` : ''}
@@ -75,98 +48,44 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
             <>Budget Progress</>
           )}
         </h3>
-        <span style={{
-          fontSize: 14,
-          color: 'var(--color-text-dark)',
-          opacity: 0.8
-        }}>
+        <span className="budgetview-day">
           Day {currentDate} of {daysInMonth}
         </span>
       </div>
 
       {/* Progress Bar Container */}
-      <div style={{
-        position: 'relative',
-        marginBottom: '16px'
-      }}>
+      <div className="budgetview-progress-container">
         {/* Main Progress Bar */}
-        <div style={{
-          height: 24,
-          background: 'var(--color-secondary)',
-          borderRadius: 12,
-          overflow: 'hidden',
-          position: 'relative'
-        }}>
+        <div className="budgetview-progress-bar">
           {/* Budget Progress Fill */}
-          <div style={{
-            height: '100%',
-            width: `${Math.min(budgetPercentage, 100)}%`,
-            background: progressColor,
-            borderRadius: 12,
-            transition: 'width 0.5s ease',
-            position: 'relative'
-          }} />
-          
+          <div className={`budgetview-progress-fill ${progressColor}`} style={{width: `${Math.min(budgetPercentage, 100)}%`}} />
           {/* Date Indicator Line */}
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: `${datePercentage}%`,
-            width: 2,
-            height: '100%',
-            background: 'var(--color-text-dark)',
-            zIndex: 2
-          }} />
+          <div className="budgetview-date-indicator" style={{left: `${datePercentage}%`}} />
         </div>
       </div>
 
       {/* Budget Details */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        fontSize: 14,
-        color: 'var(--color-text-dark)'
-      }}>
+      <div className="budgetview-details">
         <div>
-          <span style={{ fontWeight: 500 }}>Spent: </span>
-          <span style={{ 
-            color: isOverBudget ? '#e74c3c' : 'var(--color-primary)',
-            fontWeight: 600 
-          }}>
+          <span className="budgetview-spent-label">Spent: </span>
+          <span className={`budgetview-spent${isOverBudget ? ' over' : ''}`}>
             ₹{totalExpenses.toLocaleString()}
           </span>
         </div>
         <div>
-          <span style={{ fontWeight: 500 }}>Budget: </span>
-          <span style={{ fontWeight: 600 }}>₹{budget.toLocaleString()}</span>
+          <span className="budgetview-budget-label">Budget: </span>
+          <span className="budgetview-budget">₹{budget.toLocaleString()}</span>
         </div>
       </div>
 
       {/* Progress Percentage */}
-      <div style={{
-        textAlign: 'center',
-        marginTop: '12px',
-        fontSize: 16,
-        fontWeight: 600,
-        color: isOverBudget ? '#e74c3c' : 'var(--color-primary)'
-      }}>
+      <div className={`budgetview-percent${isOverBudget ? ' over' : ''}`}>
         {budgetPercentage.toFixed(1)}% of budget used
       </div>
 
       {/* Warning if over budget */}
       {isOverBudget && (
-        <div style={{
-          marginTop: '12px',
-          padding: '8px 12px',
-          background: '#fee',
-          color: '#e74c3c',
-          borderRadius: 8,
-          fontSize: 14,
-          fontWeight: 500,
-          textAlign: 'center',
-          border: '1px solid #fcc'
-        }}>
+        <div className="budgetview-warning">
           ⚠️ You're over budget by ₹{(totalExpenses - budget).toLocaleString()}
         </div>
       )}

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { initDataRaw as _initDataRaw, initDataState as _initDataState, useSignal } from '@telegram-apps/sdk-react';
+import './ExpensesTable.css';
 
 export const ExpensesTable = () => {
   const initDataRaw = useSignal(_initDataRaw);
@@ -47,38 +48,36 @@ export const ExpensesTable = () => {
   }, [initDataRaw, user]);
 
   return (
-    <div style={{ width: '100%', maxWidth: 400, margin: '24px auto', background: 'var(--color-bg-light)', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', padding: 16 }}>
-      <div style={{ fontWeight: 700, fontSize: 20, marginBottom: 16, textAlign: 'center', fontFamily: 'var(--font-primary)', color: 'var(--color-text-dark)' }}>
+    <div className="expenses-table-container">
+      <div className="expenses-table-title">
         Expenses This Month
       </div>
       {loading ? (
-        <div style={{ textAlign: 'center', color: 'var(--color-text-dark)', fontFamily: 'var(--font-primary)' }}>Loading...</div>
+        <div className="expenses-table-loading">Loading...</div>
       ) : error ? (
-        <div style={{ textAlign: 'center', color: '#e74c3c', fontFamily: 'var(--font-primary)' }}>Error: {error}</div>
+        <div className="expenses-table-error">Error: {error}</div>
       ) : (
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'var(--font-primary)', fontSize: 15 }}>
+        <table className="expenses-table">
           <thead>
-            <tr style={{ background: 'var(--color-secondary)' }}>
-              <th style={{ padding: 8, borderRadius: 4, textAlign: 'left' }}>Date</th>
-              <th style={{ padding: 8, borderRadius: 4, textAlign: 'right' }}>Amount</th>
-              <th style={{ padding: 8, borderRadius: 4, textAlign: 'left' }}>Category</th>
-              <th style={{ padding: 8, borderRadius: 4, textAlign: 'left' }}>Description</th>
+            <tr className="expenses-table-header-row">
+              <th className="expenses-table-header-cell left">Date</th>
+              <th className="expenses-table-header-cell right">Amount</th>
+              <th className="expenses-table-header-cell left">Category</th>
+              <th className="expenses-table-header-cell left">Description</th>
             </tr>
           </thead>
           <tbody>
             {expenses.length === 0 ? (
               <tr>
-                <td colSpan={4} style={{ textAlign: 'center', padding: 16, color: 'var(--color-text-dark)', opacity: 0.7 }}>
-                  No expenses found for this month.
-                </td>
+                <td colSpan={4} className="expenses-table-empty">No expenses found for this month.</td>
               </tr>
             ) : (
               expenses.map((exp, idx) => (
-                <tr key={exp.id || idx} style={{ background: idx % 2 === 0 ? 'var(--color-bg-light)' : 'var(--color-secondary)', transition: 'background 0.2s' }}>
-                  <td style={{ padding: 8 }}>{exp.date}</td>
-                  <td style={{ padding: 8, textAlign: 'right', color: 'var(--color-primary)', fontWeight: 600 }}>&#8377;{Number(exp.amount).toLocaleString()}</td>
-                  <td style={{ padding: 8 }}>{exp.category || '-'}</td>
-                  <td style={{ padding: 8 }}>{exp.description || '-'}</td>
+                <tr key={exp.id || idx} className={`expenses-table-row ${idx % 2 === 0 ? 'even' : 'odd'}`}> 
+                  <td className="expenses-table-cell date">{exp.date}</td>
+                  <td className="expenses-table-cell right highlight">&#8377;{Number(exp.amount).toLocaleString()}</td>
+                  <td className="expenses-table-cell">{exp.category || '-'}</td>
+                  <td className="expenses-table-cell">{exp.description || '-'}</td>
                 </tr>
               ))
             )}

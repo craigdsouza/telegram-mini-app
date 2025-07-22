@@ -4,6 +4,8 @@ import { BottomMenu } from '@/panels/BottomMenu/BottomMenu';
 import { MissionsPanel } from '@/panels/Missions/MissionsPanel';
 import { ProfilePanel } from '@/panels/Profile/ProfilePanel';
 import { ExpensesTable } from '@/components/TableView/ExpensesTable';
+import { BudgetView } from '@/components/BudgetView/BudgetView';
+import { DashboardPanel } from '@/panels/Dashboard/DashboardPanel';
 import './HomePage.css';
 
 export const HomePage = () => {
@@ -22,7 +24,7 @@ export const HomePage = () => {
   if (activePanel === 'missions') {
     centralComponent = <MissionsPanel />;
   } else if (activePanel === 'dashboard') {
-    centralComponent = <ExpensesTable />;
+    centralComponent = <DashboardPanel />;
   }
   else if (activePanel === 'add') {
     centralComponent = (

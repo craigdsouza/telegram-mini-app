@@ -1,0 +1,126 @@
+.budgetview-root {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+  background: var(--color-bg-light);
+  border-radius: 12px;
+  margin: 16px 0;
+  border: 2px solid var(--color-secondary);
+  font-family: var(--font-primary);
+}
+
+.budgetview-empty {
+  padding: 20px;
+  text-align: center;
+  color: var(--color-text-dark);
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 500;
+  background: var(--color-bg-light);
+  border-radius: 12px;
+  margin: 16px 0;
+  border: 2px solid var(--color-secondary);
+}
+
+.budgetview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.budgetview-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text-dark);
+}
+
+.budgetview-day {
+  font-size: 14px;
+  color: var(--color-text-dark);
+  opacity: 0.8;
+}
+
+.budgetview-progress-container {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.budgetview-progress-bar {
+  height: 24px;
+  background: var(--color-secondary);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.budgetview-progress-fill {
+  height: 100%;
+  border-radius: 12px;
+  transition: width 0.5s ease;
+  position: relative;
+}
+.budgetview-progress-fill.normal {
+  background: var(--color-primary);
+}
+.budgetview-progress-fill.over {
+  background: #e74c3c;
+}
+
+.budgetview-date-indicator {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: var(--color-text-dark);
+  z-index: 2;
+}
+
+.budgetview-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: var(--color-text-dark);
+}
+
+.budgetview-spent-label,
+.budgetview-budget-label {
+  font-weight: 500;
+}
+
+.budgetview-spent {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+.budgetview-spent.over {
+  color: #e74c3c;
+}
+
+.budgetview-budget {
+  font-weight: 600;
+}
+
+.budgetview-percent {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+.budgetview-percent.over {
+  color: #e74c3c;
+}
+
+.budgetview-warning {
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: #fee;
+  color: #e74c3c;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  border: 1px solid #fcc;
+} 

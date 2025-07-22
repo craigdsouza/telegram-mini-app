@@ -1,0 +1,89 @@
+.expenses-table-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 24px auto;
+  background: var(--color-secondary);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 16px;
+  /* margin-top: 86px; */
+}
+
+.expenses-table-title {
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 16px;
+  text-align: center;
+  font-family: var(--font-primary);
+  color: var(--color-text-dark);
+}
+
+.expenses-table-loading {
+  text-align: center;
+  color: var(--color-text-dark);
+  font-family: var(--font-primary);
+}
+
+.expenses-table-error {
+  text-align: center;
+  color: #e74c3c;
+  font-family: var(--font-primary);
+}
+
+.expenses-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-primary);
+  font-size: 15px;
+}
+
+.expenses-table-header-row {
+  background: var(--color-secondary);
+  color: var(--color-text-dark);
+}
+
+.expenses-table-header-cell {
+  padding: 8px;
+  border-radius: 4px;
+}
+.expenses-table-header-cell.left {
+  text-align: left;
+}
+.expenses-table-header-cell.right {
+  text-align: right;
+}
+
+.expenses-table-row.even {
+  background: var(--color-primary);
+  color: var(--color-text-dark);
+  transition: background 0.2s;
+}
+.expenses-table-row.odd {
+  background: var(--color-secondary);
+  color: var(--color-text-dark);
+  transition: background 0.2s;
+}
+
+.expenses-table-cell {
+  padding: 8px;
+}
+.expenses-table-cell.right {
+  text-align: right;
+}
+.expenses-table-cell.highlight {
+  color: var(--color-text-dark);
+  font-weight: 600;
+}
+
+.expenses-table-cell.date {
+  white-space: nowrap;
+  /* Optionally, set a width or min-width if needed: */
+  /* min-width: 80px; */
+}
+
+.expenses-table-empty {
+  text-align: center;
+  padding: 16px;
+  color: var(--color-text-dark);
+  opacity: 0.7;
+} 
