@@ -4,7 +4,7 @@ import {
   initDataState as _initDataState,
   useSignal,
 } from '@telegram-apps/sdk-react';
-import { MissionCard } from './MissionCard';
+import { MissionCard } from '@/components/MissionCard/MissionCard';
 import excitedSquirrelImg from '@/../assets/excited-squirrel.png';
 
 export const MissionsPanel = () => {

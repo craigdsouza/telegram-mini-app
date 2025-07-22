@@ -1,8 +1,8 @@
 import type { ComponentType, JSX } from 'react';
 
-import { HomePage } from '@/pages/HomePage';
+import { HomePage } from '@/pages/Home/HomePage';
 
-import { WelcomePage } from '@/pages/WelcomePage';
+import { WelcomePage } from '@/pages/Welcome/WelcomePage';
 
 interface Route {
   path: string;

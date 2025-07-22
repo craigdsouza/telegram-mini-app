@@ -5,7 +5,7 @@ import {
   useSignal,
 } from '@telegram-apps/sdk-react';
 import { EntrySummary } from './EntrySummary';
-import { BudgetView } from './BudgetView';
+import { BudgetView } from '../BudgetView/BudgetView';
 
 // Helper to get days in month
 function getDaysInMonth(year: number, month: number) {

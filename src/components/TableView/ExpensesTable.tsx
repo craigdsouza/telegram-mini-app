@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { initDataRaw as _initDataRaw, initDataState as _initDataState, useSignal } from '@telegram-apps/sdk-react';
 
-export const DashboardTable = () => {
+export const ExpensesTable = () => {
   const initDataRaw = useSignal(_initDataRaw);
   const initDataState = useSignal(_initDataState);
   const user = useMemo(() => initDataState?.user, [initDataState]);

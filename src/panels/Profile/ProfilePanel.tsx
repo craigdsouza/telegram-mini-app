@@ -4,7 +4,7 @@ import {
   initDataState as _initDataState,
   useSignal,
 } from '@telegram-apps/sdk-react';
-import { Calendar } from './Calendar';
+import { Calendar } from '@/components/CalendarView/Calendar';
 
 export const ProfilePanel = () => {
   const initDataRaw = useSignal(_initDataRaw);
@@ -40,6 +40,7 @@ export const ProfilePanel = () => {
           clearTimeout(timeoutId);
           if (!response.ok) throw new Error(await response.text());
           const data = await response.json();
+          console.log('💰 [DATES] Response:', data);
           setEntryDates(Array.isArray(data.days) ? data.days : []);
         } catch (fetchError: any) {
           clearTimeout(timeoutId);

@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Header } from '@/components/Header';
-import { BottomMenu } from '@/components/BottomMenu';
-import { MissionsPanel } from '@/components/Missions/MissionsPanel';
-import { ProfilePanel } from '@/components/Dashboard/ProfilePanel';
-import { DashboardTable } from '@/components/Dashboard/DashboardTable';
+import { Header } from '@/panels/HeaderMenu/Header';
+import { BottomMenu } from '@/panels/BottomMenu/BottomMenu';
+import { MissionsPanel } from '@/panels/Missions/MissionsPanel';
+import { ProfilePanel } from '@/panels/Profile/ProfilePanel';
+import { ExpensesTable } from '@/components/TableView/ExpensesTable';
 import './HomePage.css';
 
 export const HomePage = () => {
@@ -22,7 +22,7 @@ export const HomePage = () => {
   if (activePanel === 'missions') {
     centralComponent = <MissionsPanel />;
   } else if (activePanel === 'dashboard') {
-    centralComponent = <DashboardTable />;
+    centralComponent = <ExpensesTable />;
   }
   else if (activePanel === 'add') {
     centralComponent = (
