@@ -6,7 +6,13 @@
   background: var(--color-bg-light);
   font-family: var(--font-primary);
   padding-bottom: 80px; /* Account for fixed bottom menu */
-  padding-top: 64px;
+}
+
+.homepage-central {
+  position: relative;
+  height: calc(100vh - 64px - 64px); /* header and bottom menu */
+  overflow-y: auto;
+  /* Optional: add horizontal padding if needed */
 }
 
 .coming-soon-container {

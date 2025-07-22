@@ -44,7 +44,9 @@ export const HomePage = () => {
   return (
     <div className="homepage-root">
       <Header title={panelTitles[activePanel]} />
-      {centralComponent}
+      <div className="homepage-central">
+        {centralComponent}
+      </div>
       <BottomMenu active={activePanel} onMenuSelect={setActivePanel} />
     </div>
   );

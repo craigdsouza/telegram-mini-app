@@ -1,6 +1,7 @@
 import React from 'react';
 import { Calendar, User, Bell, Plus } from 'lucide-react';
 import scribblingSquirrelImg from '@/../assets/scribbling-squirrel.png';
+import './BottomMenu.css';
 
 interface BottomMenuProps {
   active: 'missions' | 'dashboard' | 'add' | 'profile' | 'notifications';
@@ -115,7 +116,7 @@ export const BottomMenu: React.FC<BottomMenuProps> = ({ active, onMenuSelect }) 
   };
 
   return (
-    <div style={{ position: 'fixed', left: 0, right: 0, bottom: 0, zIndex: 100 }}>
+    <div className="bottom-menu-root">
       <nav
         style={{
           position: 'relative',
