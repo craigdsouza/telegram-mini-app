@@ -1,0 +1,90 @@
+.missionspanel-root {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  background: var(--color-bg-light);
+  margin-top: 86px;
+}
+
+.missionspanel-loading {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+  font-size: 16px;
+  font-family: var(--font-primary);
+  font-weight: var(--font-normal);
+}
+
+.missionspanel-error-root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #f9f9f9;
+}
+.missionspanel-error-img {
+  width: 120px;
+  margin-bottom: 24px;
+}
+.missionspanel-error-title {
+  color: #e74c3c;
+  font-size: 24px;
+  font-weight: 600;
+}
+.missionspanel-error-desc {
+  color: #666;
+  font-size: 16px;
+}
+
+.missionspanel-error {
+  background: #ffebee;
+  color: #c62828;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  font-family: var(--font-primary);
+  font-weight: 500;
+  font-size: 15px;
+  text-align: center;
+}
+.missionspanel-error-debug {
+  margin-top: 12px;
+  text-align: left;
+  font-size: 13px;
+  color: #b94a48;
+  background: #fff6f6;
+  border-radius: 8px;
+  padding: 8px;
+  word-break: break-all;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+.missionspanel-error-debug-buttons {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.missionspanel-error-debug-btn {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid #b94a48;
+  background: #fff;
+  color: #b94a48;
+  cursor: pointer;
+}
+.missionspanel-error-debug-success {
+  font-size: 12px;
+  color: #388e3c;
+  margin-left: 8px;
+}
+
+.missionspanel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+} 

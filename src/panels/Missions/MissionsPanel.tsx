@@ -6,6 +6,7 @@ import {
 } from '@telegram-apps/sdk-react';
 import { MissionCard } from '@/components/MissionCard/MissionCard';
 import excitedSquirrelImg from '@/../assets/excited-squirrel.png';
+import './MissionsPanel.css';
 
 export const MissionsPanel = () => {
   const initDataRaw = useSignal(_initDataRaw);
@@ -143,94 +144,45 @@ export const MissionsPanel = () => {
 
   if (!initDataRaw || !user) {
     return (
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
-        background: '#f9f9f9'
-      }}>
-        <img src={excitedSquirrelImg} alt="Excited Squirrel" style={{ width: 120, marginBottom: 24 }} />
-        <h2 style={{ color: '#e74c3c', fontSize: 24, fontWeight: 600 }}>Error</h2>
-        <p style={{ color: '#666', fontSize: 16 }}>Could not get user data from Telegram</p>
+      <div className="missionspanel-error-root">
+        <img src={excitedSquirrelImg} alt="Excited Squirrel" className="missionspanel-error-img" />
+        <h2 className="missionspanel-error-title">Error</h2>
+        <p className="missionspanel-error-desc">Could not get user data from Telegram</p>
       </div>
     );
   }
 
   return (
-    <div style={{
-      flex: 1,
-      padding: '24px',
-      overflowY: 'auto',
-      background: 'var(--color-bg-light)'
-    }}>
+    <div className="missionspanel-root">
       
       {/* Loading State */}
       {loading && (
-        <div style={{
-          textAlign: 'center',
-          padding: '40px 20px',
-          color: '#666',
-          fontSize: 16,
-          fontFamily: 'var(--font-primary)',
-          fontWeight: 'var(--font-normal)'
-        }}>
-          Loading your mission progress...
-        </div>
+        <div className="missionspanel-loading">Loading your mission progress...</div>
       )}
       {/* Error State */}
       {error && (
-        <div style={{
-          background: '#ffebee',
-          color: '#c62828',
-          padding: 16,
-          borderRadius: 8,
-          marginBottom: 24,
-          fontFamily: 'var(--font-primary)',
-          fontWeight: 500,
-          fontSize: 15,
-          textAlign: 'center',
-        }}>
+        <div className="missionspanel-error">
           Error: {error}
-          <div style={{
-            marginTop: 12,
-            textAlign: 'left',
-            fontSize: 13,
-            color: '#b94a48',
-            background: '#fff6f6',
-            borderRadius: 8,
-            padding: 8,
-            wordBreak: 'break-all',
-            maxHeight: 200,
-            overflowY: 'auto',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            position: 'relative'
-          }}>
-            <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
-              <button onClick={handleCopyDebug} style={{ fontSize: 12, padding: '2px 8px', borderRadius: 4, border: '1px solid #b94a48', background: '#fff', color: '#b94a48', cursor: 'pointer' }}>Copy</button>
-              <button onClick={() => setShowParsed((v) => !v)} style={{ fontSize: 12, padding: '2px 8px', borderRadius: 4, border: '1px solid #b94a48', background: '#fff', color: '#b94a48', cursor: 'pointer' }}>{showParsed ? 'Raw' : 'Parse'}</button>
-              {copySuccess && <span style={{ fontSize: 12, color: '#388e3c', marginLeft: 8 }}>{copySuccess}</span>}
+          <div className="missionspanel-error-debug">
+            <div className="missionspanel-error-debug-buttons">
+              <button onClick={handleCopyDebug} className="missionspanel-error-debug-btn">Copy</button>
+              <button onClick={() => setShowParsed((v) => !v)} className="missionspanel-error-debug-btn">{showParsed ? 'Raw' : 'Parse'}</button>
+              {copySuccess && <span className="missionspanel-error-debug-success">{copySuccess}</span>}
             </div>
             {showParsed ? prettyDebugInfo : (
               <>
                 <b>Debug Info:</b><br/>
-                <b>initDataRaw:</b> <code style={{wordBreak:'break-all'}}>{String(initDataRaw)}</code><br/>
-                <b>initDataState:</b> <code style={{wordBreak:'break-all'}}>{JSON.stringify(initDataState)}</code><br/>
-                <b>user:</b> <code style={{wordBreak:'break-all'}}>{JSON.stringify(user)}</code><br/>
-                <b>API URL:</b> <code style={{wordBreak:'break-all'}}>{`${import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app'}/api/user/${user?.id}/missions`}</code><br/>
+                <b>initDataRaw:</b> <code>{String(initDataRaw)}</code><br/>
+                <b>initDataState:</b> <code>{JSON.stringify(initDataState)}</code><br/>
+                <b>user:</b> <code>{JSON.stringify(user)}</code><br/>
+                <b>API URL:</b> <code>{`${import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app'}/api/user/${user?.id}/missions`}</code><br/>
               </>
             )}
           </div>
         </div>
       )}
       {/* Missions List */}
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 24
-      }}>
+      <div className="missionspanel-list">
         {missions.map((mission) => {
           // Get progress values with proper typing
           const babyStepsProgress = missionProgress.babySteps;
