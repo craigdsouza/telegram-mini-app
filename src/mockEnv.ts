@@ -10,6 +10,7 @@ if (import.meta.env.DEV) {
     let user = undefined;
     try {
       const stored = window.localStorage.getItem('tma-dev-user');
+      console.log('[DEV] mockEnv.ts stored:', stored);
       if (stored) {
         user = JSON.parse(stored);
         console.log('[DEV] mockEnv.ts using user from localStorage:', user);

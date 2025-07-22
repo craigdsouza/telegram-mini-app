@@ -29,11 +29,11 @@ export const TEST_USERS: TestUser[] = (() => {
 // Development settings
 export const DEV_CONFIG = {
   // Enable/disable development features
-  enableUserSwitcher: import.meta.env.DEV,
+  enableUserSwitcher: import.meta.env.DEV, // Set to true to enable user switcher if env is set to dev
   enableDebugLogs: import.meta.env.DEV,
   
   // API configuration for development
-  apiUrl: import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app',
+  apiUrl: import.meta.env.VITE_LOCAL_API_URL,
   
   // Mock data settings
   useMockData: false, // Set to true to use mock data instead of API calls
