@@ -6,6 +6,7 @@
   background: var(--color-bg-light);
   font-family: var(--font-primary);
   padding-bottom: 80px; /* Account for fixed bottom menu */
+  padding-top: 64px;
 }
 
 .coming-soon-container {
