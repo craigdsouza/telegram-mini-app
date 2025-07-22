@@ -47,7 +47,7 @@ export const BottomMenu: React.FC<BottomMenuProps> = ({ active, onMenuSelect }) 
     },
   ];
 
-  const arcRadius = 36; // px
+  // const arcRadius = 36; // px
 
   // Function to get icon color based on active state
   const getIconColor = (itemKey: string) => {
@@ -65,13 +65,7 @@ export const BottomMenu: React.FC<BottomMenuProps> = ({ active, onMenuSelect }) 
           <img 
             src={scribblingSquirrelImg} 
             alt="Scribbling Squirrel" 
-            style={{ 
-              width: 32, 
-              height: 32, 
-              marginBottom: 2,
-              opacity: active === item.key ? 1 : 0.7,
-              transition: 'opacity 0.2s'
-            }} 
+            className={`icon-image ${active === item.key ? 'active' : ''}`}
           />
         );
       case 'dashboard':
@@ -79,11 +73,7 @@ export const BottomMenu: React.FC<BottomMenuProps> = ({ active, onMenuSelect }) 
           <Calendar 
             size={iconSize} 
             color={iconColor} 
-            style={{ 
-              marginBottom: 2,
-              opacity: item.disabled ? 0.25 : 1,
-              transition: 'opacity 0.2s'
-            }} 
+            className={`icon-calendar ${active === item.key ? 'active' : ''}`}
           />
         );
       case 'profile':
@@ -91,11 +81,7 @@ export const BottomMenu: React.FC<BottomMenuProps> = ({ active, onMenuSelect }) 
           <User 
             size={iconSize} 
             color={iconColor} 
-            style={{ 
-              marginBottom: 2,
-              opacity: item.disabled ? 0.25 : 1,
-              transition: 'opacity 0.2s'
-            }} 
+            className={`icon-user ${active === item.key ? 'active' : ''}`}
           />
         );
       case 'notifications':
@@ -103,11 +89,7 @@ export const BottomMenu: React.FC<BottomMenuProps> = ({ active, onMenuSelect }) 
           <Bell 
             size={iconSize} 
             color={iconColor} 
-            style={{ 
-              marginBottom: 2,
-              opacity: item.disabled ? 0.25 : 1,
-              transition: 'opacity 0.2s'
-            }} 
+            className={`icon-bell ${active === item.key ? 'active' : ''}`}
           />
         );
       default:
@@ -117,20 +99,7 @@ export const BottomMenu: React.FC<BottomMenuProps> = ({ active, onMenuSelect }) 
 
   return (
     <div className="bottom-menu-root">
-      <nav
-        style={{
-          position: 'relative',
-          height: 80,
-          background: 'var(--color-bg-light)',
-          borderTop: '2px solid var(--color-primary)',
-          boxShadow: '0 -2px 8px rgba(0,0,0,0.02)',
-          display: 'flex',
-          alignItems: 'flex-end',
-          justifyContent: 'space-around',
-          paddingBottom: 8,
-          zIndex: 2,
-        }}
-      >
+      <nav className="bottom-menu-nav">
         {menuItems.map((item) => {
           const isCenterButton = item.key === 'add';
           if (isCenterButton) {
@@ -138,47 +107,17 @@ export const BottomMenu: React.FC<BottomMenuProps> = ({ active, onMenuSelect }) 
             return (
               <div
                 key={item.key}
-                style={{
-                  position: 'absolute',
-                  left: '50%',
-                  transform: 'translate(-50%, -32px)',
-                  zIndex: 3,
-                  background: 'transparent',
-                  width: arcRadius * 2,
-                  height: arcRadius * 2,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
+                className={`center-button-wrapper ${active === item.key ? 'active' : ''}`}
               >
                 <button
                   onClick={item.onClick}
                   disabled={item.disabled}
-                  style={{
-                    background: 'var(--color-bg-light)',
-                    border: 'none',
-                    borderRadius: '50%',
-                    width: arcRadius * 2,
-                    height: arcRadius * 2,
-                    boxShadow: '0 4px 16px rgba(0,121,107,0.15)',
-                    color: 'var(--color-text-dark)',
-                    fontSize: 32,
-                    fontWeight: 700,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: item.disabled ? 'not-allowed' : 'pointer',
-                    outline: 'none',
-                    zIndex: 4,
-                  }}
+                  className={`center-button ${active === item.key ? 'active' : ''}`}
                 >
                   <Plus 
-                    size={48} 
+                    size={48}
                     color="var(--color-text-dark)" 
-                    style={{ 
-                      opacity: item.disabled ? 0.25 : 1,
-                      transition: 'opacity 0.2s'
-                    }} 
+                    className={`center-button-icon ${active === item.key ? 'active' : ''}`}
                   />
                 </button>
               </div>
@@ -190,30 +129,10 @@ export const BottomMenu: React.FC<BottomMenuProps> = ({ active, onMenuSelect }) 
               key={item.key}
               onClick={item.onClick}
               disabled={item.disabled}
-              style={{
-                background: 'var(--color-bg-light)',
-                border: 'none',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: active === item.key ? 'var(--color-primary)' : 'var(--color-text-dark)',
-                fontSize: 18,
-                fontWeight: 600,
-                cursor: item.disabled ? 'not-allowed' : 'pointer',
-                outline: 'none',
-                minWidth: 60,
-                transition: 'color 0.2s, opacity 0.2s',
-                marginTop: 16,
-              }}
+              className={`menu-item-button ${active === item.key ? 'active' : ''}`}
             >
               {renderIcon(item)}
-              <span style={{ 
-                fontSize: 13, 
-                letterSpacing: 0.2,
-                opacity: item.disabled ? 0.25 : 1,
-                transition: 'opacity 0.2s'
-              }}>
+              <span className={`menu-item-label ${active === item.key ? 'active' : ''}`}>
                 {item.label}
               </span>
             </button>

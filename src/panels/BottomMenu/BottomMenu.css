@@ -3,11 +3,102 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 64px;
+  height: 80px;
   background: var(--color-bg-light);
   border-top: 2px solid var(--color-primary);
   z-index: 1000;
   display: flex;
+  align-items: center;   /* options: flex-start, flex-end, center */
+  justify-content: space-evenly; /* options: space-around, space-between, center */
+}
+
+.bottom-menu-nav {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly; /* or space-between, or space-around */
   align-items: center;
-  justify-content: space-around;
+}
+
+.menu-item-button {
+  background: var(--color-bg-light);
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-dark);
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  min-width: 60px;
+  transition: color 0.2s, opacity 0.2s;
+  margin-top: 16px;
+}
+.menu-item-button.active {
+  color: var(--color-primary);
+}
+.menu-item-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.25;
+}
+.menu-item-label {
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+.menu-item-label:disabled {
+  opacity: 0.25;
+}
+.center-button-wrapper {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -32px);
+  z-index: 3;
+  background: transparent;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.center-button {
+  background: var(--color-bg-light);
+  border: none;
+  border-radius: 50%;
+  width: 72px;
+  height: 72px;
+  box-shadow: 0 4px 16px rgba(0,121,107,0.15);
+  color: var(--color-text-dark);
+  font-size: 32px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  outline: none;
+  z-index: 4;
+  transition: box-shadow 0.2s, opacity 0.2s;
+}
+.center-button:disabled {
+  cursor: not-allowed;
+  box-shadow: 0 4px 16px rgba(0,121,107,0.15);
+}
+.center-button-icon {
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+.center-button:disabled .center-button-icon {
+  opacity: 0.35;
+}
+.icon-image, .icon-calendar, .icon-user, .icon-bell {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 2px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.icon-image.active, .icon-calendar.active, .icon-user.active, .icon-bell.active {
+  opacity: 1;
 } 
