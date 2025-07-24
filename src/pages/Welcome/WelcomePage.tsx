@@ -54,14 +54,14 @@ export const WelcomePage: React.FC = () => {
       
       // Wait for the shrink animation to complete before navigating
       setTimeout(() => {
-        navigate('/home');
+        navigate('/pledge');
       }, 500);
       
     } catch (error) {
       console.error('🎯 [ONBOARDING] Error completing welcome step:', error);
       // Still navigate even if API call fails
       setTimeout(() => {
-        navigate('/home');
+        navigate('/pledge');
       }, 500);
     }
   };

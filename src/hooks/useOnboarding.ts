@@ -11,6 +11,7 @@ export interface OnboardingStatus {
   progressPercentage: number;
   checkProgress: () => Promise<void>;
   completeStep: (stepId: number, stepData?: any) => Promise<void>;
+  goToStep: (stepId: number) => Promise<void>;
 }
 
 export const useOnboarding = (): OnboardingStatus => {
@@ -115,6 +116,57 @@ export const useOnboarding = (): OnboardingStatus => {
     }
   };
 
+  const goToStep = async (stepId: number) => {
+    if (!user?.id || !progress) return;
+    
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app';
+      const requestUrl = `${apiUrl}/api/user/${user.id}/onboarding`;
+      
+      console.log('🎯 [ONBOARDING] Going to step:', stepId);
+      
+      // Update progress to set current_step
+      const updatedProgress = {
+        ...progress,
+        current_step: stepId
+      };
+      
+      const response = await fetch(requestUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `tma ${initDataRaw || ''}`,
+          ...(import.meta.env.DEV ? { 'X-Dev-Bypass': 'true' } : {})
+        },
+        body: JSON.stringify({ 
+          action: 'update', 
+          progress: updatedProgress 
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+      }
+      
+      const data = await response.json();
+      console.log('🎯 [ONBOARDING] Step navigation completed:', data);
+      
+      // Update local progress
+      if (data.user?.onboarding_progress) {
+        setProgress(data.user.onboarding_progress);
+      }
+      
+    } catch (error) {
+      console.error('🎯 [ONBOARDING] Error navigating to step:', error);
+      setError(error instanceof Error ? error.message : 'Failed to navigate to step');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     checkProgress();
   }, [user?.id, initDataRaw]);
@@ -127,6 +179,7 @@ export const useOnboarding = (): OnboardingStatus => {
     isComplete: progress ? isOnboardingComplete(progress) : false,
     progressPercentage: progress ? getProgressPercentage(progress) : 0,
     checkProgress,
-    completeStep
+    completeStep,
+    goToStep
   };
 }; 

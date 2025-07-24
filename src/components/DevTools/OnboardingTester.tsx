@@ -23,7 +23,7 @@ export const OnboardingTester: React.FC = () => {
     return null;
   }, [initDataRaw]);
 
-  const { progress, currentStep, isComplete, progressPercentage, completeStep } = useOnboarding();
+  const { progress, currentStep, isComplete, progressPercentage, completeStep, goToStep } = useOnboarding();
 
   const resetOnboarding = async () => {
     if (!user?.id) return;
@@ -120,6 +120,13 @@ export const OnboardingTester: React.FC = () => {
             </span>
             <span className="onboarding-tester-step-title">{step.title}</span>
             <div className="onboarding-tester-step-actions">
+              <button 
+                onClick={() => goToStep(step.id)}
+                className="onboarding-tester-step-btn"
+                disabled={currentStep === step.id}
+              >
+                Go
+              </button>
               <button 
                 onClick={() => completeStep(step.id, { test_completed: true })}
                 className="onboarding-tester-step-btn"
