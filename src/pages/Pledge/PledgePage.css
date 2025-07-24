@@ -61,6 +61,14 @@
   gap: 12px;
 }
 
+.pledge-overlay-container {
+  position: relative;
+  width: 100%;
+  min-height: 100px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
 .pledge-textarea {
   width: 100%;
   min-height: 100px;
@@ -71,10 +79,69 @@
   font-family: var(--font-primary, Nunito, Inter, sans-serif);
   font-size: 16px;
   line-height: 1.5;
-  color: #2d3a4a;
+  color: transparent; /* Hide text, show only overlay */
+  caret-color: transparent;
   resize: vertical;
   transition: all 0.2s ease;
   box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+.pledge-overlay {
+  position: relative;
+  width: 100%;
+  min-height: 100px;
+  padding: 16px;
+  border-radius: 16px;
+  font-family: var(--font-primary, Nunito, Inter, sans-serif);
+  font-size: 16px;
+  line-height: 1.5;
+  color: #2d3a4a;
+  background: transparent;
+  pointer-events: none;
+  white-space: pre-wrap;
+  word-break: break-word;
+  z-index: 1;
+}
+
+.pledge-overlay-text {
+  display: inline;
+}
+
+.pledge-overlay-typed {
+  color: #2d3a4a;
+  opacity: 1;
+  font-weight: 600;
+  transition: color 0.2s, opacity 0.2s;
+}
+
+.pledge-overlay-placeholder {
+  color: #9ca3af;
+  opacity: 0.75;
+  font-weight: 400;
+  transition: color 0.2s, opacity 0.2s;
+}
+
+.pledge-overlay-cursor {
+  display: inline-block;
+  width: 0;
+  height: 1.2em;
+  vertical-align: bottom;
+  background: none;
+  border-left: 2px solid #2d3a4a;
+  animation: blink-cursor 1s steps(1) infinite;
+}
+
+@keyframes blink-cursor {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
 }
 
 .pledge-textarea:focus {
