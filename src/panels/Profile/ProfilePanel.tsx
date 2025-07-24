@@ -5,6 +5,7 @@ import {
   useSignal,
 } from '@telegram-apps/sdk-react';
 import { Calendar } from '@/components/CalendarView/Calendar';
+import { OnboardingTester } from '@/components/DevTools';
 
 export const ProfilePanel = () => {
   const initDataRaw = useSignal(_initDataRaw);
@@ -65,5 +66,11 @@ export const ProfilePanel = () => {
   if (datesError) {
     return <div style={{ color: '#e74c3c', fontSize: 16, textAlign: 'center' }}>Error loading Dashboard: {datesError}</div>;
   }
-  return <Calendar entryDates={entryDates} />;
+  
+  return (
+    <div>
+      <Calendar entryDates={entryDates} />
+      <OnboardingTester />
+    </div>
+  );
 }; 

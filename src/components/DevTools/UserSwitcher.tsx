@@ -5,9 +5,9 @@
 // It is also used to store the selected user in localStorage for mockEnv.ts to pick up.
 // It is also used to reload the page to apply the new user data.
 
-
 import { useState } from 'react';
 import { TEST_USERS, TestUser, DEV_CONFIG } from '@/config/dev';
+import './UserSwitcher.css';
 
 interface UserSwitcherProps {
   onUserChange: (user: TestUser) => void;
@@ -57,39 +57,16 @@ export const UserSwitcher: React.FC<UserSwitcherProps> = ({ onUserChange }) => {
   }
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 10,
-      right: 10,
-      zIndex: 9999,
-      background: '#fff',
-      border: '2px solid #ddd',
-      borderRadius: 8,
-      padding: 12,
-      boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-      minWidth: 200,
-    }}>
-      <div style={{
-        marginBottom: 8,
-      }}>
-        <span style={{
-          fontSize: 12,
-          fontWeight: 600,
-          color: '#333',
-        }}>
+    <div className="user-switcher">
+      <div className="user-switcher-header">
+        <span className="user-switcher-title">
           🧪 Dev: Switch User
         </span>
       </div>
       <select
         value={selectedUserId}
         onChange={(e) => handleUserChange(Number(e.target.value))}
-        style={{
-          width: '100%',
-          padding: 8,
-          border: '1px solid #ddd',
-          borderRadius: 4,
-          fontSize: 12,
-        }}
+        className="user-switcher-select"
       >
         {TEST_USERS.map(user => (
           <option key={user.id} value={user.id}>

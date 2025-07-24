@@ -2,6 +2,7 @@ import React, { useMemo, useState , useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import squirrelImg from '@/../assets/excited-squirrel.png';
 import { initDataState as _initDataState, useSignal } from '@telegram-apps/sdk-react';
+import { useOnboarding } from '@/hooks/useOnboarding';
 import './WelcomePage.css';
 
 export const WelcomePage: React.FC = () => {
@@ -15,6 +16,16 @@ export const WelcomePage: React.FC = () => {
   const [bounce, setBounce] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
+  
+  const { loading, error, isComplete, completeStep } = useOnboarding();
+
+  // Redirect to home if onboarding is already completed
+  useEffect(() => {
+    if (isComplete) {
+      console.log('🎯 [ONBOARDING] User has completed onboarding, redirecting to home');
+      navigate('/home');
+    }
+  }, [isComplete, navigate]);
 
   useEffect(() => {
     if (displayedText.length < fullSubtitleText.length) {
@@ -34,13 +45,52 @@ export const WelcomePage: React.FC = () => {
     }
   }, [typingDone]);
 
-  const handleButtonClick = () => {
+  const handleButtonClick = async () => {
     setIsClicked(true);
-    // Wait for the shrink animation to complete before navigating
-    setTimeout(() => {
-      navigate('/home');
-    }, 500); // 150ms matches the CSS animation duration
+    
+    try {
+      // Complete the welcome step (step 0)
+      await completeStep(0, { completed_at: new Date().toISOString() });
+      
+      // Wait for the shrink animation to complete before navigating
+      setTimeout(() => {
+        navigate('/home');
+      }, 500);
+      
+    } catch (error) {
+      console.error('🎯 [ONBOARDING] Error completing welcome step:', error);
+      // Still navigate even if API call fails
+      setTimeout(() => {
+        navigate('/home');
+      }, 500);
+    }
   };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="welcome-root">
+        <div className="welcome-flex1" />
+        <div style={{ textAlign: 'center', color: '#888' }}>
+          Loading...
+        </div>
+        <div className="welcome-flex2" />
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="welcome-root">
+        <div className="welcome-flex1" />
+        <div style={{ textAlign: 'center', color: '#e74c3c' }}>
+          Error: {error}
+        </div>
+        <div className="welcome-flex2" />
+      </div>
+    );
+  }
 
   return (
     <div className="welcome-root">
@@ -62,6 +112,7 @@ export const WelcomePage: React.FC = () => {
         className={`welcome-go-btn ${bounce ? 'welcome-go-btn-bounce' : ''} ${isHovered ? 'welcome-go-btn-hovered' : ''} ${isClicked ? 'welcome-go-btn-clicked' : ''}`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        disabled={loading}
       >
         Let's go!
       </button>
