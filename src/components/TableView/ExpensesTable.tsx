@@ -39,7 +39,8 @@ export const ExpensesTable = () => {
   const [error, setError] = useState<string | null>(null);
   const [monthStart, setMonthStart] = useState<number | null>(null);
   const [monthEnd, setMonthEnd] = useState<number | null>(null);
-
+  console.log(monthStart, monthEnd);
+  
   useEffect(() => {
     if (!initDataRaw || !user) return;
     const fetchSettingsAndExpenses = async () => {
