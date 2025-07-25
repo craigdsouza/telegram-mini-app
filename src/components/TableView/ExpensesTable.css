@@ -1,11 +1,12 @@
 .expenses-table-container {
-  width: 100%;
-  max-width: 360px;
+  width: 95%;
+  max-width: 95vw;
   margin: 24px auto;
   background: var(--color-secondary);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   padding: 16px;
+  overflow-x: auto;
   /* margin-top: 86px; */
 }
 
@@ -32,9 +33,11 @@
 
 .expenses-table {
   width: 100%;
+  min-width: 600px;
   border-collapse: collapse;
   font-family: var(--font-primary);
-  font-size: 15px;
+  font-size: 14px;
+  table-layout: auto;
 }
 
 .expenses-table-header-row {
@@ -43,8 +46,11 @@
 }
 
 .expenses-table-header-cell {
-  padding: 8px;
+  padding: 6px 4px;
   border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
 }
 .expenses-table-header-cell.left {
   text-align: left;
@@ -65,7 +71,9 @@
 }
 
 .expenses-table-cell {
-  padding: 8px;
+  padding: 6px 4px;
+  white-space: nowrap;
+  font-size: 13px;
 }
 .expenses-table-cell.right {
   text-align: right;
@@ -77,8 +85,30 @@
 
 .expenses-table-cell.date {
   white-space: nowrap;
-  /* Optionally, set a width or min-width if needed: */
-  /* min-width: 80px; */
+  width: 12%;
+  min-width: 80px;
+  max-width: 80px;
+}
+
+.expenses-table-cell.description {
+  width: 60%;
+  min-width: 150px;
+  max-width: none;
+  white-space: nowrap;
+}
+
+.expenses-table-cell.category {
+  width: 18%;
+  min-width: 80px;
+  max-width: 120px;
+  white-space: nowrap;
+}
+
+.expenses-table-cell.amount {
+  width: 10%;
+  min-width: 60px;
+  max-width: 60px;
+  text-align: right;
 }
 
 .expenses-table-empty {

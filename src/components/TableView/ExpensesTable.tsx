@@ -142,9 +142,9 @@ export const ExpensesTable: React.FC<ExpensesTableProps> = ({ userId, initDataRa
               expenses.map((exp, idx) => (
                 <tr key={exp.id || idx} className={`expenses-table-row ${idx % 2 === 0 ? 'even' : 'odd'}`}> 
                   <td className="expenses-table-cell date">{exp.date}</td>
-                  <td className="expenses-table-cell right highlight">&#8377;{Number(exp.amount).toLocaleString()}</td>
-                  <td className="expenses-table-cell">{exp.category || '-'}</td>
-                  <td className="expenses-table-cell">{exp.description || '-'}</td>
+                  <td className="expenses-table-cell amount highlight">&#8377;{Number(exp.amount).toLocaleString()}</td>
+                  <td className="expenses-table-cell category">{exp.category || '-'}</td>
+                  <td className="expenses-table-cell description">{exp.description || '-'}</td>
                 </tr>
               ))
             )}
