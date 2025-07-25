@@ -110,7 +110,7 @@ export const DashboardPanel = () => {
           familyMembers={budgetData?.familyMembers || 1}
         />
       )}
-      {internalUserId && <ExpensesTable userId={internalUserId} initDataRaw={initDataRaw} />}
+      {internalUserId && initDataRaw && <ExpensesTable userId={internalUserId} initDataRaw={initDataRaw} />}
     </div>
   );
 }; 
