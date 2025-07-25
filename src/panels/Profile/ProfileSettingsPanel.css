@@ -1,0 +1,80 @@
+.profile-settings-panel-root {
+  background: var(--color-secondary);
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.04);
+  padding: 20px 16px 16px 16px;
+  margin-top: 20px;
+  margin-bottom: 16px;
+  font-family: var(--font-primary);
+}
+
+.profile-settings-title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-dark);
+  margin-bottom: 12px;
+}
+
+.profile-settings-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.profile-settings-label {
+  flex: 0 0 120px;
+  font-size: var(--text-base);
+  color: var(--color-text-dark);
+  margin-right: 10px;
+}
+
+.profile-settings-input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid var(--color-primary-light);
+  border-radius: 8px;
+  font-size: var(--text-base);
+  background: var(--color-bg-light);
+  color: var(--color-text-dark);
+  transition: border 0.2s;
+  font-family: var(--font-primary);
+}
+
+.profile-settings-input:focus {
+  border: 1.5px solid var(--color-primary);
+  outline: none;
+}
+
+.profile-settings-save-btn {
+  margin-top: 8px;
+  width: 100%;
+  padding: 10px 0;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: var(--font-primary);
+}
+
+.profile-settings-save-btn:disabled {
+  background: var(--color-primary-light);
+  cursor: not-allowed;
+}
+
+.profile-settings-error {
+  color: var(--color-accent);
+  font-size: var(--text-sm);
+  margin-top: 6px;
+  margin-bottom: 2px;
+}
+
+.profile-settings-success {
+  color: var(--color-primary);
+  font-size: var(--text-sm);
+  margin-top: 6px;
+  margin-bottom: 2px;
+} 

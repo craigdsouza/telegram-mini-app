@@ -61,3 +61,11 @@ Disabling a button faded the entire button, but only the icon should appear fade
 #### Solution
 - Remove `opacity` from the button’s disabled state.
 - Use a CSS selector like `.center-button:disabled .center-button-icon { opacity: 0.25; }` to target only the icon inside a disabled button.
+
+### Problem Statement
+Date values in the table's date column were wrapping onto a second line, making the table harder to read.
+
+#### Solution
+- Add a class to the date cell (e.g., `.expenses-table-cell.date`).
+- Use `white-space: nowrap;` in CSS to prevent line breaks within the cell.
+- Optionally, set a `min-width` or `width` to ensure the column has enough space for the date format.
