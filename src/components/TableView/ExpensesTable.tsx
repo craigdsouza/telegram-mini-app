@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
-import { initDataRaw as _initDataRaw, initDataState as _initDataState, useSignal } from '@telegram-apps/sdk-react';
+import { useEffect, useState } from 'react';
 import './ExpensesTable.css';
 
 function getCustomMonthRange(today: Date, start: number | null, end: number | null) {
@@ -29,11 +28,12 @@ function getCustomMonthRange(today: Date, start: number | null, end: number | nu
   return { startDate, endDate };
 }
 
-export const ExpensesTable = () => {
-  const initDataRaw = useSignal(_initDataRaw);
-  const initDataState = useSignal(_initDataState);
-  const user = useMemo(() => initDataState?.user, [initDataState]);
+interface ExpensesTableProps {
+  userId: number;
+  initDataRaw: string;
+}
 
+export const ExpensesTable: React.FC<ExpensesTableProps> = ({ userId, initDataRaw }) => {
   const [expenses, setExpenses] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -42,7 +42,7 @@ export const ExpensesTable = () => {
   console.log(monthStart, monthEnd);
   
   useEffect(() => {
-    if (!initDataRaw || !user) return;
+    if (!initDataRaw || !userId) return;
     const fetchSettingsAndExpenses = async () => {
       setLoading(true);
       setError(null);
@@ -54,7 +54,7 @@ export const ExpensesTable = () => {
           ...(import.meta.env.DEV ? { 'X-Dev-Bypass': 'true' } : {})
         };
         // Fetch user settings
-        const settingsRes = await fetch(`${apiUrl}/api/user/${user.id}/settings`, { headers: initDataHeader });
+        const settingsRes = await fetch(`${apiUrl}/api/user/${userId}/settings`, { headers: initDataHeader });
         let start: number | null = null;
         let end: number | null = null;
         if (settingsRes.ok) {
@@ -66,21 +66,45 @@ export const ExpensesTable = () => {
         setMonthEnd(end);
         // Calculate date range
         const { startDate, endDate } = getCustomMonthRange(today, start, end);
-        // Fetch expenses for this range
-        const requestUrl = `${apiUrl}/api/user/${user.id}/expenses/range?start=${startDate.toISOString().slice(0,10)}&end=${endDate.toISOString().slice(0,10)}`;
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 30000);
-        const response = await fetch(requestUrl, {
-          headers: initDataHeader,
-          signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(errorText);
+        let expenses = [];
+        if (start && startDate.toISOString().slice(0,10) !== new Date(today.getFullYear(), today.getMonth(), 1).toISOString().slice(0,10)) {
+          // Use custom range endpoint if custom start date is set and not the 1st of the month
+          const requestUrl = `${apiUrl}/api/user/${userId}/expenses/range?start=${startDate.toISOString().slice(0,10)}&end=${endDate.toISOString().slice(0,10)}`;
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 30000);
+          const response = await fetch(requestUrl, {
+            headers: initDataHeader,
+            signal: controller.signal
+          });
+          clearTimeout(timeoutId);
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText);
+          }
+          const data = await response.json();
+          expenses = data.expenses || [];
+        } else {
+          // Use current month endpoint if no custom start date
+          const year = today.getFullYear();
+          const month = today.getMonth() + 1;
+          // NOTE: This endpoint expects the Telegram user ID, not internal. You may need to pass it as a prop if needed.
+          // For now, fallback to internal user ID for both endpoints for consistency.
+          const requestUrl = `${apiUrl}/api/user/${userId}/expenses/current-month?year=${year}&month=${month}`;
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 30000);
+          const response = await fetch(requestUrl, {
+            headers: initDataHeader,
+            signal: controller.signal
+          });
+          clearTimeout(timeoutId);
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText);
+          }
+          const data = await response.json();
+          expenses = data.expenses || [];
         }
-        const data = await response.json();
-        setExpenses(data.expenses || []);
+        setExpenses(expenses);
       } catch (err: any) {
         setError(err.message || 'Failed to load expenses');
       } finally {
@@ -88,7 +112,7 @@ export const ExpensesTable = () => {
       }
     };
     fetchSettingsAndExpenses();
-  }, [initDataRaw, user]);
+  }, [initDataRaw, userId]);
 
   return (
     <div className="expenses-table-container">
