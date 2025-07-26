@@ -10,6 +10,9 @@ interface BudgetViewProps {
   datePercentage: number;
   isFamily?: boolean;
   familyMembers?: number;
+  customPeriod?: boolean;
+  periodStart?: string;
+  periodEnd?: string;
 //   currency: string;
 }
 
@@ -22,6 +25,9 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
   datePercentage,
   isFamily = false,
   familyMembers = 1,
+  customPeriod = false,
+  // periodStart,
+  // periodEnd,
 //   currency
 }) => {
   if (!budget || budget <= 0) {
@@ -49,7 +55,16 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
           )}
         </h3>
         <span className="budgetview-day">
-          Day {currentDate} of {daysInMonth}
+          {customPeriod ? (
+            <>
+              Day {currentDate} of {daysInMonth}
+              <small className="budgetview-period-info">
+                Custom period
+              </small>
+            </>
+          ) : (
+            <>Day {currentDate} of {daysInMonth}</>
+          )}
         </span>
       </div>
 

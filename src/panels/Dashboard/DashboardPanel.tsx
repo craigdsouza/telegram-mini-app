@@ -108,6 +108,9 @@ export const DashboardPanel = () => {
           datePercentage={budgetData?.datePercentage || 0}
           isFamily={budgetData?.isFamily || false}
           familyMembers={budgetData?.familyMembers || 1}
+          customPeriod={budgetData?.customPeriod || false}
+          periodStart={budgetData?.periodStart}
+          periodEnd={budgetData?.periodEnd}
         />
       )}
       {internalUserId && initDataRaw && <ExpensesTable userId={internalUserId} initDataRaw={initDataRaw} />}
