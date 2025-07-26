@@ -15,12 +15,16 @@ export const PledgePage: React.FC = () => {
 
   const expectedPledge = "I pledge, to act always, keeping my long term financial well being in mind";
 
-  // Focus textarea and set cursor at start on mount
+  // Focus textarea and set cursor at start on mount with 2s delay
   useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.focus();
-      textareaRef.current.setSelectionRange(0, 0);
-    }
+    const timer = setTimeout(() => {
+      if (textareaRef.current) {
+        textareaRef.current.focus();
+        textareaRef.current.setSelectionRange(0, 0);
+      }
+    }, 4000); // 4 second delay
+
+    return () => clearTimeout(timer);
   }, []);
 
   // Handle typing: only allow typing the expected pledge, char by char
