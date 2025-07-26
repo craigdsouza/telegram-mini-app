@@ -88,6 +88,7 @@ export const ProfileSettingsPanel: React.FC<ProfileSettingsPanelProps> = ({ user
           value={monthStart}
           onChange={(e) => setMonthStart(e.target.value)}
           disabled={loading || saving}
+          placeholder="DEFAULT is 1st"
         />
       </div>
       <button

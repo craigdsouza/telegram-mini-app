@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Check, IndianRupee } from 'lucide-react';
+import { Check } from 'lucide-react';
 import babySquirrelSittingImg from '@/../assets/baby-squirrel-sitting.png';
 import studyingSquirrelImg from '@/../assets/studying-squirrel.png';
+import { CheckBoxList } from './CheckBoxList';
 import './MissionCard.css';
 
 interface MissionCardProps {
@@ -14,6 +15,7 @@ interface MissionCardProps {
   isCompleted: boolean;
   isUnlocked: boolean;
   budgetSet?: boolean;
+  descriptionItems?: Array<{ text: string; completed: boolean }>;
 }
 
 export const MissionCard: React.FC<MissionCardProps> = ({
@@ -25,7 +27,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
   target,
   isCompleted,
   isUnlocked,
-  budgetSet
+  descriptionItems
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
@@ -75,8 +77,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
   ].filter(Boolean).join(' ');
 
   const titleClasses = [
-    'mission-title',
-    id === 'juniorAnalyst' ? 'with-budget-indicator' : ''
+    'mission-title'
   ].filter(Boolean).join(' ');
 
   const progressContainerClasses = [
@@ -89,16 +90,6 @@ export const MissionCard: React.FC<MissionCardProps> = ({
     isCompleted ? 'completed' : ''
   ].filter(Boolean).join(' ');
 
-  const budgetIndicatorClasses = [
-    'budget-indicator',
-    isCompleted ? 'with-completion' : ''
-  ].filter(Boolean).join(' ');
-
-  const budgetIconClasses = [
-    'budget-icon',
-    budgetSet ? 'set' : ''
-  ].filter(Boolean).join(' ');
-
   return (
     <div 
       className={cardClasses}
@@ -109,20 +100,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
       onTouchStart={handleMouseDown}
       onTouchEnd={handleMouseUp}
     >
-      {/* Budget Indicator (only for Junior Budget Analyst) */}
-      {id === 'juniorAnalyst' && (
-        <div className={budgetIndicatorClasses}>
-          {/* Budget Status Text */}
-          <span className="budget-text">
-            /budget set?
-          </span>
-          
-          {/* Budget Status Icon */}
-          <div className={budgetIconClasses}>
-            <IndianRupee size={16} />
-          </div>
-        </div>
-      )}
+
 
       {/* Completion Badge */}
       {isCompleted && (
@@ -145,9 +123,13 @@ export const MissionCard: React.FC<MissionCardProps> = ({
             {title}
           </h3>
           {isExpanded && (
-            <p className="mission-description">
-              {description}
-            </p>
+            descriptionItems ? (
+              <CheckBoxList items={descriptionItems} />
+            ) : (
+              <p className="mission-description">
+                {description}
+              </p>
+            )
           )}
         </div>
       </div>

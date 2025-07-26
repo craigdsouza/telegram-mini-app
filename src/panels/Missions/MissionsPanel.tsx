@@ -206,6 +206,30 @@ export const MissionsPanel = () => {
           
           const isUnlocked = mission.id === 'babySteps' || mission.id === 'juniorAnalyst' ? true : false; // adjust logic as needed
           
+          // Create description items for CheckBoxList
+          let descriptionItems: Array<{ text: string; completed: boolean }> | undefined;
+          
+          if (mission.id === 'babySteps') {
+            descriptionItems = [
+              {
+                text: 'Record expenses for 3+ days',
+                completed: babyStepsProgress >= 3
+              }
+            ];
+          } else if (mission.id === 'juniorAnalyst') {
+            const expenseDaysCompleted = Math.min(juniorAnalystProgress, 7);
+            descriptionItems = [
+              {
+                text: 'Record expenses for 7+ days',
+                completed: expenseDaysCompleted >= 7
+              },
+              {
+                text: 'Set a monthly budget with /budget',
+                completed: budgetSet
+              }
+            ];
+          }
+          
           // Add detailed logging for each mission
           console.log(`🎯 [MISSION ${mission.id.toUpperCase()}]`, {
             title: mission.title,
@@ -214,7 +238,8 @@ export const MissionsPanel = () => {
             budgetSet: budgetSet,
             isCompleted: isCompleted,
             isUnlocked: isUnlocked,
-            progressPercentage: Math.round((progress / mission.target) * 100)
+            progressPercentage: Math.round((progress / mission.target) * 100),
+            descriptionItems: descriptionItems
           });
           
           return (
@@ -229,6 +254,7 @@ export const MissionsPanel = () => {
               isCompleted={isCompleted}
               isUnlocked={isUnlocked}
               budgetSet={mission.id === 'juniorAnalyst' ? budgetSet : undefined}
+              descriptionItems={descriptionItems}
             />
           );
         })}

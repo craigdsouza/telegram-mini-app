@@ -78,9 +78,7 @@
   overflow-wrap: break-word;
 }
 
-.mission-title.with-budget-indicator {
-  padding-right: 120px;
-}
+
 
 .mission-description {
   margin: 0;
@@ -92,47 +90,7 @@
   animation: slideDown 0.3s ease-out;
 }
 
-.budget-indicator {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  z-index: 1;
-}
 
-.budget-indicator.with-completion {
-  right: 44px;
-}
-
-.budget-text {
-  font-size: 14px;
-  color: var(--color-text-dark);
-  font-family: var(--font-primary);
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.budget-icon {
-  background: var(--color-secondary);
-  color: var(--color-text-light);
-  border-radius: 50%;
-  width: 26px;
-  height: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: bold;
-  border: 2px solid var(--color-text-dark);
-  transition: all 0.3s ease;
-}
-
-.budget-icon.set {
-  background: var(--color-primary);
-  color: var(--color-text-dark);
-}
 
 .completion-badge {
   position: absolute;
