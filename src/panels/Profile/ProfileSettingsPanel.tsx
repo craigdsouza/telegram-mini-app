@@ -49,9 +49,19 @@ export const ProfileSettingsPanel: React.FC<ProfileSettingsPanelProps> = ({ user
     setSuccess(false);
     try {
       const apiUrl = import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app';
-      const start = monthStart ? Number(monthStart) : null;
+      
+      // Handle empty string conversion to null
+      const start = monthStart.trim() === '' ? null : Number(monthStart);
+      
       // Calculate end: if start is 1, end is 31; else end is start-1
       const end = start === 1 ? 31 : (start ? start - 1 : null);
+      
+      console.log('[ProfileSettingsPanel] Saving settings:', { 
+        monthStart: monthStart, 
+        start: start, 
+        end: end 
+      });
+      
       const response = await fetch(`${apiUrl}/api/user/${userId}/settings`, {
         method: 'POST',
         headers: {
@@ -81,20 +91,25 @@ export const ProfileSettingsPanel: React.FC<ProfileSettingsPanelProps> = ({ user
     <div className="profile-settings-panel-root">
       <h2 className="profile-settings-title">Profile Settings</h2>
       <div className="profile-settings-row">
-        <label className="profile-settings-label">Month Start:</label>
-        <input
-          className="profile-settings-input"
-          type="number"
-          value={monthStart}
-          onChange={(e) => setMonthStart(e.target.value)}
-          disabled={loading || saving}
-          placeholder="DEFAULT is 1st"
-        />
+        <div className="profile-settings-input-row">
+          <label className="profile-settings-label">Month Start:</label>
+          <input
+            className="profile-settings-input"
+            type="number"
+            value={monthStart}
+            onChange={(e) => setMonthStart(e.target.value)}
+            disabled={loading || saving}
+            placeholder="LEAVE BLANK for 1st"
+          />
+        </div>
+        <small className="profile-settings-hint">
+          Leave blank to use the 1st of each month as default
+        </small>
       </div>
       <button
         className="profile-settings-save-btn"
         onClick={handleSave}
-        disabled={saving || !monthStart}
+        disabled={saving}
       >
         {saving ? 'Saving...' : 'Save Settings'}
       </button>

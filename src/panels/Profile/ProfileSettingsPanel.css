@@ -17,8 +17,16 @@
 
 .profile-settings-row {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   margin-bottom: 14px;
+}
+
+.profile-settings-input-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 4px;
 }
 
 .profile-settings-label {
@@ -77,4 +85,11 @@
   font-size: var(--text-sm);
   margin-top: 6px;
   margin-bottom: 2px;
+}
+
+.profile-settings-hint {
+  color: var(--color-text-light);
+  font-size: var(--text-xs);
+  margin-top: 2px;
+  font-style: italic;
 } 
