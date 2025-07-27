@@ -138,19 +138,35 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Error Message Styles */
-.error-message {
+/* Error Message Overlay */
+.error-message-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  padding: 16px;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   animation: slideIn 0.3s ease-out;
 }
 
-.error-bubble {
-  background: #f8d7da !important;
-  border: 1px solid #f5c6cb;
-  color: #721c24 !important;
+.error-message-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #721c24;
+  font-size: var(--text-sm);
 }
 
-.error-message .message-avatar {
-  background: #dc3545;
+.error-icon {
+  font-size: 18px;
+}
+
+.error-text {
+  font-weight: var(--font-medium);
 }
 
 /* Category Suggestions */
@@ -334,7 +350,7 @@
   color: var(--color-text-dark);
   /* border: 1px solid var(--color-primary-light); */
   padding: 4px 0;
-  margin: 0;
+  margin-top: 10px;
 }
 
 .expenses-table-container-header h2 {
