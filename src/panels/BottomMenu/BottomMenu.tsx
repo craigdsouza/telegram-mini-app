@@ -29,7 +29,7 @@ export const BottomMenu: React.FC<BottomMenuProps> = ({ active, onMenuSelect }) 
       icon: '➕',
       key: 'add',
       onClick: () => onMenuSelect('add'),
-      disabled: true,
+      disabled: false,
     },
     {
       label: 'You', // relabel Profile to 'You'

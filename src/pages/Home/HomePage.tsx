@@ -4,6 +4,7 @@ import { BottomMenu } from '@/panels/BottomMenu/BottomMenu';
 import { MissionsPanel } from '@/panels/Missions/MissionsPanel';
 import { ProfilePanel } from '@/panels/Profile/ProfilePanel';
 import { DashboardPanel } from '@/panels/Dashboard/DashboardPanel';
+import { AddExpensePanel } from '@/panels/AddExpense/AddExpensePanel';
 import './HomePage.css';
 
 export const HomePage = () => {
@@ -25,11 +26,7 @@ export const HomePage = () => {
     centralComponent = <DashboardPanel />;
   }
   else if (activePanel === 'add') {
-    centralComponent = (
-      <div className="coming-soon-container">
-        Add Expense form coming soon!
-      </div>
-    );
+    centralComponent = <AddExpensePanel />;
   }
   else if (activePanel === 'profile') {
     centralComponent = <ProfilePanel />;
