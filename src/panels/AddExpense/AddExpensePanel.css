@@ -8,10 +8,11 @@
 
 /* Messages Panel */
 .messages-panel {
-  flex: 1;
+  height: 68px; /* Fixed height for messages */
   overflow-y: auto;
   padding: 16px;
   padding-bottom: 8px;
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
 .messages-container {
@@ -260,6 +261,48 @@
   .message {
     max-width: 90%;
   }
+}
+
+/* Expenses Table Container */
+.expenses-table-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 16px;
+  /* border: 1px solid var(--color-primary-light); */
+}
+
+.expenses-table-container-header {
+  text-align: center;
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  color: var(--color-text-dark);
+  border: 1px solid var(--color-primary-light);
+  padding: 4px 0;
+  margin: 0;
+}
+
+.expenses-table-container-header h2 {
+  margin: 0;
+  padding: 0;
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+}
+
+/* Expenses Table Loading and Error States */
+.expenses-loading, .expenses-error {
+  padding: 16px;
+  text-align: center;
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+}
+
+.expenses-loading {
+  color: var(--color-text-dark);
+  opacity: 0.7;
+}
+
+.expenses-error {
+  color: var(--color-accent);
 }
 
 /* Scrollbar styling */

@@ -4,7 +4,6 @@ import {
   initDataState as _initDataState,
   useSignal,
 } from '@telegram-apps/sdk-react';
-import { Calendar } from '@/components/CalendarView/Calendar';
 import { OnboardingTester } from '@/components/DevTools';
 import { ProfileSettingsPanel } from './ProfileSettingsPanel';
 
@@ -109,7 +108,6 @@ export const ProfilePanel = () => {
   
   return (
     <div>
-      <Calendar entryDates={entryDates} />
       {internalUserId && <ProfileSettingsPanel userId={internalUserId} initDataRaw={initDataRaw} />}
       <OnboardingTester />
     </div>

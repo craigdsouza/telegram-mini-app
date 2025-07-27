@@ -1,6 +1,6 @@
 .budgetview-root {
-  width: 100%;
-  max-width: 360px;
+  /* width: 100%; */
+  /* max-width: 360px; */
   padding: 20px;
   background: var(--color-bg-light);
   border-radius: 12px;

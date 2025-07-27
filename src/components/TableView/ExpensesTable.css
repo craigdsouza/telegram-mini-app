@@ -1,13 +1,12 @@
 .expenses-table-container {
   width: 95%;
   max-width: 95vw;
-  margin: 24px auto;
+  margin: 16px auto;
   background: var(--color-secondary);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   padding: 16px;
-  overflow-x: auto;
-  /* margin-top: 86px; */
+  border: 1px solid var(--color-primary-light);
 }
 
 .expenses-table-title {
@@ -34,23 +33,62 @@
 .expenses-table {
   width: 100%;
   min-width: 600px;
-  border-collapse: collapse;
   font-family: var(--font-primary);
   font-size: 14px;
-  table-layout: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.expenses-table-header-row {
+.expenses-table-header {
+  display: flex;
   background: var(--color-secondary);
   color: var(--color-text-dark);
+  font-weight: var(--font-bold);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 8px;
+  flex-shrink: 0; /* Prevent header from shrinking */
+  overflow: hidden;
+}
+
+.expenses-table-body {
+  display: flex;
+  flex-direction: column;
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: auto; /* Allow horizontal scroll if needed */
+}
+
+/* Hide scrollbar for webkit browsers (Chrome, Safari, Edge) */
+.expenses-table-body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.expenses-table-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.expenses-table-body::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+/* Hide scrollbar for Firefox */
+.expenses-table-body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
 }
 
 .expenses-table-header-cell {
-  padding: 6px 4px;
+  padding: 10px 4px;
   border-radius: 4px;
   font-size: 13px;
   font-weight: 600;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 .expenses-table-header-cell.left {
   text-align: left;
@@ -59,21 +97,25 @@
   text-align: right;
 }
 
+.expenses-table-row {
+  display: flex;
+  transition: background 0.2s;
+}
+
 .expenses-table-row.even {
   background: var(--color-primary);
   color: var(--color-text-dark);
-  transition: background 0.2s;
 }
 .expenses-table-row.odd {
   background: var(--color-secondary);
   color: var(--color-text-dark);
-  transition: background 0.2s;
 }
 
 .expenses-table-cell {
   padding: 6px 4px;
   white-space: nowrap;
   font-size: 13px;
+  flex-shrink: 0;
 }
 .expenses-table-cell.right {
   text-align: right;
@@ -116,4 +158,5 @@
   padding: 16px;
   color: var(--color-text-dark);
   opacity: 0.7;
+  width: 100%;
 } 

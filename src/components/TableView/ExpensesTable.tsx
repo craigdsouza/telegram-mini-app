@@ -115,41 +115,37 @@ export const ExpensesTable: React.FC<ExpensesTableProps> = ({ userId, initDataRa
   }, [initDataRaw, userId]);
 
   return (
-    <div className="expenses-table-container">
-      <div className="expenses-table-title">
-        Expenses This Month
-      </div>
+    <div className="expenses-table">
       {loading ? (
         <div className="expenses-table-loading">Loading...</div>
       ) : error ? (
         <div className="expenses-table-error">Error: {error}</div>
       ) : (
-        <table className="expenses-table">
-          <thead>
-            <tr className="expenses-table-header-row">
-              <th className="expenses-table-header-cell left">Date</th>
-              <th className="expenses-table-header-cell right">Amount</th>
-              <th className="expenses-table-header-cell left">Category</th>
-              <th className="expenses-table-header-cell left">Description</th>
-            </tr>
-          </thead>
-          <tbody>
+        <>
+          {/* Sticky Header */}
+          <div className="expenses-table-header">
+            <div className="expenses-table-header-cell left">Date</div>
+            <div className="expenses-table-header-cell right">Amount</div>
+            <div className="expenses-table-header-cell left">Category</div>
+            <div className="expenses-table-header-cell left">Description</div>
+          </div>
+          
+          {/* Table Body */}
+          <div className="expenses-table-body">
             {expenses.length === 0 ? (
-              <tr>
-                <td colSpan={4} className="expenses-table-empty">No expenses found for this month.</td>
-              </tr>
+              <div className="expenses-table-empty">No expenses found for this month.</div>
             ) : (
               expenses.map((exp, idx) => (
-                <tr key={exp.id || idx} className={`expenses-table-row ${idx % 2 === 0 ? 'even' : 'odd'}`}> 
-                  <td className="expenses-table-cell date">{exp.date}</td>
-                  <td className="expenses-table-cell amount highlight">&#8377;{Number(exp.amount).toLocaleString()}</td>
-                  <td className="expenses-table-cell category">{exp.category || '-'}</td>
-                  <td className="expenses-table-cell description">{exp.description || '-'}</td>
-                </tr>
+                <div key={exp.id || idx} className={`expenses-table-row ${idx % 2 === 0 ? 'even' : 'odd'}`}> 
+                  <div className="expenses-table-cell date">{exp.date}</div>
+                  <div className="expenses-table-cell amount highlight">&#8377;{Number(exp.amount).toLocaleString()}</div>
+                  <div className="expenses-table-cell category">{exp.category || '-'}</div>
+                  <div className="expenses-table-cell description">{exp.description || '-'}</div>
+                </div>
               ))
             )}
-          </tbody>
-        </table>
+          </div>
+        </>
       )}
     </div>
   );
