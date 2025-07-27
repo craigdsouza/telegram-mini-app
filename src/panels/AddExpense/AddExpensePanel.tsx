@@ -22,19 +22,70 @@ export const AddExpensePanel: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('Groceries');
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-  const handleSendMessage = () => {
-    if (amount.trim()) {
-      // TODO: Handle message sending logic
-      console.log('Sending expense:', { 
-        date: selectedDate, 
-        mode: selectedMode, 
-        category: selectedCategory, 
-        amount, 
-        description: description.trim() || null 
-      });
-      setAmount('');
-      setDescription('');
+  const handleSendMessage = async () => {
+    if (amount.trim() && !isSubmitting) {
+      setIsSubmitting(true);
+      setSubmitError(null);
+      
+      try {
+        // Create expense object for API
+        const expenseData = {
+          date: selectedDate === 'TODAY' ? new Date().toISOString().slice(0, 10) : 
+                new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
+          amount: parseFloat(amount),
+          category: selectedCategory,
+          description: description.trim() || null,
+          mode: selectedMode
+        };
+
+        // Send to backend
+        const apiUrl = import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app';
+        const initDataHeader = {
+          'Content-Type': 'application/json',
+          Authorization: `tma ${initDataRaw}`,
+          ...(import.meta.env.DEV ? { 'X-Dev-Bypass': 'true' } : {})
+        };
+
+        const response = await fetch(`${apiUrl}/api/expenses`, {
+          method: 'POST',
+          headers: initDataHeader,
+          body: JSON.stringify(expenseData)
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Failed to save expense: ${errorText}`);
+        }
+
+        // Success - show message and reset form
+        const message = `Expense of ₹${amount} recorded for ${selectedDate} in ${selectedCategory}`;
+        setSuccessMessage(message);
+        setShowSuccessMessage(true);
+        
+        // Hide success message after 3 seconds
+        setTimeout(() => {
+          setShowSuccessMessage(false);
+          setSuccessMessage('');
+        }, 3000);
+        
+        setAmount('');
+        setDescription('');
+        
+        // Trigger ExpensesTable to reload data from database
+        setRefreshTrigger(prev => prev + 1);
+        
+      } catch (error: any) {
+        setSubmitError(error.message || 'Failed to save expense');
+        console.error('Error saving expense:', error);
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -98,6 +149,36 @@ export const AddExpensePanel: React.FC = () => {
               <div className="message-time">now</div>
             </div>
           </div>
+
+          {/* Success Message */}
+          {showSuccessMessage && (
+            <div className="message bot-message success-message">
+              <div className="message-avatar">
+                <span className="avatar-emoji">✅</span>
+              </div>
+              <div className="message-content">
+                <div className="message-bubble success-bubble">
+                  <p>{successMessage}</p>
+                </div>
+                <div className="message-time">now</div>
+              </div>
+            </div>
+          )}
+
+          {/* Error Message */}
+          {submitError && (
+            <div className="message bot-message error-message">
+              <div className="message-avatar">
+                <span className="avatar-emoji">❌</span>
+              </div>
+              <div className="message-content">
+                <div className="message-bubble error-bubble">
+                  <p>{submitError}</p>
+                </div>
+                <div className="message-time">now</div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -111,7 +192,11 @@ export const AddExpensePanel: React.FC = () => {
         ) : userIdError ? (
           <div className="expenses-error">Error: {userIdError}</div>
         ) : internalUserId && initDataRaw ? (
-          <ExpensesTable userId={internalUserId} initDataRaw={initDataRaw} />
+          <ExpensesTable 
+            userId={internalUserId} 
+            initDataRaw={initDataRaw} 
+            refreshTrigger={refreshTrigger}
+          />
         ) : null}
       </div>
 
@@ -145,10 +230,14 @@ export const AddExpensePanel: React.FC = () => {
                       <button 
               className="send-button"
               onClick={handleSendMessage}
-              disabled={!amount.trim()}
+              disabled={!amount.trim() || isSubmitting}
             >
-            <Send size={20} />
-          </button>
+              {isSubmitting ? (
+                <div className="loading-spinner"></div>
+              ) : (
+                <Send size={20} />
+              )}
+            </button>
         </div>
       </div>
     </div>

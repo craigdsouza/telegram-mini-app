@@ -12,11 +12,7 @@ export const ProfilePanel = () => {
   const initDataState = useSignal(_initDataState);
   const user = useMemo(() => initDataState?.user, [initDataState]);
 
-  const [setEntryDates] = useState<number[]>([]);
-  const [loadingDates, setLoadingDates] = useState(false);
-  const [datesError, setDatesError] = useState<string | null>(null);
-
-  // New state for internal user ID
+  // State for internal user ID
   const [internalUserId, setInternalUserId] = useState<number | null>(null);
   const [userIdLoading, setUserIdLoading] = useState(false);
   const [userIdError, setUserIdError] = useState<string | null>(null);
@@ -49,46 +45,6 @@ export const ProfilePanel = () => {
       .finally(() => setUserIdLoading(false));
   }, [user?.id]);
 
-  useEffect(() => {
-    if (!initDataRaw || !user) return;
-    const fetchEntryDates = async () => {
-      setLoadingDates(true);
-      setDatesError(null);
-      try {
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = today.getMonth() + 1;
-        const apiUrl = import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app';
-        const requestUrl = `${apiUrl}/api/user/${user.id}/expenses/dates?year=${year}&month=${month}`;
-        console.log('💰 [DATES] Fetching from URL:', requestUrl);
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 30000);
-        try {
-          const response = await fetch(requestUrl, {
-            headers: {
-              Authorization: `tma ${initDataRaw}`,
-              ...(import.meta.env.DEV ? { 'X-Dev-Bypass': 'true' } : {})
-            },
-            signal: controller.signal
-          });
-          clearTimeout(timeoutId);
-          if (!response.ok) throw new Error(await response.text());
-          const data = await response.json();
-          console.log('💰 [DATES] Response:', data);
-          setEntryDates(Array.isArray(data.days) ? data.days : []);
-        } catch (fetchError: any) {
-          clearTimeout(timeoutId);
-          setDatesError(fetchError.message || 'Unknown error');
-        } finally {
-          setLoadingDates(false);
-        }
-      } catch (err: any) {
-        setDatesError(err.message || 'Unknown error');
-      }
-    };
-    fetchEntryDates();
-  }, [initDataRaw, user]);
-
   if (!initDataRaw || !user) {
     return null;
   }
@@ -98,12 +54,6 @@ export const ProfilePanel = () => {
   }
   if (userIdError) {
     return <div style={{ color: '#e74c3c', fontSize: 16, textAlign: 'center' }}>Error: {userIdError}</div>;
-  }
-  if (loadingDates) {
-    return <div style={{ color: '#888', fontSize: 16, textAlign: 'center' }}>Loading Dashboard...</div>;
-  }
-  if (datesError) {
-    return <div style={{ color: '#e74c3c', fontSize: 16, textAlign: 'center' }}>Error loading Dashboard: {datesError}</div>;
   }
   
   return (

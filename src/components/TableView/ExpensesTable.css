@@ -106,8 +106,8 @@
 }
 
 .expenses-table-header-cell.description {
-  width: 60%;
-  min-width: 150px;
+  width: 45%;
+  min-width: 120px;
   max-width: none;
   white-space: nowrap;
 }
@@ -124,6 +124,13 @@
   min-width: 60px;
   max-width: 60px;
   text-align: right;
+}
+
+.expenses-table-header-cell.mode {
+  width: 15%;
+  min-width: 80px;
+  max-width: 100px;
+  white-space: nowrap;
 }
 
 .expenses-table-row {
@@ -162,8 +169,8 @@
 }
 
 .expenses-table-cell.description {
-  width: 60%;
-  min-width: 150px;
+  width: 45%;
+  min-width: 120px;
   max-width: none;
   white-space: nowrap;
 }
@@ -180,6 +187,13 @@
   min-width: 60px;
   max-width: 60px;
   text-align: right;
+}
+
+.expenses-table-cell.mode {
+  width: 15%;
+  min-width: 80px;
+  max-width: 100px;
+  white-space: nowrap;
 }
 
 .expenses-table-empty {

@@ -31,9 +31,10 @@ function getCustomMonthRange(today: Date, start: number | null, end: number | nu
 interface ExpensesTableProps {
   userId: number;
   initDataRaw: string;
+  refreshTrigger?: number;
 }
 
-export const ExpensesTable: React.FC<ExpensesTableProps> = ({ userId, initDataRaw }) => {
+export const ExpensesTable: React.FC<ExpensesTableProps> = ({ userId, initDataRaw, refreshTrigger }) => {
   const [expenses, setExpenses] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -112,7 +113,7 @@ export const ExpensesTable: React.FC<ExpensesTableProps> = ({ userId, initDataRa
       }
     };
     fetchSettingsAndExpenses();
-  }, [initDataRaw, userId]);
+  }, [initDataRaw, userId, refreshTrigger]);
 
   return (
     <div className="expenses-table">
@@ -126,6 +127,7 @@ export const ExpensesTable: React.FC<ExpensesTableProps> = ({ userId, initDataRa
           <div className="expenses-table-header">
             <div className="expenses-table-header-cell left date">Date</div>
             <div className="expenses-table-header-cell right amount">Amount</div>
+            <div className="expenses-table-header-cell left mode">Mode</div>
             <div className="expenses-table-header-cell left category">Category</div>
             <div className="expenses-table-header-cell left description">Description</div>
           </div>
@@ -139,6 +141,7 @@ export const ExpensesTable: React.FC<ExpensesTableProps> = ({ userId, initDataRa
                 <div key={exp.id || idx} className={`expenses-table-row ${idx % 2 === 0 ? 'even' : 'odd'}`}> 
                   <div className="expenses-table-cell date">{exp.date}</div>
                   <div className="expenses-table-cell amount highlight">&#8377;{Number(exp.amount).toLocaleString()}</div>
+                  <div className="expenses-table-cell mode">{exp.mode || '-'}</div>
                   <div className="expenses-table-cell category">{exp.category || '-'}</div>
                   <div className="expenses-table-cell description">{exp.description || '-'}</div>
                 </div>
