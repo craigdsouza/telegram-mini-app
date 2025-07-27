@@ -32,14 +32,23 @@ interface ExpensesTableProps {
   userId: number;
   initDataRaw: string;
   refreshTrigger?: number;
+  highlightNewEntry?: boolean;
+  newExpenseData?: {
+    date: string;
+    amount: number;
+    category: string;
+    description: string | null;
+    mode: 'UPI' | 'CASH' | 'DEBIT CARD' | 'CREDIT CARD';
+  };
 }
 
-export const ExpensesTable: React.FC<ExpensesTableProps> = ({ userId, initDataRaw, refreshTrigger }) => {
+export const ExpensesTable: React.FC<ExpensesTableProps> = ({ userId, initDataRaw, refreshTrigger, highlightNewEntry = false, newExpenseData }) => {
   const [expenses, setExpenses] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [monthStart, setMonthStart] = useState<number | null>(null);
   const [monthEnd, setMonthEnd] = useState<number | null>(null);
+  const [showGlimmer, setShowGlimmer] = useState(false);
   console.log(monthStart, monthEnd);
   
   useEffect(() => {
@@ -115,6 +124,41 @@ export const ExpensesTable: React.FC<ExpensesTableProps> = ({ userId, initDataRa
     fetchSettingsAndExpenses();
   }, [initDataRaw, userId, refreshTrigger]);
 
+  // Debug refreshTrigger changes
+  useEffect(() => {
+    console.log('[ExpensesTable] refreshTrigger changed:', refreshTrigger);
+  }, [refreshTrigger]);
+
+  // Debug expenses changes
+  useEffect(() => {
+    console.log('[ExpensesTable] expenses array changed, length:', expenses.length);
+  }, [expenses]);
+
+  // Function to find the index of the newly added expense
+  const findNewExpenseIndex = () => {
+    if (!newExpenseData || !highlightNewEntry) return -1;
+    
+    return expenses.findIndex(exp => 
+      exp.date === newExpenseData.date &&
+      exp.amount === newExpenseData.amount &&
+      exp.category === newExpenseData.category &&
+      exp.description === newExpenseData.description &&
+      exp.mode === newExpenseData.mode
+    );
+  };
+
+  // Trigger glimmer animation when highlightNewEntry is true
+  useEffect(() => {
+    console.log('[ExpensesTable] highlightNewEntry changed:', highlightNewEntry);
+    if (highlightNewEntry) {
+      console.log('[ExpensesTable] Starting glimmer animation');
+      setShowGlimmer(true);
+    } else {
+      console.log('[ExpensesTable] Stopping glimmer animation');
+      setShowGlimmer(false);
+    }
+  }, [highlightNewEntry]);
+
   return (
     <div className="expenses-table">
       {loading ? (
@@ -137,15 +181,20 @@ export const ExpensesTable: React.FC<ExpensesTableProps> = ({ userId, initDataRa
             {expenses.length === 0 ? (
               <div className="expenses-table-empty">No expenses found for this month.</div>
             ) : (
-              expenses.map((exp, idx) => (
-                <div key={exp.id || idx} className={`expenses-table-row ${idx % 2 === 0 ? 'even' : 'odd'}`}> 
-                  <div className="expenses-table-cell date">{exp.date}</div>
-                  <div className="expenses-table-cell amount highlight">&#8377;{Number(exp.amount).toLocaleString()}</div>
-                  <div className="expenses-table-cell mode">{exp.mode || '-'}</div>
-                  <div className="expenses-table-cell category">{exp.category || '-'}</div>
-                  <div className="expenses-table-cell description">{exp.description || '-'}</div>
-                </div>
-              ))
+              expenses.map((exp, idx) => {
+                const newExpenseIndex = findNewExpenseIndex();
+                const shouldGlimmer = showGlimmer && idx === newExpenseIndex && newExpenseIndex !== -1;
+                
+                return (
+                  <div key={exp.id || idx} className={`expenses-table-row ${idx % 2 === 0 ? 'even' : 'odd'} ${shouldGlimmer ? 'glimmer' : ''}`}> 
+                    <div className="expenses-table-cell date">{exp.date}</div>
+                    <div className="expenses-table-cell amount highlight">&#8377;{Number(exp.amount).toLocaleString()}</div>
+                    <div className="expenses-table-cell mode">{exp.mode || '-'}</div>
+                    <div className="expenses-table-cell category">{exp.category || '-'}</div>
+                    <div className="expenses-table-cell description">{exp.description || '-'}</div>
+                  </div>
+                );
+              })
             )}
           </div>
         </>

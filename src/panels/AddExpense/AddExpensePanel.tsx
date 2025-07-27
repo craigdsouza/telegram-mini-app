@@ -18,6 +18,14 @@ export const AddExpensePanel: React.FC = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [highlightNewEntry, setHighlightNewEntry] = useState(false);
+  const [newExpenseData, setNewExpenseData] = useState<{
+    date: string;
+    amount: number;
+    category: string;
+    description: string | null;
+    mode: 'UPI' | 'CASH' | 'DEBIT CARD' | 'CREDIT CARD';
+  } | null>(null);
 
   const handleExpenseSubmit = async (expenseData: {
     date: string;
@@ -53,6 +61,9 @@ export const AddExpensePanel: React.FC = () => {
       const message = `Expense of ₹${expenseData.amount} recorded for ${expenseData.date} in ${expenseData.category}`;
       setSuccessMessage(message);
       setRefreshTrigger(prev => prev + 1);
+      console.log('[AddExpensePanel] Setting highlightNewEntry to true');
+      setHighlightNewEntry(true);
+      setNewExpenseData(expenseData);
       
     } catch (error: any) {
       setSubmitError(error.message || 'Failed to save expense');
@@ -63,8 +74,11 @@ export const AddExpensePanel: React.FC = () => {
     };
 
   const handleDismissMessage = () => {
+    console.log('[AddExpensePanel] handleDismissMessage called, setting highlightNewEntry to false');
     setSuccessMessage(null);
     setSubmitError(null);
+    setHighlightNewEntry(false);
+    setNewExpenseData(null);
   };
 
 
@@ -113,6 +127,8 @@ export const AddExpensePanel: React.FC = () => {
             userId={internalUserId} 
             initDataRaw={initDataRaw} 
             refreshTrigger={refreshTrigger}
+            highlightNewEntry={highlightNewEntry}
+            newExpenseData={newExpenseData || undefined}
           />
         ) : null}
       </div>
