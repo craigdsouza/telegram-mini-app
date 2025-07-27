@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Plus } from 'lucide-react';
+import { Send} from 'lucide-react';
 import { DateSelector } from '@/components/DateSelector/DateSelector';
 import { ModeSelector } from '@/components/ModeSelector/ModeSelector';
 import { CategorySelector } from '@/components/CategorySelector/CategorySelector';
