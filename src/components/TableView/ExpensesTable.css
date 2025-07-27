@@ -1,6 +1,6 @@
 .expenses-table-container {
-  width: 95%;
-  max-width: 95vw;
+  width: 90%;
+  max-width: 90vw;
   margin: 16px auto;
   background: var(--color-secondary);
   border-radius: 12px;
