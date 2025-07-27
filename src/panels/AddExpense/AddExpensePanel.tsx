@@ -24,9 +24,15 @@ export const AddExpensePanel: React.FC = () => {
   const [description, setDescription] = useState('');
 
   const handleSendMessage = () => {
-    if (amount.trim() && description.trim()) {
+    if (amount.trim()) {
       // TODO: Handle message sending logic
-      console.log('Sending expense:', { date: selectedDate, mode: selectedMode, category: selectedCategory, amount, description });
+      console.log('Sending expense:', { 
+        date: selectedDate, 
+        mode: selectedMode, 
+        category: selectedCategory, 
+        amount, 
+        description: description.trim() || null 
+      });
       setAmount('');
       setDescription('');
     }
@@ -130,17 +136,17 @@ export const AddExpensePanel: React.FC = () => {
             <input
               type="text"
               className="description-input"
-              placeholder="veggies from the supermarket"
+              placeholder="veggies from the supermarket (optional)"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               onKeyPress={handleKeyPress}
             />
           </div>
-          <button 
-            className="send-button"
-            onClick={handleSendMessage}
-            disabled={!amount.trim() || !description.trim()}
-          >
+                      <button 
+              className="send-button"
+              onClick={handleSendMessage}
+              disabled={!amount.trim()}
+            >
             <Send size={20} />
           </button>
         </div>

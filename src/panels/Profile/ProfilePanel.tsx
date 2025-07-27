@@ -12,7 +12,7 @@ export const ProfilePanel = () => {
   const initDataState = useSignal(_initDataState);
   const user = useMemo(() => initDataState?.user, [initDataState]);
 
-  const [entryDates, setEntryDates] = useState<number[]>([]);
+  const [setEntryDates] = useState<number[]>([]);
   const [loadingDates, setLoadingDates] = useState(false);
   const [datesError, setDatesError] = useState<string | null>(null);
 
