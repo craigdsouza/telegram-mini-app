@@ -97,6 +97,35 @@
   text-align: right;
 }
 
+/* Header cell width classes to match data cells */
+.expenses-table-header-cell.date {
+  white-space: nowrap;
+  width: 12%;
+  min-width: 80px;
+  max-width: 80px;
+}
+
+.expenses-table-header-cell.description {
+  width: 60%;
+  min-width: 150px;
+  max-width: none;
+  white-space: nowrap;
+}
+
+.expenses-table-header-cell.category {
+  width: 18%;
+  min-width: 80px;
+  max-width: 120px;
+  white-space: nowrap;
+}
+
+.expenses-table-header-cell.amount {
+  width: 10%;
+  min-width: 60px;
+  max-width: 60px;
+  text-align: right;
+}
+
 .expenses-table-row {
   display: flex;
   transition: background 0.2s;

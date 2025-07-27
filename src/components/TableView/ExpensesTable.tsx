@@ -124,10 +124,10 @@ export const ExpensesTable: React.FC<ExpensesTableProps> = ({ userId, initDataRa
         <>
           {/* Sticky Header */}
           <div className="expenses-table-header">
-            <div className="expenses-table-header-cell left">Date</div>
-            <div className="expenses-table-header-cell right">Amount</div>
-            <div className="expenses-table-header-cell left">Category</div>
-            <div className="expenses-table-header-cell left">Description</div>
+            <div className="expenses-table-header-cell left date">Date</div>
+            <div className="expenses-table-header-cell right amount">Amount</div>
+            <div className="expenses-table-header-cell left category">Category</div>
+            <div className="expenses-table-header-cell left description">Description</div>
           </div>
           
           {/* Table Body */}
