@@ -8,8 +8,8 @@ import { AddExpensePanel } from '@/panels/AddExpense/AddExpensePanel';
 import './HomePage.css';
 
 export const HomePage = () => {
-  // Set 'profile' as the default active panel
-  const [activePanel, setActivePanel] = useState<'missions' | 'dashboard' | 'add' | 'profile' | 'notifications'>('profile');
+  // Set 'add' as the default active panel
+  const [activePanel, setActivePanel] = useState<'missions' | 'dashboard' | 'add' | 'profile' | 'notifications'>('add');
 
   const panelTitles: Record<typeof activePanel, string> = {
     missions: 'Missions',
