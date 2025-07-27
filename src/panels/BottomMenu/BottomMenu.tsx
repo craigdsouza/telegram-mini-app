@@ -76,6 +76,14 @@ export const BottomMenu: React.FC<BottomMenuProps> = ({ active, onMenuSelect }) 
             className={`icon-calendar ${active === item.key ? 'active' : ''}`}
           />
         );
+      case 'add':
+        return (
+          <Plus 
+            size={iconSize} 
+            color={iconColor} 
+            className={`icon-plus ${active === item.key ? 'active' : ''}`}
+          />
+        );
       case 'profile':
         return (
           <User 
@@ -100,44 +108,19 @@ export const BottomMenu: React.FC<BottomMenuProps> = ({ active, onMenuSelect }) 
   return (
     <div className="bottom-menu-root">
       <nav className="bottom-menu-nav">
-        {menuItems.map((item) => {
-          const isCenterButton = item.key === 'add';
-          if (isCenterButton) {
-            // Center the plus button absolutely over the nav
-            return (
-              <div
-                key={item.key}
-                className={`center-button-wrapper ${active === item.key ? 'active' : ''}`}
-              >
-                <button
-                  onClick={item.onClick}
-                  disabled={item.disabled}
-                  className={`center-button ${active === item.key ? 'active' : ''}`}
-                >
-                  <Plus 
-                    size={48}
-                    color="var(--color-text-dark)" 
-                    className={`center-button-icon ${active === item.key ? 'active' : ''}`}
-                  />
-                </button>
-              </div>
-            );
-          }
-          // Normal menu items
-          return (
-            <button
-              key={item.key}
-              onClick={item.onClick}
-              disabled={item.disabled}
-              className={`menu-item-button ${active === item.key ? 'active' : ''}`}
-            >
-              {renderIcon(item)}
-              <span className={`menu-item-label ${active === item.key ? 'active' : ''}`}>
-                {item.label}
-              </span>
-            </button>
-          );
-        })}
+        {menuItems.map((item) => (
+          <button
+            key={item.key}
+            onClick={item.onClick}
+            disabled={item.disabled}
+            className={`menu-item-button ${active === item.key ? 'active' : ''}`}
+          >
+            {renderIcon(item)}
+            <span className={`menu-item-label ${active === item.key ? 'active' : ''}`}>
+              {item.label}
+            </span>
+          </button>
+        ))}
       </nav>
     </div>
   );

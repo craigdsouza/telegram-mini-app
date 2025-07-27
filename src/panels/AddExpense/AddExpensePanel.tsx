@@ -48,7 +48,7 @@ export const AddExpensePanel: React.FC = () => {
             </div>
             <div className="message-content">
               <div className="message-bubble">
-                <p>Hi! I'm here to help you track your expenses. Use the template below to add your expense in one go!</p>
+                <p>Hi! I'm here to help you track your expenses. This feature is still in development. <br></br>For now please continue to add expenses via the <b>bot</b> with the <b>/add</b> command!</p>
               </div>
               <div className="message-time">now</div>
             </div>

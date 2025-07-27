@@ -10,6 +10,7 @@
 
 .homepage-central {
   position: relative;
+  margin-top: 64px; /* Account for fixed header */
   height: calc(100vh - 64px - 64px); /* header and bottom menu */
   overflow-y: auto;
   /* Optional: add horizontal padding if needed */
