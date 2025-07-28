@@ -13,6 +13,7 @@
   margin-top: 64px; /* Account for fixed header */
   height: calc(100vh - 64px - 64px); /* header and bottom menu */
   overflow-y: auto;
+  padding: 0px 16px 0px 16px;
   /* Optional: add horizontal padding if needed */
 }
 

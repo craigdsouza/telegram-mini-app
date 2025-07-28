@@ -207,7 +207,9 @@ export const ExpensesTable: React.FC<ExpensesTableProps> = ({ userId, initDataRa
           {/* Table Body */}
           <div className="expenses-table-body">
             {expenses.length === 0 ? (
-              <div className="expenses-table-empty">No expenses found for this month.</div>
+              <div className="expenses-table-empty">
+                {selectedDate ? 'No expenses found for the selected date.' : 'No expenses found for this month.'}
+              </div>
             ) : (
               expenses.map((exp, idx) => {
                 const newExpenseIndex = findNewExpenseIndex();

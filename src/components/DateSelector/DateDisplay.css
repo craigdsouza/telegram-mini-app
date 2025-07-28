@@ -1,0 +1,18 @@
+.date-display-container {
+  display: inline-flex;
+  align-items: center;
+  background: white;
+  border: 1px solid var(--color-primary-light);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  color: var(--color-text-dark);
+  cursor: default;
+  user-select: none;
+}
+
+.date-display-value {
+  font-weight: 500;
+  color: var(--color-primary);
+} 

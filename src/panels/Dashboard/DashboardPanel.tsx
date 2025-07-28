@@ -26,6 +26,7 @@ export const DashboardPanel = () => {
   // State for selected date and components visibility
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
   const [showExpensesComponents, setShowExpensesComponents] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   // State for ExpensesInputTemplate
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -58,15 +59,31 @@ export const DashboardPanel = () => {
     setErrorMessage(undefined);
 
     try {
-      // For now, just show a success message
-      // TODO: Implement actual API call to submit expense
-      setSuccessMessage('Expense added successfully!');
+      // Send to backend
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app';
+      const initDataHeader = {
+        'Content-Type': 'application/json',
+        Authorization: `tma ${initDataRaw}`,
+        ...(import.meta.env.DEV ? { 'X-Dev-Bypass': 'true' } : {})
+      };
+
+      const response = await fetch(`${apiUrl}/api/expenses`, {
+        method: 'POST',
+        headers: initDataHeader,
+        body: JSON.stringify(expenseData)
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to save expense: ${errorText}`);
+      }
+
+      // Success - show message and trigger refresh
+      const message = `Expense of ₹${expenseData.amount} recorded for ${expenseData.date} in ${expenseData.category}`;
+      setSuccessMessage(message);
       
-      // Reset form after a delay
-      setTimeout(() => {
-        setSuccessMessage(undefined);
-        setErrorMessage(undefined);
-      }, 3000);
+      // Trigger refresh of calendar and expenses table
+      setRefreshTrigger(prev => prev + 1);
     } catch (error: any) {
       setErrorMessage(error.message || 'Failed to add expense');
     } finally {
@@ -74,7 +91,7 @@ export const DashboardPanel = () => {
     }
   };
 
-  // Dismiss messages
+  // Handle message dismissal
   const handleDismissMessage = () => {
     setSuccessMessage(undefined);
     setErrorMessage(undefined);
@@ -119,7 +136,7 @@ export const DashboardPanel = () => {
       }
     };
     fetchEntryDates();
-  }, [initDataRaw, user]);
+  }, [initDataRaw, user, refreshTrigger]); // Added refreshTrigger dependency
 
   useEffect(() => {
     if (!initDataRaw || !user) return;
@@ -205,7 +222,7 @@ export const DashboardPanel = () => {
       )}
       
       {/* ExpensesInputTemplate - Show when a date is selected */}
-      {showExpensesComponents && (
+      {showExpensesComponents && selectedDateString && (
         <ExpensesInputTemplate
           onSubmit={handleExpenseSubmit}
           isSubmitting={isSubmitting}
@@ -213,6 +230,7 @@ export const DashboardPanel = () => {
           errorMessage={errorMessage}
           onDismissMessage={handleDismissMessage}
           variant="dashboard"
+          selectedDate={selectedDateString}
         />
       )}
       
@@ -224,6 +242,7 @@ export const DashboardPanel = () => {
           userId={internalUserId}
           initDataRaw={initDataRaw}
           selectedDate={selectedDateString}
+          refreshTrigger={refreshTrigger}
         />
       )}
     </div>

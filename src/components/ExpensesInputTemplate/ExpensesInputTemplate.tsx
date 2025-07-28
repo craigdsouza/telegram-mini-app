@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Send } from 'lucide-react';
 import { DateSelector } from '@/components/DateSelector/DateSelector';
+import { DateDisplay } from '@/components/DateSelector/DateDisplay';
 import { ModeSelector } from '@/components/ModeSelector/ModeSelector';
 import { CategorySelector } from '@/components/CategorySelector/CategorySelector';
 import './ExpensesInputTemplate.css';
@@ -18,6 +19,7 @@ interface ExpensesInputTemplateProps {
   errorMessage?: string;
   onDismissMessage?: () => void;
   variant?: 'default' | 'dashboard';
+  selectedDate?: string; // YYYY-MM-DD format for dashboard variant
 }
 
 export const ExpensesInputTemplate: React.FC<ExpensesInputTemplateProps> = ({ 
@@ -26,9 +28,10 @@ export const ExpensesInputTemplate: React.FC<ExpensesInputTemplateProps> = ({
   successMessage,
   errorMessage,
   onDismissMessage,
-  variant = 'default'
+  variant = 'default',
+  selectedDate
 }) => {
-  const [selectedDate, setSelectedDate] = useState<'TODAY' | 'YESTERDAY'>('TODAY');
+  const [selectedDateOption, setSelectedDateOption] = useState<'TODAY' | 'YESTERDAY'>('TODAY');
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const [selectedMode, setSelectedMode] = useState<'UPI' | 'CASH' | 'DEBIT CARD' | 'CREDIT CARD'>('UPI');
@@ -36,9 +39,19 @@ export const ExpensesInputTemplate: React.FC<ExpensesInputTemplateProps> = ({
 
   const handleSendMessage = () => {
     if (amount.trim() && !isSubmitting) {
+      let expenseDate: string;
+      
+      if (variant === 'dashboard' && selectedDate) {
+        // Use the selected date from calendar
+        expenseDate = selectedDate;
+      } else {
+        // Use the date selector logic
+        expenseDate = selectedDateOption === 'TODAY' ? new Date().toISOString().slice(0, 10) : 
+              new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+      }
+
       const expenseData = {
-        date: selectedDate === 'TODAY' ? new Date().toISOString().slice(0, 10) : 
-              new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
+        date: expenseDate,
         amount: parseFloat(amount),
         category: selectedCategory,
         description: description.trim() || null,
@@ -80,7 +93,11 @@ export const ExpensesInputTemplate: React.FC<ExpensesInputTemplateProps> = ({
         {!successMessage && !errorMessage ? (
           <>
             <div className="template-text">
-              <DateSelector value={selectedDate} onChange={setSelectedDate} />
+              {variant === 'dashboard' && selectedDate ? (
+                <DateDisplay date={selectedDate} />
+              ) : (
+                <DateSelector value={selectedDateOption} onChange={setSelectedDateOption} />
+              )}
               <span className="template-text-part"> I spent </span>
               <input
                 type="text"
