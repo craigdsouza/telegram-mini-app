@@ -40,9 +40,10 @@ interface ExpensesTableProps {
     description: string | null;
     mode: 'UPI' | 'CASH' | 'DEBIT CARD' | 'CREDIT CARD';
   };
+  selectedDate?: string | null; // New prop for single date filtering
 }
 
-export const ExpensesTable: React.FC<ExpensesTableProps> = ({ userId, initDataRaw, refreshTrigger, highlightNewEntry = false, newExpenseData }) => {
+export const ExpensesTable: React.FC<ExpensesTableProps> = ({ userId, initDataRaw, refreshTrigger, highlightNewEntry = false, newExpenseData, selectedDate }) => {
   const [expenses, setExpenses] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -63,23 +64,14 @@ export const ExpensesTable: React.FC<ExpensesTableProps> = ({ userId, initDataRa
           Authorization: `tma ${initDataRaw}`,
           ...(import.meta.env.DEV ? { 'X-Dev-Bypass': 'true' } : {})
         };
-        // Fetch user settings
-        const settingsRes = await fetch(`${apiUrl}/api/user/${userId}/settings`, { headers: initDataHeader });
-        let start: number | null = null;
-        let end: number | null = null;
-        if (settingsRes.ok) {
-          const settingsData = await settingsRes.json();
-          start = settingsData.settings.month_start;
-          end = settingsData.settings.month_end;
-        }
-        setMonthStart(start);
-        setMonthEnd(end);
-        // Calculate date range
-        const { startDate, endDate } = getCustomMonthRange(today, start, end);
+
         let expenses = [];
-        if (start && startDate.toISOString().slice(0,10) !== new Date(today.getFullYear(), today.getMonth(), 1).toISOString().slice(0,10)) {
-          // Use custom range endpoint if custom start date is set and not the 1st of the month
-          const requestUrl = `${apiUrl}/api/user/${userId}/expenses/range?start=${startDate.toISOString().slice(0,10)}&end=${endDate.toISOString().slice(0,10)}`;
+
+        // If selectedDate is provided, use the range endpoint for single date
+        if (selectedDate) {
+          console.log('[ExpensesTable] Fetching expenses for single date:', selectedDate);
+          const requestUrl = `${apiUrl}/api/user/${userId}/expenses/range?start=${selectedDate}&end=${selectedDate}`;
+          console.log('[ExpensesTable] API URL:', requestUrl);
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 30000);
           const response = await fetch(requestUrl, {
@@ -87,32 +79,68 @@ export const ExpensesTable: React.FC<ExpensesTableProps> = ({ userId, initDataRa
             signal: controller.signal
           });
           clearTimeout(timeoutId);
+          console.log('[ExpensesTable] Response status:', response.status);
           if (!response.ok) {
             const errorText = await response.text();
+            console.log('[ExpensesTable] Error response:', errorText);
             throw new Error(errorText);
           }
           const data = await response.json();
+          console.log('[ExpensesTable] Response data:', data);
           expenses = data.expenses || [];
         } else {
-          // Use current month endpoint if no custom start date
-          const year = today.getFullYear();
-          const month = today.getMonth() + 1;
-          // NOTE: This endpoint expects the Telegram user ID, not internal. You may need to pass it as a prop if needed.
-          // For now, fallback to internal user ID for both endpoints for consistency.
-          const requestUrl = `${apiUrl}/api/user/${userId}/expenses/current-month?year=${year}&month=${month}`;
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 30000);
-          const response = await fetch(requestUrl, {
-            headers: initDataHeader,
-            signal: controller.signal
-          });
-          clearTimeout(timeoutId);
-          if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(errorText);
+          // Original logic for current month or custom range
+          // Fetch user settings
+          const settingsRes = await fetch(`${apiUrl}/api/user/${userId}/settings`, { headers: initDataHeader });
+          let start: number | null = null;
+          let end: number | null = null;
+          if (settingsRes.ok) {
+            const settingsData = await settingsRes.json();
+            start = settingsData.settings.month_start;
+            end = settingsData.settings.month_end;
           }
-          const data = await response.json();
-          expenses = data.expenses || [];
+          setMonthStart(start);
+          setMonthEnd(end);
+          // Calculate date range
+          const { startDate, endDate } = getCustomMonthRange(today, start, end);
+          
+          if (start && startDate.toISOString().slice(0,10) !== new Date(today.getFullYear(), today.getMonth(), 1).toISOString().slice(0,10)) {
+            // Use custom range endpoint if custom start date is set and not the 1st of the month
+            const requestUrl = `${apiUrl}/api/user/${userId}/expenses/range?start=${startDate.toISOString().slice(0,10)}&end=${endDate.toISOString().slice(0,10)}`;
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000);
+            const response = await fetch(requestUrl, {
+              headers: initDataHeader,
+              signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+            if (!response.ok) {
+              const errorText = await response.text();
+              throw new Error(errorText);
+            }
+            const data = await response.json();
+            expenses = data.expenses || [];
+          } else {
+            // Use current month endpoint if no custom start date
+            const year = today.getFullYear();
+            const month = today.getMonth() + 1;
+            // NOTE: This endpoint expects the Telegram user ID, not internal. You may need to pass it as a prop if needed.
+            // For now, fallback to internal user ID for both endpoints for consistency.
+            const requestUrl = `${apiUrl}/api/user/${userId}/expenses/current-month?year=${year}&month=${month}`;
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000);
+            const response = await fetch(requestUrl, {
+              headers: initDataHeader,
+              signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+            if (!response.ok) {
+              const errorText = await response.text();
+              throw new Error(errorText);
+            }
+            const data = await response.json();
+            expenses = data.expenses || [];
+          }
         }
         setExpenses(expenses);
       } catch (err: any) {
@@ -122,7 +150,7 @@ export const ExpensesTable: React.FC<ExpensesTableProps> = ({ userId, initDataRa
       }
     };
     fetchSettingsAndExpenses();
-  }, [initDataRaw, userId, refreshTrigger]);
+  }, [initDataRaw, userId, refreshTrigger, selectedDate]); // Added selectedDate to dependencies
 
   // Debug refreshTrigger changes
   useEffect(() => {

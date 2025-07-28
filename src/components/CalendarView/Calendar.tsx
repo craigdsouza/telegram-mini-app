@@ -19,9 +19,15 @@ function getFirstDayOfWeek(year: number, month: number) {
 
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+interface CalendarProps {
+  entryDates?: number[];
+  onDateClick?: (date: number) => void;
+}
+
+export const Calendar: React.FC<CalendarProps> = ({ entryDates = [], onDateClick }) => {
+  const [isExpanded, setIsExpanded] = useState(true);
   const [isPressed, setIsPressed] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<number | null>(null);
   
   const initDataRaw = useSignal(_initDataRaw);
   const initDataState = useSignal(_initDataState);
@@ -71,6 +77,14 @@ export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] 
     setIsPressed(false);
   };
 
+  const handleDateClick = (e: React.MouseEvent, date: number) => {
+    e.stopPropagation(); // Prevent triggering the calendar expand/collapse
+    setSelectedDate(date);
+    if (onDateClick) {
+      onDateClick(date);
+    }
+  };
+
   // Build CSS classes
   const cardClasses = [
     'calendar-root',
@@ -103,12 +117,23 @@ export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] 
             {days.map((d, i) => {
               const isToday = d === today.getDate();
               const hasEntry = d !== null && entryDatesSet.has(d);
+              const isSelected = d === selectedDate;
+              
               let dayClass = 'calendar-day-cell';
               if (hasEntry) dayClass += ' has-entry';
-              else if (isToday) dayClass += ' today';
+              if (isToday) dayClass += ' today';
+              if (isSelected) dayClass += ' selected';
               if (!d) dayClass += ' empty';
+              
               return (
-                <div key={i} className={dayClass}>{d || ''}</div>
+                <div 
+                  key={i} 
+                  className={dayClass}
+                  onClick={d !== null ? (e) => handleDateClick(e, d) : undefined}
+                  style={d !== null ? { cursor: 'pointer' } : undefined}
+                >
+                  {d || ''}
+                </div>
               );
             })}
           </div>

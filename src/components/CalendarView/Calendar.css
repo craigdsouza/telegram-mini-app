@@ -1,7 +1,7 @@
 .calendar-root {
   width: calc(100% - 36px);
   max-width: 340px;
-  margin: 24px auto 0 auto;
+  margin: 24px auto 24px auto;
   background: var(--color-secondary);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
@@ -65,21 +65,60 @@
   font-family: var(--font-primary);
   transition: background 0.2s, color 0.2s, border 0.2s;
 }
+
 .calendar-day-cell.has-entry {
   background: var(--color-primary);
   color: var(--color-text-light);
   font-weight: 700;
   border: none;
 }
+
 .calendar-day-cell.today {
   background: transparent;
-  color: var(--color-primary);
+  color: var(--color-text-dark);
   font-weight: 700;
   border: 2px solid var(--color-primary);
 }
+
+.calendar-day-cell.selected {
+  border: 3px solid var(--color-text-light);
+  background: transparent;
+  color: var(--color-text-dark);
+  font-weight: 600;
+}
+
 .calendar-day-cell.empty {
   opacity: 0.3;
-} 
+}
+
+/* Handle overlapping states */
+.calendar-day-cell.today.has-entry {
+  background: var(--color-primary);
+  color: var(--color-text-dark);
+  font-weight: 700;
+  border: 2px solid var(--color-text-dark);
+}
+
+.calendar-day-cell.selected.has-entry {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  font-weight: 700;
+  border: 3px solid var(--color-text-light);
+}
+
+.calendar-day-cell.today.selected {
+  border: 3px solid var(--color-accent);
+  background: transparent;
+  color: var(--color-text-dark);
+  font-weight: 700;
+}
+
+.calendar-day-cell.today.selected.has-entry {
+  background: var(--color-primary);
+  color: var(--color-text-dark);
+  font-weight: 700;
+  border: 3px solid var(--color-text-light);
+}
 
 @keyframes slideDown {
   from {

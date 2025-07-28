@@ -12,6 +12,20 @@
   position: relative; /* For overlay positioning */
 }
 
+/* Dashboard variant - overrides fixed positioning */
+.template-input-container.dashboard {
+  position: static;
+  bottom: auto;
+  left: auto;
+  right: auto;
+  background: transparent;
+  border-top: none;
+  padding: 16px;
+  padding-bottom: 16px;
+  z-index: auto;
+  margin: 16px 0;
+}
+
 .template-input-wrapper {
   display: flex;
   align-items: center;

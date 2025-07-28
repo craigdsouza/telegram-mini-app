@@ -17,6 +17,7 @@ interface ExpensesInputTemplateProps {
   successMessage?: string;
   errorMessage?: string;
   onDismissMessage?: () => void;
+  variant?: 'default' | 'dashboard';
 }
 
 export const ExpensesInputTemplate: React.FC<ExpensesInputTemplateProps> = ({ 
@@ -24,7 +25,8 @@ export const ExpensesInputTemplate: React.FC<ExpensesInputTemplateProps> = ({
   isSubmitting = false,
   successMessage,
   errorMessage,
-  onDismissMessage
+  onDismissMessage,
+  variant = 'default'
 }) => {
   const [selectedDate, setSelectedDate] = useState<'TODAY' | 'YESTERDAY'>('TODAY');
   const [amount, setAmount] = useState('');
@@ -66,8 +68,14 @@ export const ExpensesInputTemplate: React.FC<ExpensesInputTemplateProps> = ({
     }
   };
 
+  // Build CSS classes
+  const containerClasses = [
+    'template-input-container',
+    variant === 'dashboard' ? 'dashboard' : ''
+  ].filter(Boolean).join(' ');
+
   return (
-    <div className="template-input-container">
+    <div className={containerClasses}>
       <div className="template-input-wrapper">
         {!successMessage && !errorMessage ? (
           <>

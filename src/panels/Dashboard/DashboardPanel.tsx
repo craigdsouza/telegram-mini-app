@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { initDataRaw as _initDataRaw, initDataState as _initDataState, useSignal } from '@telegram-apps/sdk-react';
 import { BudgetView } from '@/components/BudgetView/BudgetView';
 import { Calendar } from '@/components/CalendarView/Calendar';
+import { ExpensesInputTemplate } from '@/components/ExpensesInputTemplate/ExpensesInputTemplate';
+import { ExpensesTable } from '@/components/TableView/ExpensesTable';
 import './DashboardPanel.css';
 
 export const DashboardPanel = () => {
@@ -17,6 +19,63 @@ export const DashboardPanel = () => {
   const [entryDates, setEntryDates] = useState<number[]>([]);
   const [loadingDates, setLoadingDates] = useState(false);
   const [datesError, setDatesError] = useState<string | null>(null);
+
+  // State for selected date and components visibility
+  const [selectedDate, setSelectedDate] = useState<number | null>(null);
+  const [showExpensesComponents, setShowExpensesComponents] = useState(false);
+
+  // State for ExpensesInputTemplate
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | undefined>(undefined);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+
+  // Handle date selection from calendar
+  const handleDateClick = (date: number) => {
+    if (selectedDate === date) {
+      // If clicking the same date, toggle the components off
+      setSelectedDate(null);
+      setShowExpensesComponents(false);
+    } else {
+      // If clicking a different date, show the components
+      setSelectedDate(date);
+      setShowExpensesComponents(true);
+    }
+  };
+
+  // Handle expense submission
+  const handleExpenseSubmit = async (expenseData: {
+    date: string;
+    amount: number;
+    category: string;
+    description: string | null;
+    mode: 'UPI' | 'CASH' | 'DEBIT CARD' | 'CREDIT CARD';
+  }) => {
+    setIsSubmitting(true);
+    setSuccessMessage(undefined);
+    setErrorMessage(undefined);
+
+    try {
+      // For now, just show a success message
+      // TODO: Implement actual API call to submit expense
+      setSuccessMessage('Expense added successfully!');
+      
+      // Reset form after a delay
+      setTimeout(() => {
+        setSuccessMessage(undefined);
+        setErrorMessage(undefined);
+      }, 3000);
+    } catch (error: any) {
+      setErrorMessage(error.message || 'Failed to add expense');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Dismiss messages
+  const handleDismissMessage = () => {
+    setSuccessMessage(undefined);
+    setErrorMessage(undefined);
+  };
 
   // Fetch entry dates for Calendar
   useEffect(() => {
@@ -98,6 +157,11 @@ export const DashboardPanel = () => {
   const today = new Date();
   const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
 
+  // Construct selected date string for API
+  const selectedDateString = selectedDate ? 
+    `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}` : 
+    null;
+
   if (loadingDates) {
     return <div style={{ color: '#888', fontSize: 16, textAlign: 'center' }}>Loading Dashboard...</div>;
   }
@@ -126,7 +190,29 @@ export const DashboardPanel = () => {
           periodEnd={budgetData?.periodEnd}
         />
       )}
-      <Calendar entryDates={entryDates} />
+      
+      {/* ExpensesInputTemplate - Show when a date is selected */}
+      {showExpensesComponents && (
+        <ExpensesInputTemplate
+          onSubmit={handleExpenseSubmit}
+          isSubmitting={isSubmitting}
+          successMessage={successMessage}
+          errorMessage={errorMessage}
+          onDismissMessage={handleDismissMessage}
+          variant="dashboard"
+        />
+      )}
+      
+      <Calendar entryDates={entryDates} onDateClick={handleDateClick} />
+      
+      {/* ExpensesTable - Show when a date is selected */}
+      {showExpensesComponents && user && initDataRaw && (
+        <ExpensesTable
+          userId={user.id}
+          initDataRaw={initDataRaw}
+          selectedDate={selectedDateString}
+        />
+      )}
     </div>
   );
 }; 
