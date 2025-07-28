@@ -1,7 +1,7 @@
 .calendar-root {
   width: calc(100% - 36px);
   max-width: 340px;
-  margin: 24px auto 24px auto;
+  margin: 0px auto 24px auto;
   background: var(--color-secondary);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
