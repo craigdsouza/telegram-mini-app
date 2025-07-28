@@ -1,7 +1,4 @@
 .dashboard-panel-root {
-  width: 100%;
-  max-width: 360px;
-  margin: 0 auto;
-  margin-top: 86px;
-  /* Add any additional spacing or layout as needed */
+  padding:24px;
+  margin-top: 16px;
 } 

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   initDataRaw as _initDataRaw,
   initDataState as _initDataState,
@@ -20,6 +20,9 @@ function getFirstDayOfWeek(year: number, month: number) {
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isPressed, setIsPressed] = useState(false);
+  
   const initDataRaw = useSignal(_initDataRaw);
   const initDataState = useSignal(_initDataState);
   const user = useMemo(() => initDataState?.user, [initDataState]);
@@ -52,34 +55,70 @@ export const Calendar: React.FC<{ entryDates?: number[] }> = ({ entryDates = [] 
     days.push(null);
   }
 
+  const handleClick = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  const handleMouseDown = () => {
+    setIsPressed(true);
+  };
+
+  const handleMouseUp = () => {
+    setIsPressed(false);
+  };
+
+  const handleMouseLeave = () => {
+    setIsPressed(false);
+  };
+
+  // Build CSS classes
+  const cardClasses = [
+    'calendar-root',
+    isPressed ? 'pressed' : ''
+  ].filter(Boolean).join(' ');
+
   return (
-    <div className="calendar-root">
+    <div 
+      className={cardClasses}
+      onClick={handleClick}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseLeave}
+      onTouchStart={handleMouseDown}
+      onTouchEnd={handleMouseUp}
+    >
       <div className="calendar-title">
         {today.toLocaleString('default', { month: 'long' })}, {year}
       </div>
-      <div className="calendar-weekdays-row">
-        {WEEKDAYS.map((wd) => (
-          <div key={wd} className="calendar-weekday-cell">{wd}</div>
-        ))}
-      </div>
-      <div className="calendar-days-grid">
-        {days.map((d, i) => {
-          const isToday = d === today.getDate();
-          const hasEntry = d !== null && entryDatesSet.has(d);
-          let dayClass = 'calendar-day-cell';
-          if (hasEntry) dayClass += ' has-entry';
-          else if (isToday) dayClass += ' today';
-          if (!d) dayClass += ' empty';
-          return (
-            <div key={i} className={dayClass}>{d || ''}</div>
-          );
-        })}
-      </div>
-      <EntrySummary
-        entryCount={entryDates.length}
-        totalDays={daysInMonth}
-        monthName={today.toLocaleString('default', { month: 'long' })}
-      />
+      
+      {/* Calendar content - Only show when expanded */}
+      {isExpanded && (
+        <>
+          <div className="calendar-weekdays-row">
+            {WEEKDAYS.map((wd) => (
+              <div key={wd} className="calendar-weekday-cell">{wd}</div>
+            ))}
+          </div>
+          <div className="calendar-days-grid">
+            {days.map((d, i) => {
+              const isToday = d === today.getDate();
+              const hasEntry = d !== null && entryDatesSet.has(d);
+              let dayClass = 'calendar-day-cell';
+              if (hasEntry) dayClass += ' has-entry';
+              else if (isToday) dayClass += ' today';
+              if (!d) dayClass += ' empty';
+              return (
+                <div key={i} className={dayClass}>{d || ''}</div>
+              );
+            })}
+          </div>
+          <EntrySummary
+            entryCount={entryDates.length}
+            totalDays={daysInMonth}
+            monthName={today.toLocaleString('default', { month: 'long' })}
+          />
+        </>
+      )}
     </div>
   );
 }; 

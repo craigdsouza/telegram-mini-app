@@ -30,7 +30,8 @@ export const EntrySummary: React.FC<EntrySummaryProps> = ({ entryCount, totalDay
       fontWeight: 500,
       color: '#7a5a00',
       gap: 16,
-      fontFamily: 'var(--font-primary)'
+      fontFamily: 'var(--font-primary)',
+      animation: 'slideDown 0.3s ease-out'
     }}>
       <span style={{ fontFamily: 'var(--font-primary)' }}>{entryCount}/{totalDays} days in {monthName}</span>
       <span style={{ 
