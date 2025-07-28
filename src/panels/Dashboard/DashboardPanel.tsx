@@ -50,6 +50,7 @@ export const DashboardPanel = () => {
     description: string | null;
     mode: 'UPI' | 'CASH' | 'DEBIT CARD' | 'CREDIT CARD';
   }) => {
+    console.log('💰 [DASHBOARD] Submitting expense:', expenseData);
     setIsSubmitting(true);
     setSuccessMessage(undefined);
     setErrorMessage(undefined);
