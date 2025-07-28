@@ -1,12 +1,21 @@
 .budgetview-root {
   /* width: 100%; */
   /* max-width: 360px; */
-  padding: 20px;
+  padding: 14px;
   background: var(--color-bg-light);
   border-radius: 12px;
   margin: 16px 0;
   border: 2px solid var(--color-secondary);
   font-family: var(--font-primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  transform: scale(1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.budgetview-root.pressed {
+  transform: scale(0.98);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .budgetview-empty {
@@ -26,7 +35,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .budgetview-title {
@@ -54,7 +63,7 @@
 
 .budgetview-progress-container {
   position: relative;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .budgetview-progress-bar {
@@ -93,6 +102,7 @@
   align-items: center;
   font-size: 14px;
   color: var(--color-text-dark);
+  animation: slideDown 0.3s ease-out;
 }
 
 .budgetview-spent-label,
@@ -114,10 +124,11 @@
 
 .budgetview-percent {
   text-align: center;
-  margin-top: 12px;
-  font-size: 16px;
+  margin-top: 8px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--color-primary);
+  animation: slideDown 0.3s ease-out;
 }
 .budgetview-percent.over {
   color: #e74c3c;
@@ -133,4 +144,18 @@
   font-weight: 500;
   text-align: center;
   border: 1px solid #fcc;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 100px;
+  }
 } 
