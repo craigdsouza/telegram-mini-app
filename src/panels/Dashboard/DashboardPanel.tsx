@@ -4,9 +4,12 @@ import { BudgetView } from '@/components/BudgetView/BudgetView';
 import { Calendar } from '@/components/CalendarView/Calendar';
 import { ExpensesInputTemplate } from '@/components/ExpensesInputTemplate/ExpensesInputTemplate';
 import { ExpensesTable } from '@/components/TableView/ExpensesTable';
+import { useUser } from '@/contexts/UserContext';
 import './DashboardPanel.css';
 
 export const DashboardPanel = () => {
+  const { internalUserId, telegramUserId, isLoading: userLoading, error: userError } = useUser();
+  console.log('💰 [DASHBOARD] User:', internalUserId, telegramUserId);
   const initDataRaw = useSignal(_initDataRaw);
   const initDataState = useSignal(_initDataState);
   const user = useMemo(() => initDataState?.user, [initDataState]);
@@ -50,7 +53,6 @@ export const DashboardPanel = () => {
     description: string | null;
     mode: 'UPI' | 'CASH' | 'DEBIT CARD' | 'CREDIT CARD';
   }) => {
-    console.log('💰 [DASHBOARD] Submitting expense:', expenseData);
     setIsSubmitting(true);
     setSuccessMessage(undefined);
     setErrorMessage(undefined);
@@ -163,6 +165,16 @@ export const DashboardPanel = () => {
     `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}` : 
     null;
 
+  // Show loading state while user data is being fetched
+  if (userLoading) {
+    return <div style={{ color: '#888', fontSize: 16, textAlign: 'center' }}>Loading user data...</div>;
+  }
+
+  // Show error state if user data failed to load
+  if (userError) {
+    return <div style={{ color: '#e74c3c', fontSize: 16, textAlign: 'center' }}>Error loading user data: {userError}</div>;
+  }
+
   if (loadingDates) {
     return <div style={{ color: '#888', fontSize: 16, textAlign: 'center' }}>Loading Dashboard...</div>;
   }
@@ -207,9 +219,9 @@ export const DashboardPanel = () => {
       <Calendar entryDates={entryDates} onDateClick={handleDateClick} />
       
       {/* ExpensesTable - Show when a date is selected */}
-      {showExpensesComponents && user && initDataRaw && (
+      {showExpensesComponents && internalUserId && initDataRaw && (
         <ExpensesTable
-          userId={user.id}
+          userId={internalUserId}
           initDataRaw={initDataRaw}
           selectedDate={selectedDateString}
         />

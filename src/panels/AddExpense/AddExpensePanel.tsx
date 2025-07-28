@@ -1,18 +1,16 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { initDataRaw as _initDataRaw, initDataState as _initDataState, useSignal } from '@telegram-apps/sdk-react';
 import { ExpensesInputTemplate } from '@/components/ExpensesInputTemplate/ExpensesInputTemplate';
 import { ExpensesTable } from '@/components/TableView/ExpensesTable';
+import { useUser } from '@/contexts/UserContext';
 import './AddExpensePanel.css';
 
 export const AddExpensePanel: React.FC = () => {
+  const { internalUserId, isLoading: userLoading, error: userError } = useUser();
   const initDataRaw = useSignal(_initDataRaw);
   const initDataState = useSignal(_initDataState);
   const user = useMemo(() => initDataState?.user, [initDataState]);
-
-  // State for internal user ID (needed for ExpensesTable)
-  const [internalUserId, setInternalUserId] = useState<number | null>(null);
-  const [userIdLoading, setUserIdLoading] = useState(false);
-  const [userIdError, setUserIdError] = useState<string | null>(null);
+  console.log('💰 [ADD EXPENSE] User:', internalUserId, user);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -81,36 +79,6 @@ export const AddExpensePanel: React.FC = () => {
     setNewExpenseData(null);
   };
 
-
-
-  // Fetch internal user ID from backend (needed for ExpensesTable)
-  useEffect(() => {
-    if (!user?.id) return;
-    setUserIdLoading(true);
-    setUserIdError(null);
-    const apiUrl = import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app';
-    const url = `${apiUrl}/api/user/${user.id}`;
-    console.log('[AddExpensePanel] Fetching internal user ID for telegram ID:', user.id, url);
-    fetch(url)
-      .then(async (res) => {
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(`HTTP ${res.status}: ${text}`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setInternalUserId(data.id);
-        console.log('[AddExpensePanel] Got internal user ID:', data.id);
-      })
-      .catch((err) => {
-        setUserIdError('Failed to fetch internal user ID');
-        setInternalUserId(null);
-        console.error('[AddExpensePanel] Error fetching internal user ID:', err);
-      })
-      .finally(() => setUserIdLoading(false));
-  }, [user?.id]);
-
   return (
     <div className="add-expense-panel-root">
       {/* Expenses Table */}
@@ -118,10 +86,10 @@ export const AddExpensePanel: React.FC = () => {
         <h2>Expenses this month</h2>
       </div>
       <div className="expenses-table-container">
-        {userIdLoading ? (
+        {userLoading ? (
           <div className="expenses-loading">Loading user info...</div>
-        ) : userIdError ? (
-          <div className="expenses-error">Error: {userIdError}</div>
+        ) : userError ? (
+          <div className="expenses-error">Error: {userError}</div>
         ) : internalUserId && initDataRaw ? (
           <ExpensesTable 
             userId={internalUserId} 
@@ -132,8 +100,6 @@ export const AddExpensePanel: React.FC = () => {
           />
         ) : null}
       </div>
-
-
 
       {/* Expenses Input Template */}
       <ExpensesInputTemplate 
