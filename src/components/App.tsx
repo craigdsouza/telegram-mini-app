@@ -14,34 +14,16 @@ export function App() {
   const initDataState = useSignal(_initDataState);
   const user = useMemo(() => initDataState?.user, [initDataState]);
 
-  // Identify user when app loads
+  // Identify user as soon as possible
   useEffect(() => {
-    console.log('🔍 [POSTHOG] App level - PostHog instance:', posthog);
-    console.log('🔍 [POSTHOG] App level - User data (initDataState):', user);
-    console.log('🔍 [POSTHOG] App level - Environment vars:', {
-      key: import.meta.env.VITE_PUBLIC_POSTHOG_KEY ? 'present' : 'missing',
-      host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST
-    });
-    
     if (posthog && user?.id) {
-      console.log('🔍 [POSTHOG] Attempting to identify user with data:', {
-        distinct_id: user.id.toString(),
-        properties: {
-          first_name: user.first_name,
-          last_name: user.last_name,
-          username: user.username
-        }
+      console.log('🔍 [POSTHOG] Identifying user immediately:', user.id.toString());
+      posthog.identify(user.id.toString(), {
+        first_name: user.first_name,
+        last_name: user.last_name,
+        username: user.username
       });
-      
-      posthog.identify(user.id.toString());
-      
-      console.log('✅ [POSTHOG] User identification called for:', user.id.toString());
-      console.log('✅ [POSTHOG] Check PostHog dashboard for person profile creation');
-      
-    } else if (posthog && !user?.id) {
-      console.log('⏳ [POSTHOG] Waiting for user data...');
-    } else {
-      console.warn('⚠️ [POSTHOG] Cannot identify user:', { posthog: !!posthog, userId: user?.id });
+      console.log('✅ [POSTHOG] User identification completed for:', user.id.toString());
     }
   }, [posthog, user]);
 
