@@ -33,11 +33,7 @@ export function App() {
         }
       });
       
-      posthog.identify(user.id.toString(), {
-        first_name: user.first_name,
-        last_name: user.last_name,
-        username: user.username
-      });
+      posthog.identify(user.id.toString());
       
       // Check if identification worked by getting the current distinct ID
       const currentDistinctId = posthog.get_distinct_id();
@@ -46,6 +42,10 @@ export function App() {
         current_distinct_id: currentDistinctId,
         identification_successful: currentDistinctId === user.id.toString()
       });
+      
+      // Additional debugging - check PostHog state
+      console.log('🔍 [POSTHOG] PostHog state check:', posthog);
+      
     } else if (posthog && !user?.id) {
       console.log('⏳ [POSTHOG] Waiting for user data...');
     } else {
