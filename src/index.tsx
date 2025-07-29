@@ -16,7 +16,6 @@ import './mockEnv.ts';
 
 const options = {
   api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
-  person_profiles: 'ALWAYS'
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
