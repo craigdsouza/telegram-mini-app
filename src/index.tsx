@@ -17,6 +17,10 @@ import './mockEnv.ts';
 const options = {
   api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
   debug: true, // Enable PostHog debug mode to see more details
+  loaded: (posthog: any) => {
+    console.log('🎉 [POSTHOG] PostHog loaded callback triggered');
+    console.log('🎉 [POSTHOG] Current distinct ID after load:', posthog.get_distinct_id());
+  }
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);

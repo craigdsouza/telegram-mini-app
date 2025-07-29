@@ -35,16 +35,8 @@ export function App() {
       
       posthog.identify(user.id.toString());
       
-      // Check if identification worked by getting the current distinct ID
-      const currentDistinctId = posthog.get_distinct_id();
-      console.log('✅ [POSTHOG] User identification result:', {
-        attempted_id: user.id.toString(),
-        current_distinct_id: currentDistinctId,
-        identification_successful: currentDistinctId === user.id.toString()
-      });
-      
-      // Additional debugging - check PostHog state
-      console.log('🔍 [POSTHOG] PostHog state check:', posthog);
+      console.log('✅ [POSTHOG] User identification called for:', user.id.toString());
+      console.log('✅ [POSTHOG] Check PostHog dashboard for person profile creation');
       
     } else if (posthog && !user?.id) {
       console.log('⏳ [POSTHOG] Waiting for user data...');
