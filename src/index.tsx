@@ -18,7 +18,8 @@ const options = {
   api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
   debug: true, // Enable PostHog debug mode to see more details
   // Fix cookie subdomain mismatch for Railway
-  persistence: 'localStorage' as const, // Use localStorage only to avoid cookie issues
+  persistence: 'localStorage+cookie' as const, // Use localStorage only to avoid cookie issues
+  cookie_domain: '.railway.app',
   loaded: (posthog: any) => {
     console.log('🎉 [POSTHOG] PostHog loaded callback triggered');
     console.log('🎉 [POSTHOG] Current distinct ID after load:', posthog.get_distinct_id());
