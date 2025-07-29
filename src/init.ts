@@ -22,9 +22,17 @@ export async function init(options: {
   eruda: boolean;
   mockForMacOS: boolean;
 }): Promise<void> {
+  // Enhanced initialization logging
+  console.log('🚀 [INIT] Starting Telegram Mini App initialization...');
+  console.log('🚀 [INIT] Current domain at init:', window.location.hostname);
+  console.log('🚀 [INIT] Init options:', options);
+  console.log('🚀 [INIT] Launch params:', retrieveLaunchParams());
+  
   // Set @telegram-apps/sdk-react debug mode and initialize it.
   setDebug(options.debug);
+  console.log('🚀 [INIT] Debug mode set to:', options.debug);
   initSDK();
+  console.log('🚀 [INIT] SDK initialized');
 
   // Add Eruda if needed.
   options.eruda && void import('eruda').then(({ default: eruda }) => {

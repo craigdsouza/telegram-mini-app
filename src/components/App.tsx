@@ -14,6 +14,34 @@ export function App() {
   const initDataState = useSignal(_initDataState);
   const user = useMemo(() => initDataState?.user, [initDataState]);
 
+  // Enhanced domain debugging in App component
+  useEffect(() => {
+    console.log('🏠 [APP] App component mounted');
+    console.log('🏠 [APP] Current domain in App:', window.location.hostname);
+    console.log('🏠 [APP] Expected custom domain: finance.craigdsouza.in');
+    console.log('🏠 [APP] Expected Railway domain: telegram-mini-app-production-8aae.up.railway.app');
+    console.log('🏠 [APP] Is running on custom domain?', window.location.hostname === 'finance.craigdsouza.in');
+    console.log('🏠 [APP] Is running on Railway domain?', window.location.hostname === 'telegram-mini-app-production-8aae.up.railway.app');
+    console.log('🏠 [APP] Full URL:', window.location.href);
+    console.log('🏠 [APP] Launch params:', lp);
+    console.log('🏠 [APP] Platform:', lp.tgWebAppPlatform);
+    
+    // Test API connectivity
+    const testApiConnection = async () => {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app';
+        console.log('🏠 [APP] Testing API connection to:', apiUrl);
+        const response = await fetch(`${apiUrl}/ping`);
+        const data = await response.json();
+        console.log('🏠 [APP] API ping response:', data);
+      } catch (error) {
+        console.error('🏠 [APP] API ping failed:', error);
+      }
+    };
+    
+    testApiConnection();
+  }, [lp]);
+
   // Identify user as soon as possible
   useEffect(() => {
     console.log('🔍 [POSTHOG] App level - PostHog instance:', posthog);

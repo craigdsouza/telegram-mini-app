@@ -33,6 +33,23 @@ const options = {
   }
 }
 
+// Enhanced domain debugging logs
+console.log('🌐 [DOMAIN DEBUG] Mini app starting...');
+console.log('🌐 [DOMAIN DEBUG] Current window.location:', {
+  href: window.location.href,
+  hostname: window.location.hostname,
+  protocol: window.location.protocol,
+  pathname: window.location.pathname,
+  search: window.location.search,
+  hash: window.location.hash
+});
+console.log('🌐 [DOMAIN DEBUG] Expected custom domain: finance.craigdsouza.in');
+console.log('🌐 [DOMAIN DEBUG] Expected Railway domain: telegram-mini-app-production-8aae.up.railway.app');
+console.log('🌐 [DOMAIN DEBUG] Is custom domain?', window.location.hostname === 'finance.craigdsouza.in');
+console.log('🌐 [DOMAIN DEBUG] Is Railway domain?', window.location.hostname === 'telegram-mini-app-production-8aae.up.railway.app');
+console.log('🌐 [DOMAIN DEBUG] User agent:', navigator.userAgent);
+console.log('🌐 [DOMAIN DEBUG] Referrer:', document.referrer);
+
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 
 try {
