@@ -29,6 +29,21 @@ export function App() {
         username: user.username
       });
       console.log('✅ [POSTHOG] User identified at app level:', user.id, user.first_name);
+    } else if (posthog && !user?.id) {
+      console.log('⏳ [POSTHOG] Waiting for user data...');
+      // Retry after a short delay
+      const timer = setTimeout(() => {
+        const retryUser = lp.user as any;
+        if (retryUser?.id) {
+          posthog.identify(retryUser.id.toString(), {
+            first_name: retryUser.first_name,
+            last_name: retryUser.last_name,
+            username: retryUser.username
+          });
+          console.log('✅ [POSTHOG] User identified on retry:', retryUser.id, retryUser.first_name);
+        }
+      }, 1000);
+      return () => clearTimeout(timer);
     } else {
       console.warn('⚠️ [POSTHOG] Cannot identify user:', { posthog: !!posthog, userId: user?.id });
     }
