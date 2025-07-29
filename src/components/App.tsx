@@ -35,6 +35,7 @@ export function App() {
       const timer = setTimeout(() => {
         const retryUser = lp.user as any;
         if (retryUser?.id) {
+          console.log('🔍 [POSTHOG] Retrying user identification...');
           posthog.identify(retryUser.id.toString(), {
             first_name: retryUser.first_name,
             last_name: retryUser.last_name,
@@ -42,7 +43,7 @@ export function App() {
           });
           console.log('✅ [POSTHOG] User identified on retry:', retryUser.id, retryUser.first_name);
         }
-      }, 1000);
+      }, 5000);
       return () => clearTimeout(timer);
     } else {
       console.warn('⚠️ [POSTHOG] Cannot identify user:', { posthog: !!posthog, userId: user?.id });
