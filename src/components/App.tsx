@@ -14,6 +14,13 @@ export function App() {
 
   // Identify user when app loads
   useEffect(() => {
+    console.log('🔍 [POSTHOG] App level - PostHog instance:', posthog);
+    console.log('🔍 [POSTHOG] App level - User data:', lp.user);
+    console.log('🔍 [POSTHOG] App level - Environment vars:', {
+      key: import.meta.env.VITE_PUBLIC_POSTHOG_KEY ? 'present' : 'missing',
+      host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST
+    });
+    
     const user = lp.user as any;
     if (posthog && user?.id) {
       posthog.identify(user.id.toString(), {
@@ -22,6 +29,8 @@ export function App() {
         username: user.username
       });
       console.log('✅ [POSTHOG] User identified at app level:', user.id, user.first_name);
+    } else {
+      console.warn('⚠️ [POSTHOG] Cannot identify user:', { posthog: !!posthog, userId: user?.id });
     }
   }, [posthog, lp.user]);
 
