@@ -24,12 +24,28 @@ export function App() {
     });
     
     if (posthog && user?.id) {
+      console.log('🔍 [POSTHOG] Attempting to identify user with data:', {
+        distinct_id: user.id.toString(),
+        properties: {
+          first_name: user.first_name,
+          last_name: user.last_name,
+          username: user.username
+        }
+      });
+      
       posthog.identify(user.id.toString(), {
         first_name: user.first_name,
         last_name: user.last_name,
         username: user.username
       });
-      console.log('✅ [POSTHOG] User identified at app level:', user.id, user.first_name);
+      
+      // Check if identification worked by getting the current distinct ID
+      const currentDistinctId = posthog.get_distinct_id();
+      console.log('✅ [POSTHOG] User identification result:', {
+        attempted_id: user.id.toString(),
+        current_distinct_id: currentDistinctId,
+        identification_successful: currentDistinctId === user.id.toString()
+      });
     } else if (posthog && !user?.id) {
       console.log('⏳ [POSTHOG] Waiting for user data...');
     } else {
