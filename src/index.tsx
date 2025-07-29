@@ -17,9 +17,9 @@ import './mockEnv.ts';
 const options = {
   api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
   debug: true, // Enable PostHog debug mode to see more details
-  // Try default persistence with explicit configuration
+  // Use default persistence with custom domain
   persistence: 'localStorage+cookie' as const, // Use default persistence
-  cookie_domain: '.railway.app', // Explicitly set for Railway subdomains
+  cookie_domain: '.craigdsouza.in', // Replace with your actual domain
   loaded: (posthog: any) => {
     console.log('🎉 [POSTHOG] PostHog loaded callback triggered');
     console.log('🎉 [POSTHOG] Current distinct ID after load:', posthog.get_distinct_id());
@@ -28,7 +28,7 @@ const options = {
     console.log('🎉 [POSTHOG] PostHog config:', {
       api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
       persistence: 'localStorage+cookie',
-      cookie_domain: '.railway.app'
+      cookie_domain: '.craigdsouza.in'
     });
   }
 }
