@@ -7,11 +7,17 @@ import { retrieveLaunchParams } from '@telegram-apps/sdk-react';
 import { EnvUnsupported } from '@/components/EnvUnsupported.tsx';
 import { Root } from '@/components/Root.tsx';
 import { init } from '@/init.ts';
+import { PostHogProvider } from 'posthog-js/react'
 
 import './index.css';
 
 // Mock the environment in case, we are outside Telegram.
 import './mockEnv.ts';
+
+const options = {
+  api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
+  person_profiles: 'ALWAYS'
+}
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 
@@ -30,7 +36,9 @@ try {
     .then(() => {
       root.render(
         <StrictMode>
-          <Root/>
+          <PostHogProvider apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY} options={options}>
+            <Root/>
+          </PostHogProvider>
         </StrictMode>,
       );
     });

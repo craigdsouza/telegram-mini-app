@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import squirrelImg from '@/../assets/excited-squirrel.png';
 import { initDataState as _initDataState, useSignal } from '@telegram-apps/sdk-react';
 import { useOnboarding } from '@/hooks/useOnboarding';
+import { usePostHog } from 'posthog-js/react';
 import './WelcomePage.css';
 
 export const WelcomePage: React.FC = () => {
@@ -18,6 +19,30 @@ export const WelcomePage: React.FC = () => {
   const [isClicked, setIsClicked] = useState(false);
   
   const { loading, error, isComplete, completeStep } = useOnboarding();
+  const posthog = usePostHog();
+
+
+
+  // Test PostHog event when page loads
+  useEffect(() => {
+    console.log('🔍 [POSTHOG] Testing PostHog event capture...');
+    console.log('🔍 [POSTHOG] PostHog instance:', posthog);
+    
+    if (posthog) {
+      try {
+        posthog.capture('welcome_page_loaded', { 
+          user_id: user?.id,
+          user_first_name: firstName,
+          timestamp: new Date().toISOString()
+        });
+        console.log('✅ [POSTHOG] Event captured successfully: welcome_page_loaded');
+      } catch (error) {
+        console.error('❌ [POSTHOG] Failed to capture event:', error);
+      }
+    } else {
+      console.warn('⚠️ [POSTHOG] PostHog instance not available');
+    }
+  }, [posthog, user?.id, firstName]);
 
   // Redirect to home if onboarding is already completed
   useEffect(() => {
@@ -59,6 +84,7 @@ export const WelcomePage: React.FC = () => {
       
     } catch (error) {
       console.error('🎯 [ONBOARDING] Error completing welcome step:', error);
+      
       // Still navigate even if API call fails
       setTimeout(() => {
         navigate('/pledge');
