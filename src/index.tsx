@@ -17,12 +17,13 @@ import './mockEnv.ts';
 const options = {
   api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
   debug: true, // Enable PostHog debug mode to see more details
-  // Fix cookie subdomain mismatch for Railway
-  persistence: 'localStorage+cookie' as const, // Use localStorage only to avoid cookie issues
-  cookie_domain: '.railway.app',
+  // Disable persistence to see if that's the issue
+  persistence: 'memory' as const, // Use memory only - no storage
   loaded: (posthog: any) => {
     console.log('🎉 [POSTHOG] PostHog loaded callback triggered');
     console.log('🎉 [POSTHOG] Current distinct ID after load:', posthog.get_distinct_id());
+    console.log('🎉 [POSTHOG] Current URL:', window.location.href);
+    console.log('🎉 [POSTHOG] Current domain:', window.location.hostname);
   }
 }
 

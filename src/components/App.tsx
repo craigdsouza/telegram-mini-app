@@ -16,6 +16,13 @@ export function App() {
 
   // Identify user as soon as possible
   useEffect(() => {
+    console.log('🔍 [POSTHOG] App level - PostHog instance:', posthog);
+    console.log('🔍 [POSTHOG] App level - User data (initDataState):', user);
+    console.log('🔍 [POSTHOG] App level - Environment vars:', {
+      key: import.meta.env.VITE_PUBLIC_POSTHOG_KEY ? 'present' : 'missing',
+      host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST
+    });
+    
     if (posthog && user?.id) {
       console.log('🔍 [POSTHOG] Identifying user immediately:', user.id.toString());
       posthog.identify(user.id.toString(), {
@@ -24,6 +31,11 @@ export function App() {
         username: user.username
       });
       console.log('✅ [POSTHOG] User identification completed for:', user.id.toString());
+      console.log('✅ [POSTHOG] Distinct ID after identification:', posthog.get_distinct_id());
+    } else if (posthog && !user?.id) {
+      console.log('⏳ [POSTHOG] Waiting for user data...');
+    } else {
+      console.warn('⚠️ [POSTHOG] Cannot identify user:', { posthog: !!posthog, userId: user?.id });
     }
   }, [posthog, user]);
 
