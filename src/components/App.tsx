@@ -25,13 +25,26 @@ export function App() {
     
     if (posthog && user?.id) {
       console.log('🔍 [POSTHOG] Identifying user immediately:', user.id.toString());
+      
+      // Get distinct ID before identification
+      console.log('🔍 [POSTHOG] Distinct ID BEFORE identification:', posthog.get_distinct_id());
+      
       posthog.identify(user.id.toString(), {
         first_name: user.first_name,
         last_name: user.last_name,
         username: user.username
       });
+      
       console.log('✅ [POSTHOG] User identification completed for:', user.id.toString());
-      console.log('✅ [POSTHOG] Distinct ID after identification:', posthog.get_distinct_id());
+      
+      // Check distinct ID after a short delay to allow processing
+      setTimeout(() => {
+        console.log('🔍 [POSTHOG] Distinct ID AFTER identification (delayed):', posthog.get_distinct_id());
+      }, 100);
+      
+      // Also check immediately
+      console.log('🔍 [POSTHOG] Distinct ID AFTER identification (immediate):', posthog.get_distinct_id());
+      
     } else if (posthog && !user?.id) {
       console.log('⏳ [POSTHOG] Waiting for user data...');
     } else {
