@@ -17,9 +17,8 @@ import './mockEnv.ts';
 const options = {
   api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
   debug: true, // Enable PostHog debug mode to see more details
-  // Use default persistence with custom domain
-  persistence: 'localStorage+cookie' as const, // Use default persistence
-  cookie_domain: '.craigdsouza.in', // Replace with your actual domain
+  // Use localStorage only to avoid cookie domain issues
+  persistence: 'localStorage' as const,
   loaded: (posthog: any) => {
     console.log('🎉 [POSTHOG] PostHog loaded callback triggered');
     console.log('🎉 [POSTHOG] Current distinct ID after load:', posthog.get_distinct_id());
@@ -27,28 +26,12 @@ const options = {
     console.log('🎉 [POSTHOG] Current domain:', window.location.hostname);
     console.log('🎉 [POSTHOG] PostHog config:', {
       api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
-      persistence: 'localStorage+cookie',
-      cookie_domain: '.craigdsouza.in'
+      persistence: 'localStorage'
     });
   }
 }
 
-// Enhanced domain debugging logs
-console.log('🌐 [DOMAIN DEBUG] Mini app starting...');
-console.log('🌐 [DOMAIN DEBUG] Current window.location:', {
-  href: window.location.href,
-  hostname: window.location.hostname,
-  protocol: window.location.protocol,
-  pathname: window.location.pathname,
-  search: window.location.search,
-  hash: window.location.hash
-});
-console.log('🌐 [DOMAIN DEBUG] Expected custom domain: finance.craigdsouza.in');
-console.log('🌐 [DOMAIN DEBUG] Expected Railway domain: telegram-mini-app-production-8aae.up.railway.app');
-console.log('🌐 [DOMAIN DEBUG] Is custom domain?', window.location.hostname === 'finance.craigdsouza.in');
-console.log('🌐 [DOMAIN DEBUG] Is Railway domain?', window.location.hostname === 'telegram-mini-app-production-8aae.up.railway.app');
-console.log('🌐 [DOMAIN DEBUG] User agent:', navigator.userAgent);
-console.log('🌐 [DOMAIN DEBUG] Referrer:', document.referrer);
+
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 
