@@ -19,6 +19,8 @@ const options = {
   debug: true, // Enable PostHog debug mode to see more details
   // Use localStorage only to avoid cookie domain issues
   persistence: 'localStorage' as const,
+  // Disable automatic distinct ID generation
+  disable_session_recording: true,
   loaded: (posthog: any) => {
     console.log('🎉 [POSTHOG] PostHog loaded callback triggered');
     console.log('🎉 [POSTHOG] Current distinct ID after load:', posthog.get_distinct_id());
@@ -28,6 +30,10 @@ const options = {
       api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
       persistence: 'localStorage'
     });
+    
+    // Immediately opt out to prevent automatic ID generation
+    posthog.opt_out_capturing();
+    console.log('🎉 [POSTHOG] Opted out of capturing to prevent auto ID generation');
   }
 }
 

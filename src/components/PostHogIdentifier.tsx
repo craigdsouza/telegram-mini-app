@@ -13,16 +13,19 @@ export const PostHogIdentifier: React.FC = () => {
       console.log('🆔 [POSTHOG_ID] Starting user identification...');
       console.log('🆔 [POSTHOG_ID] User data:', user);
       
-      // Get current distinct ID
-      const currentId = posthog.get_distinct_id();
-      console.log('🆔 [POSTHOG_ID] Current distinct ID:', currentId);
+      // Force a complete reset and re-identification
+      console.log('🆔 [POSTHOG_ID] Force resetting PostHog...');
+      posthog.reset();
       
-      // Only identify if we haven't already or if the ID is different
-      if (currentId !== user.id.toString()) {
-        console.log('🆔 [POSTHOG_ID] Identifying user with Telegram ID:', user.id.toString());
+      // Wait a bit for reset to complete, then identify
+      setTimeout(() => {
+        console.log('🆔 [POSTHOG_ID] Setting up user identification...');
         
-        // Reset and identify
-        posthog.reset();
+        // First opt in to enable capturing
+        posthog.opt_in_capturing();
+        
+        // Now identify with Telegram ID
+        console.log('🆔 [POSTHOG_ID] Identifying user with Telegram ID:', user.id.toString());
         posthog.identify(user.id.toString(), {
           first_name: user.first_name,
           last_name: user.last_name,
@@ -34,16 +37,24 @@ export const PostHogIdentifier: React.FC = () => {
         
         hasIdentified.current = true;
         
-        // Verify identification worked
+        // Verify identification worked with multiple checks
         setTimeout(() => {
           const newId = posthog.get_distinct_id();
-          console.log('🆔 [POSTHOG_ID] Verification - New distinct ID:', newId);
+          console.log('🆔 [POSTHOG_ID] Verification (100ms) - New distinct ID:', newId);
           console.log('🆔 [POSTHOG_ID] Identification successful?', newId === user.id.toString());
-        }, 200);
-      } else {
-        console.log('🆔 [POSTHOG_ID] User already identified with correct ID');
-        hasIdentified.current = true;
-      }
+        }, 100);
+        
+        setTimeout(() => {
+          const newId = posthog.get_distinct_id();
+          console.log('🆔 [POSTHOG_ID] Verification (500ms) - New distinct ID:', newId);
+          console.log('🆔 [POSTHOG_ID] Identification successful?', newId === user.id.toString());
+          
+          if (newId !== user.id.toString()) {
+            console.error('🆔 [POSTHOG_ID] IDENTIFICATION FAILED - Still using random ID!');
+            console.error('🆔 [POSTHOG_ID] Expected:', user.id.toString(), 'Got:', newId);
+          }
+        }, 500);
+      }, 100);
     }
   }, [posthog, user]);
 
