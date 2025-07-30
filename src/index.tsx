@@ -19,7 +19,11 @@ const options = {
   debug: true, // Enable PostHog debug mode to see more details
   // Use localStorage only to avoid cookie domain issues
   persistence: 'localStorage' as const,
-  // Disable automatic distinct ID generation
+  // Enable autocapture for comprehensive event tracking
+  autocapture: true,
+  capture_pageview: true,
+  capture_pageleave: true,
+  // Keep session recording disabled to avoid conflicts
   disable_session_recording: true,
   loaded: (posthog: any) => {
     console.log('🎉 [POSTHOG] PostHog loaded callback triggered');
@@ -28,12 +32,14 @@ const options = {
     console.log('🎉 [POSTHOG] Current domain:', window.location.hostname);
     console.log('🎉 [POSTHOG] PostHog config:', {
       api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
-      persistence: 'localStorage'
+      persistence: 'localStorage',
+      autocapture: true
     });
     
-    // Immediately opt out to prevent automatic ID generation
+    // Temporarily opt out to prevent automatic ID generation
+    // We'll opt back in after user identification
     posthog.opt_out_capturing();
-    console.log('🎉 [POSTHOG] Opted out of capturing to prevent auto ID generation');
+    console.log('🎉 [POSTHOG] Temporarily opted out - will enable after user identification');
   }
 }
 

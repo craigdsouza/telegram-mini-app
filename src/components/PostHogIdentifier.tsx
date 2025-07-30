@@ -21,8 +21,9 @@ export const PostHogIdentifier: React.FC = () => {
       setTimeout(() => {
         console.log('🆔 [POSTHOG_ID] Setting up user identification...');
         
-        // First opt in to enable capturing
+        // First opt in to enable capturing and autocapture
         posthog.opt_in_capturing();
+        console.log('🆔 [POSTHOG_ID] Enabled capturing and autocapture');
         
         // Now identify with Telegram ID
         console.log('🆔 [POSTHOG_ID] Identifying user with Telegram ID:', user.id.toString());
@@ -52,6 +53,13 @@ export const PostHogIdentifier: React.FC = () => {
           if (newId !== user.id.toString()) {
             console.error('🆔 [POSTHOG_ID] IDENTIFICATION FAILED - Still using random ID!');
             console.error('🆔 [POSTHOG_ID] Expected:', user.id.toString(), 'Got:', newId);
+          } else {
+            // Test autocapture by sending a test event
+            console.log('🆔 [POSTHOG_ID] Testing autocapture with a test event...');
+            posthog.capture('autocapture_test', {
+              user_id: user.id.toString(),
+              test_type: 'autocapture_verification'
+            });
           }
         }, 500);
       }, 100);
