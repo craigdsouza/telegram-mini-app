@@ -14,7 +14,7 @@ export const DashboardPanel = () => {
   const initDataRaw = useSignal(_initDataRaw);
   const initDataState = useSignal(_initDataState);
   const user = useMemo(() => initDataState?.user, [initDataState]);
-  const { trackCalendarDateClicked, trackExpenseAddStarted, trackExpenseAdded } = usePostHogEvents();
+  const { trackCalendarDateClicked, trackExpenseAdded } = usePostHogEvents();
 
   const [budgetData, setBudgetData] = useState<any>(null);
   const [loadingBudget, setLoadingBudget] = useState(false);

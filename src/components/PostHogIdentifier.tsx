@@ -60,6 +60,14 @@ export const PostHogIdentifier: React.FC = () => {
               user_id: user.id.toString(),
               test_type: 'autocapture_verification'
             });
+            
+            // Test our custom event
+            console.log('🆔 [POSTHOG_ID] Testing custom event...');
+            posthog.capture('test_custom_event', {
+              user_id: user.id.toString(),
+              test_type: 'custom_event_verification',
+              timestamp: new Date().toISOString()
+            });
           }
         }, 500);
       }, 100);

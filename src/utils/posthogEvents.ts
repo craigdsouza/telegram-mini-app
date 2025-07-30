@@ -41,6 +41,11 @@ export const usePostHogEvents = () => {
       return;
     }
 
+    // Debug: Check if PostHog is opted in
+    const isOptedIn = posthog.has_opted_out_capturing ? !posthog.has_opted_out_capturing() : true;
+    console.log('🎯 [POSTHOG EVENTS] PostHog opted in status:', isOptedIn);
+    console.log('🎯 [POSTHOG EVENTS] Current distinct ID:', posthog.get_distinct_id());
+
     console.log('🎯 [POSTHOG EVENTS] Tracking expense_added:', eventData);
     posthog.capture(POSTHOG_EVENTS.EXPENSE_ADDED, {
       ...eventData,

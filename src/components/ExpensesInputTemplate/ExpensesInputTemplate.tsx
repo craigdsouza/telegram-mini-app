@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { Send } from 'lucide-react';
 import { DateSelector } from '@/components/DateSelector/DateSelector';
 import { DateDisplay } from '@/components/DateSelector/DateDisplay';

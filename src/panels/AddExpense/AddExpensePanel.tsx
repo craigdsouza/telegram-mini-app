@@ -12,6 +12,7 @@ export const AddExpensePanel: React.FC = () => {
   const initDataState = useSignal(_initDataState);
   const user = useMemo(() => initDataState?.user, [initDataState]);
   const { trackExpenseAddStarted, trackExpenseAdded } = usePostHogEvents();
+  console.log('💰 [ADD EXPENSE]: trackExpenseAddStarted', trackExpenseAddStarted);
   console.log('💰 [ADD EXPENSE] User:', internalUserId, user);
 
 
