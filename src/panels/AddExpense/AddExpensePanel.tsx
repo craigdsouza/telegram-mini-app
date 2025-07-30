@@ -3,6 +3,7 @@ import { initDataRaw as _initDataRaw, initDataState as _initDataState, useSignal
 import { ExpensesInputTemplate } from '@/components/ExpensesInputTemplate/ExpensesInputTemplate';
 import { ExpensesTable } from '@/components/TableView/ExpensesTable';
 import { useUser } from '@/contexts/UserContext';
+import { usePostHogEvents } from '@/utils/posthogEvents';
 import './AddExpensePanel.css';
 
 export const AddExpensePanel: React.FC = () => {
@@ -10,7 +11,10 @@ export const AddExpensePanel: React.FC = () => {
   const initDataRaw = useSignal(_initDataRaw);
   const initDataState = useSignal(_initDataState);
   const user = useMemo(() => initDataState?.user, [initDataState]);
+  const { trackExpenseAddStarted, trackExpenseAdded } = usePostHogEvents();
   console.log('💰 [ADD EXPENSE] User:', internalUserId, user);
+
+
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -62,6 +66,11 @@ export const AddExpensePanel: React.FC = () => {
       console.log('[AddExpensePanel] Setting highlightNewEntry to true');
       setHighlightNewEntry(true);
       setNewExpenseData(expenseData);
+      
+      // Track successful expense addition
+      trackExpenseAdded({
+        source: 'add_expense_page'
+      });
       
     } catch (error: any) {
       setSubmitError(error.message || 'Failed to save expense');

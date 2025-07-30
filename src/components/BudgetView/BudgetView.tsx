@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { usePostHogEvents } from '@/utils/posthogEvents';
 import './BudgetView.css';
 
 interface BudgetViewProps {
@@ -32,6 +33,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
+  const { trackBudgetViewExpanded } = usePostHogEvents();
 
   if (!budget || budget <= 0) {
     return (
@@ -45,7 +47,18 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
   const progressColor = isOverBudget ? 'over' : 'normal';
 
   const handleClick = () => {
-    setIsExpanded(!isExpanded);
+    const newExpandedState = !isExpanded;
+    setIsExpanded(newExpandedState);
+    
+    // Track when user expands the budget view
+    if (newExpandedState) {
+      trackBudgetViewExpanded({
+        is_family: isFamily,
+        custom_period: customPeriod,
+        budget_percentage: budgetPercentage,
+        is_over_budget: budgetPercentage > 100
+      });
+    }
   };
 
   const handleMouseDown = () => {

@@ -5,6 +5,7 @@ import { Calendar } from '@/components/CalendarView/Calendar';
 import { ExpensesInputTemplate } from '@/components/ExpensesInputTemplate/ExpensesInputTemplate';
 import { ExpensesTable } from '@/components/TableView/ExpensesTable';
 import { useUser } from '@/contexts/UserContext';
+import { usePostHogEvents } from '@/utils/posthogEvents';
 import './DashboardPanel.css';
 
 export const DashboardPanel = () => {
@@ -13,6 +14,7 @@ export const DashboardPanel = () => {
   const initDataRaw = useSignal(_initDataRaw);
   const initDataState = useSignal(_initDataState);
   const user = useMemo(() => initDataState?.user, [initDataState]);
+  const { trackCalendarDateClicked, trackExpenseAddStarted, trackExpenseAdded } = usePostHogEvents();
 
   const [budgetData, setBudgetData] = useState<any>(null);
   const [loadingBudget, setLoadingBudget] = useState(false);
@@ -39,10 +41,24 @@ export const DashboardPanel = () => {
       // If clicking the same date, toggle the components off
       setSelectedDate(null);
       setShowExpensesComponents(false);
+      
+      // Track calendar date click to hide expense input
+      trackCalendarDateClicked({
+        date,
+        has_existing_expenses: entryDates.includes(date),
+        action: 'hide_expense_input'
+      });
     } else {
       // If clicking a different date, show the components
       setSelectedDate(date);
       setShowExpensesComponents(true);
+      
+      // Track calendar date click to show expense input
+      trackCalendarDateClicked({
+        date,
+        has_existing_expenses: entryDates.includes(date),
+        action: 'show_expense_input'
+      });
     }
   };
 
@@ -84,6 +100,11 @@ export const DashboardPanel = () => {
       
       // Trigger refresh of calendar and expenses table
       setRefreshTrigger(prev => prev + 1);
+      
+      // Track successful expense addition from calendar
+      trackExpenseAdded({
+        source: 'calendar_date_click'
+      });
     } catch (error: any) {
       setErrorMessage(error.message || 'Failed to add expense');
     } finally {

@@ -20,9 +20,9 @@ export function App() {
   // Basic PostHog status logging
   useEffect(() => {
     if (posthog && user?.id) {
-      console.log('🔍 [POSTHOG] App level - PostHog ready with user:', user.id);
+      console.log('        [POSTHOG APP] App level - PostHog ready with user:', user.id);
     } else if (posthog && !user?.id) {
-      console.log('⏳ [POSTHOG] App level - Waiting for user data...');
+      console.log('        [POSTHOG APP] App level - Waiting for user data...');
     }
   }, [posthog, user]);
 

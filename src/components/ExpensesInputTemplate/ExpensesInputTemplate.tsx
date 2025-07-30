@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Send } from 'lucide-react';
 import { DateSelector } from '@/components/DateSelector/DateSelector';
 import { DateDisplay } from '@/components/DateSelector/DateDisplay';
 import { ModeSelector } from '@/components/ModeSelector/ModeSelector';
 import { CategorySelector } from '@/components/CategorySelector/CategorySelector';
+import { usePostHogEvents } from '@/utils/posthogEvents';
 import './ExpensesInputTemplate.css';
 
 interface ExpensesInputTemplateProps {
@@ -36,6 +37,9 @@ export const ExpensesInputTemplate: React.FC<ExpensesInputTemplateProps> = ({
   const [description, setDescription] = useState('');
   const [selectedMode, setSelectedMode] = useState<'UPI' | 'CASH' | 'DEBIT CARD' | 'CREDIT CARD'>('UPI');
   const [selectedCategory, setSelectedCategory] = useState<string>('Groceries');
+  const { trackExpenseAddStarted } = usePostHogEvents();
+
+
 
   const handleSendMessage = () => {
     if (amount.trim() && !isSubmitting) {
@@ -81,6 +85,14 @@ export const ExpensesInputTemplate: React.FC<ExpensesInputTemplateProps> = ({
     }
   };
 
+  const handleAmountClick = () => {
+    // Track when user clicks on amount input to start adding expense
+    trackExpenseAddStarted({
+      source: variant === 'dashboard' ? 'calendar_date_click' : 'add_expense_page',
+      selected_date: variant === 'dashboard' ? selectedDate : undefined
+    });
+  };
+
   // Build CSS classes
   const containerClasses = [
     'template-input-container',
@@ -106,6 +118,7 @@ export const ExpensesInputTemplate: React.FC<ExpensesInputTemplateProps> = ({
                 value={amount}
                 onChange={handleAmountChange}
                 onKeyPress={handleKeyPress}
+                onClick={handleAmountClick}
               />
               <ModeSelector value={selectedMode} onChange={setSelectedMode} />
               <span className="template-text-part"> on </span>

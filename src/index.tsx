@@ -24,13 +24,11 @@ const options = {
   capture_pageview: true,
   capture_pageleave: true,
   // Keep session recording disabled to avoid conflicts
-  disable_session_recording: true,
+  disable_session_recording: false,
   loaded: (posthog: any) => {
-    console.log('🎉 [POSTHOG] PostHog loaded callback triggered');
-    console.log('🎉 [POSTHOG] Current distinct ID after load:', posthog.get_distinct_id());
-    console.log('🎉 [POSTHOG] Current URL:', window.location.href);
-    console.log('🎉 [POSTHOG] Current domain:', window.location.hostname);
-    console.log('🎉 [POSTHOG] PostHog config:', {
+    console.log('🎉 [POSTHOG index.tsx] PostHog loaded callback triggered');
+    console.log('🎉 [POSTHOG index.tsx] Current distinct ID after load:', posthog.get_distinct_id());
+    console.log('🎉 [POSTHOG index.tsx] PostHog config:', {
       api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
       persistence: 'localStorage',
       autocapture: true
@@ -39,7 +37,7 @@ const options = {
     // Temporarily opt out to prevent automatic ID generation
     // We'll opt back in after user identification
     posthog.opt_out_capturing();
-    console.log('🎉 [POSTHOG] Temporarily opted out - will enable after user identification');
+    console.log('🎉 [POSTHOG index.tsx] Temporarily opted out - will enable after user identification');
   }
 }
 

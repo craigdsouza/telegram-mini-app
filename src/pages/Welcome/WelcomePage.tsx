@@ -25,8 +25,8 @@ export const WelcomePage: React.FC = () => {
 
   // Test PostHog event when page loads
   useEffect(() => {
-    console.log('🔍 [POSTHOG] Testing PostHog event capture...');
-    console.log('🔍 [POSTHOG] PostHog instance:', posthog);
+    console.log('    [POSTHOG WELCOME] Testing PostHog event capture...');
+    console.log('    [POSTHOG WELCOME] PostHog instance:', posthog);
     
     if (posthog) {
       try {
@@ -35,19 +35,19 @@ export const WelcomePage: React.FC = () => {
           user_first_name: firstName,
           timestamp: new Date().toISOString()
         });
-        console.log('✅ [POSTHOG] Event captured successfully: welcome_page_loaded');
+        console.log('    [POSTHOG WELCOME] Event captured successfully: welcome_page_loaded');
       } catch (error) {
-        console.error('❌ [POSTHOG] Failed to capture event:', error);
+        console.error('    [POSTHOG WELCOME] Failed to capture event:', error);
       }
     } else {
-      console.warn('⚠️ [POSTHOG] PostHog instance not available');
+      console.warn('    [POSTHOG WELCOME] PostHog instance not available');
     }
   }, [posthog, user?.id, firstName]);
 
   // Redirect to home if onboarding is already completed
   useEffect(() => {
     if (isComplete) {
-      console.log('🎯 [ONBOARDING] User has completed onboarding, redirecting to home');
+      console.log('🎯 [ONBOARDING WELCOME] User has completed onboarding, redirecting to home');
       navigate('/home');
     }
   }, [isComplete, navigate]);
@@ -83,7 +83,7 @@ export const WelcomePage: React.FC = () => {
       }, 500);
       
     } catch (error) {
-      console.error('🎯 [ONBOARDING] Error completing welcome step:', error);
+      console.error('🎯 [ONBOARDING WELCOME] Error completing welcome step:', error);
       
       // Still navigate even if API call fails
       setTimeout(() => {
