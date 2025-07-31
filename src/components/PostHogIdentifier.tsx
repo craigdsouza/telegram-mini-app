@@ -36,18 +36,23 @@ export const PostHogIdentifier: React.FC = () => {
           source: 'telegram_webapp'
         });
         
-        hasIdentified.current = true;
+        // Add delay after identify to ensure PostHog's internal state is ready
+        // This is the fix suggested by PostHog support for batching issues
+        setTimeout(() => {
+          console.log('🆔 [POSTHOG_ID] PostHog internal state should now be ready (150ms delay)');
+          hasIdentified.current = true;
+        }, 150);
         
         // Verify identification worked with multiple checks
         setTimeout(() => {
           const newId = posthog.get_distinct_id();
-          console.log('🆔 [POSTHOG_ID] Verification (100ms) - New distinct ID:', newId);
+          console.log('🆔 [POSTHOG_ID] Verification (250ms) - New distinct ID:', newId);
           console.log('🆔 [POSTHOG_ID] Identification successful?', newId === user.id.toString());
-        }, 100);
+        }, 250);
         
         setTimeout(() => {
           const newId = posthog.get_distinct_id();
-          console.log('🆔 [POSTHOG_ID] Verification (500ms) - New distinct ID:', newId);
+          console.log('🆔 [POSTHOG_ID] Verification (650ms) - New distinct ID:', newId);
           console.log('🆔 [POSTHOG_ID] Identification successful?', newId === user.id.toString());
           
           if (newId !== user.id.toString()) {
