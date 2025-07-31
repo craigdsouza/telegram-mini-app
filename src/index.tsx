@@ -38,10 +38,9 @@ const options = {
     
 
     
-    // Temporarily opt out to prevent automatic ID generation
-    // We'll opt back in after user identification
-    posthog.opt_out_capturing();
-    console.log('🎉 [POSTHOG index.tsx] Temporarily opted out - will enable after user identification');
+    // PostHog is now ready for normal operation
+    // User identification will happen in PostHogIdentifier component
+    console.log('🎉 [POSTHOG index.tsx] PostHog loaded and ready for identification');
     
     // Set up periodic flushing to ensure events are sent
     setInterval(() => {
