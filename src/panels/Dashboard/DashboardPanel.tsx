@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { initDataRaw as _initDataRaw, initDataState as _initDataState, useSignal } from '@telegram-apps/sdk-react';
 import { BudgetView } from '@/components/BudgetView/BudgetView';
+import { BudgetViewSkeleton } from '@/components/BudgetView/BudgetViewSkeleton';
 import { Calendar } from '@/components/CalendarView/Calendar';
+import { CalendarSkeleton } from '@/components/CalendarView/CalendarSkeleton';
 import { ExpensesInputTemplate } from '@/components/ExpensesInputTemplate/ExpensesInputTemplate';
 import { ExpensesTable } from '@/components/TableView/ExpensesTable';
 import { useUser } from '@/contexts/UserContext';
@@ -257,17 +259,16 @@ export const DashboardPanel = () => {
     return <div style={{ color: '#e74c3c', fontSize: 16, textAlign: 'center' }}>Error loading user data: {userError}</div>;
   }
 
-  if (loadingDates) {
-    return <div style={{ color: '#888', fontSize: 16, textAlign: 'center' }}>Loading Dashboard...</div>;
-  }
+  // Show error state if dates failed to load
   if (datesError) {
     return <div style={{ color: '#e74c3c', fontSize: 16, textAlign: 'center' }}>Error loading Dashboard: {datesError}</div>;
   }
 
   return (
     <div className="dashboard-panel-root">
+      {/* BudgetView with skeleton loading */}
       {loadingBudget ? (
-        <div className="dashboard-budget-loading">Loading budget data...</div>
+        <BudgetViewSkeleton />
       ) : budgetError ? (
         <div className="dashboard-budget-error">Error: {budgetError}</div>
       ) : (
@@ -302,13 +303,18 @@ export const DashboardPanel = () => {
         />
       )}
       
-      <Calendar 
-        entryDates={entryDates} 
-        onDateClick={handleDateClick}
-        currentMonth={currentMonth}
-        onPreviousMonth={goToPreviousMonth}
-        onNextMonth={goToNextMonth}
-      />
+      {/* Calendar with skeleton loading */}
+      {loadingDates ? (
+        <CalendarSkeleton />
+      ) : (
+        <Calendar 
+          entryDates={entryDates} 
+          onDateClick={handleDateClick}
+          currentMonth={currentMonth}
+          onPreviousMonth={goToPreviousMonth}
+          onNextMonth={goToNextMonth}
+        />
+      )}
       
       {/* ExpensesTable - Show when a date is selected */}
       {showExpensesComponents && internalUserId && initDataRaw && (

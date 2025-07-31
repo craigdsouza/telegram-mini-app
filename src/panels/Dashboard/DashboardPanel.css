@@ -1,4 +1,16 @@
 .dashboard-panel-root {
   padding:16px;
   margin-top: 16px;
+}
+
+.dashboard-budget-error {
+  background: var(--background);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  color: #e74c3c;
+  font-size: 14px;
+  text-align: center;
+  border: 1px solid #e74c3c;
 } 
