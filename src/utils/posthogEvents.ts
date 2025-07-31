@@ -51,6 +51,11 @@ export const usePostHogEvents = () => {
       ...eventData,
       timestamp: new Date().toISOString(),
     });
+    
+    // Force immediate sending
+    setTimeout(() => {
+      (posthog as any).flush?.();
+    }, 100);
   };
 
   const trackExpenseAddStarted = (eventData: ExpenseAddStartedEvent) => {
@@ -64,6 +69,11 @@ export const usePostHogEvents = () => {
       ...eventData,
       timestamp: new Date().toISOString(),
     });
+    
+    // Force immediate sending
+    setTimeout(() => {
+      (posthog as any).flush?.();
+    }, 100);
   };
 
   const trackCalendarDateClicked = (eventData: CalendarDateClickedEvent) => {
@@ -77,6 +87,11 @@ export const usePostHogEvents = () => {
       ...eventData,
       timestamp: new Date().toISOString(),
     });
+    
+    // Force immediate sending
+    setTimeout(() => {
+      (posthog as any).flush?.();
+    }, 100);
   };
 
   const trackBudgetViewExpanded = (eventData: BudgetViewExpandedEvent) => {
@@ -90,6 +105,11 @@ export const usePostHogEvents = () => {
       ...eventData,
       timestamp: new Date().toISOString(),
     });
+    
+    // Force immediate sending
+    setTimeout(() => {
+      (posthog as any).flush?.();
+    }, 100);
   };
 
   return {
