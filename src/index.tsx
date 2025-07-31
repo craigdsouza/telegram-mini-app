@@ -36,6 +36,18 @@ const options = {
       autocapture: true
     });
     
+    // Set up immediate sending for all events
+    posthog.capture = ((originalCapture: any) => {
+      return function(this: any, event: string, properties?: any) {
+        const result = originalCapture.call(this, event, properties);
+        // Force immediate sending after each capture
+        setTimeout(() => {
+          this.flush?.();
+        }, 100);
+        return result;
+      };
+    })(posthog.capture);
+    
     // Temporarily opt out to prevent automatic ID generation
     // We'll opt back in after user identification
     posthog.opt_out_capturing();
