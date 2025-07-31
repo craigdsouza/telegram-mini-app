@@ -51,6 +51,9 @@ export const usePostHogEvents = () => {
       ...eventData,
       timestamp: new Date().toISOString(),
     });
+    
+    // Force immediate sending to avoid batching delays
+    (posthog as any).flush?.();
   };
 
   const trackExpenseAddStarted = (eventData: ExpenseAddStartedEvent) => {
@@ -64,6 +67,9 @@ export const usePostHogEvents = () => {
       ...eventData,
       timestamp: new Date().toISOString(),
     });
+    
+    // Force immediate sending to avoid batching delays
+    (posthog as any).flush?.();
   };
 
   const trackCalendarDateClicked = (eventData: CalendarDateClickedEvent) => {
@@ -77,6 +83,9 @@ export const usePostHogEvents = () => {
       ...eventData,
       timestamp: new Date().toISOString(),
     });
+    
+    // Force immediate sending to avoid batching delays
+    (posthog as any).flush?.();
   };
 
   const trackBudgetViewExpanded = (eventData: BudgetViewExpandedEvent) => {
@@ -90,6 +99,9 @@ export const usePostHogEvents = () => {
       ...eventData,
       timestamp: new Date().toISOString(),
     });
+    
+    // Force immediate sending to avoid batching delays
+    (posthog as any).flush?.();
   };
 
   return {

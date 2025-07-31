@@ -25,6 +25,8 @@ const options = {
   capture_pageleave: true,
   // Keep session recording disabled to avoid conflicts
   disable_session_recording: false,
+  // Reduce batching delays for immediate event sending
+  send_feature_flags: false,
   loaded: (posthog: any) => {
     console.log('🎉 [POSTHOG index.tsx] PostHog loaded callback triggered');
     console.log('🎉 [POSTHOG index.tsx] Current distinct ID after load:', posthog.get_distinct_id());
@@ -38,6 +40,13 @@ const options = {
     // We'll opt back in after user identification
     posthog.opt_out_capturing();
     console.log('🎉 [POSTHOG index.tsx] Temporarily opted out - will enable after user identification');
+    
+    // Set up periodic flushing to ensure events are sent
+    setInterval(() => {
+      if (posthog && !posthog.has_opted_out_capturing()) {
+        (posthog as any).flush?.();
+      }
+    }, 10000); // Flush every 10 seconds
   }
 }
 
