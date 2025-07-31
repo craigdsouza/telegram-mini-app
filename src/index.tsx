@@ -16,7 +16,7 @@ import './mockEnv.ts';
 
 const options = {
   api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
-  debug: true, // Enable PostHog debug mode to see more details
+  debug: false, // Enable PostHog debug mode to see more details
   // Use localStorage only to avoid cookie domain issues
   persistence: 'localStorage' as const,
   // Enable autocapture for comprehensive event tracking

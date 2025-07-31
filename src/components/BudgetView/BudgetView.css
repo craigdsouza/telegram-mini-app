@@ -32,10 +32,59 @@
 }
 
 .budgetview-header {
+  margin-bottom: 8px;
+}
+
+.budgetview-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.budgetview-subtitle-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+}
+
+.budgetview-month {
+  font-size: 14px;
+  color: var(--color-text-dark);
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+.budgetview-nav-button {
+  background: none;
+  border: none;
+  color: var(--color-text-dark);
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+}
+
+.budgetview-nav-button:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--color-primary);
+}
+
+.budgetview-nav-button:active {
+  background: rgba(0, 0, 0, 0.1);
+  transform: scale(0.95);
+}
+
+.budgetview-nav-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-primary);
 }
 
 .budgetview-title {

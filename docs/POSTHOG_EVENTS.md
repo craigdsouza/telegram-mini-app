@@ -40,12 +40,21 @@ The app tracks user interactions related to expense management to understand use
 
 ## Implementation Details
 
+### PostHog Configuration
+The app uses a **minimal identification approach** to ensure real-time event sending:
+
+1. **PostHog loads normally** without any opt-out/opt-in cycles
+2. **User identification happens** via `posthog.identify()` when Telegram user data is available
+3. **No `reset()` calls** that could corrupt PostHog's internal batching mechanisms
+4. **Events send immediately** without requiring page refresh
+
 ### Event Tracking Utility
 All events are managed through the `usePostHogEvents` hook in `src/utils/posthogEvents.ts`. This provides:
 - Consistent event naming
 - Type-safe event properties
 - Centralized logging
 - Error handling for when PostHog is not available
+- **Immediate event sending** via `posthog.flush()` calls
 
 ### Components with Event Tracking
 
@@ -188,6 +197,14 @@ To test that events are being captured correctly:
 2. Look for log messages starting with `🎯 [POSTHOG EVENTS]`
 3. Check your PostHog dashboard for the events
 4. Verify that user identification is working (events should be associated with Telegram user IDs)
+5. **Verify real-time sending** - events should appear within 1-2 seconds without page refresh
+
+### Troubleshooting
+
+If events are not appearing in real-time:
+- Check that PostHog is properly initialized (look for `🎉 [POSTHOG index.tsx]` logs)
+- Verify user identification is successful (look for `🆔 [POSTHOG_ID]` logs)
+- Ensure no `reset()` or opt-out/opt-in cycles are interfering with PostHog's internal state
 
 ## Future Enhancements
 
@@ -196,4 +213,20 @@ Potential additional events to consider:
 - `expense_deleted` - When users delete expenses
 - `category_changed` - When users change expense categories
 - `budget_viewed` - When users view budget information
-- `calendar_viewed` - When users expand/collapse the calendar 
+- `calendar_viewed` - When users expand/collapse the calendar
+
+## Lessons Learned
+
+### What Worked
+- **Minimal identification approach** - Simple `posthog.identify()` without complex state management
+- **No `reset()` calls** - Avoids corrupting PostHog's internal batching mechanisms
+- **No opt-out/opt-in cycles** - PostHog works best when left in its natural state
+- **Immediate `flush()` calls** - Ensures events are sent right away
+
+### What Didn't Work
+- **Complex state management** with `reset()`, `opt_out_capturing()`, and `opt_in_capturing()`
+- **PostHog method overrides** that broke core functionality
+- **Excessive delays and timeouts** that didn't address the root cause
+
+### Key Insight
+**Real-time events worked with anonymous users but broke after implementing complex identification flows.** The solution was to keep PostHog's internal state intact and use the simplest possible identification method. 

@@ -17,13 +17,52 @@
 }
 
 .calendar-title {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-weight: 700;
   font-size: 20px;
   margin-bottom: 0px;
   letter-spacing: var(--tracking-wide);
   font-family: var(--font-primary);
   color: var(--color-text-dark);
+}
+
+.calendar-month-name {
+  flex: 1;
+  text-align: center;
+}
+
+.calendar-nav-button {
+  background: none;
+  border: none;
+  color: var(--color-text-dark);
+  font-size: 24px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+}
+
+.calendar-nav-button:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--color-primary);
+}
+
+.calendar-nav-button:active {
+  background: rgba(0, 0, 0, 0.1);
+  transform: scale(0.95);
+}
+
+.calendar-nav-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-primary);
 }
 
 .calendar-weekdays-row {

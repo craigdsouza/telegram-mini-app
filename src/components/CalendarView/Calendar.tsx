@@ -22,9 +22,18 @@ const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 interface CalendarProps {
   entryDates?: number[];
   onDateClick?: (date: number) => void;
+  currentMonth: Date;
+  onPreviousMonth: () => void;
+  onNextMonth: () => void;
 }
 
-export const Calendar: React.FC<CalendarProps> = ({ entryDates = [], onDateClick }) => {
+export const Calendar: React.FC<CalendarProps> = ({ 
+  entryDates = [], 
+  onDateClick,
+  currentMonth,
+  onPreviousMonth,
+  onNextMonth
+}) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [isPressed, setIsPressed] = useState(false);
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
@@ -39,9 +48,8 @@ export const Calendar: React.FC<CalendarProps> = ({ entryDates = [], onDateClick
   console.log('[DEBUG] user:', user);
 
   // console.log('entryDates prop:', entryDates, 'types:', entryDates.map(e => typeof e));
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
+  const year = currentMonth.getFullYear();
+  const month = currentMonth.getMonth();
   const daysInMonth = getDaysInMonth(year, month);
   const firstDayOfWeek = getFirstDayOfWeek(year, month);
 
@@ -85,6 +93,16 @@ export const Calendar: React.FC<CalendarProps> = ({ entryDates = [], onDateClick
     }
   };
 
+  const handlePreviousMonth = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering the calendar expand/collapse
+    onPreviousMonth();
+  };
+
+  const handleNextMonth = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering the calendar expand/collapse
+    onNextMonth();
+  };
+
   // Build CSS classes
   const cardClasses = [
     'calendar-root',
@@ -102,7 +120,23 @@ export const Calendar: React.FC<CalendarProps> = ({ entryDates = [], onDateClick
       onTouchEnd={handleMouseUp}
     >
       <div className="calendar-title">
-        {today.toLocaleString('default', { month: 'long' })}, {year}
+        <button 
+          className="calendar-nav-button calendar-nav-prev"
+          onClick={handlePreviousMonth}
+          aria-label="Previous month"
+        >
+          ‹
+        </button>
+        <span className="calendar-month-name">
+          {currentMonth.toLocaleString('default', { month: 'long' })}, {year}
+        </span>
+        <button 
+          className="calendar-nav-button calendar-nav-next"
+          onClick={handleNextMonth}
+          aria-label="Next month"
+        >
+          ›
+        </button>
       </div>
       
       {/* Calendar content - Only show when expanded */}
@@ -115,7 +149,10 @@ export const Calendar: React.FC<CalendarProps> = ({ entryDates = [], onDateClick
           </div>
           <div className="calendar-days-grid">
             {days.map((d, i) => {
-              const isToday = d === today.getDate();
+              const today = new Date();
+              const isToday = d === today.getDate() && 
+                             currentMonth.getMonth() === today.getMonth() && 
+                             currentMonth.getFullYear() === today.getFullYear();
               const hasEntry = d !== null && entryDatesSet.has(d);
               const isSelected = d === selectedDate;
               
@@ -140,7 +177,7 @@ export const Calendar: React.FC<CalendarProps> = ({ entryDates = [], onDateClick
           <EntrySummary
             entryCount={entryDates.length}
             totalDays={daysInMonth}
-            monthName={today.toLocaleString('default', { month: 'long' })}
+            monthName={currentMonth.toLocaleString('default', { month: 'long' })}
           />
         </>
       )}

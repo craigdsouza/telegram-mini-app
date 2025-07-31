@@ -8,6 +8,14 @@ import { useUser } from '@/contexts/UserContext';
 import { usePostHogEvents } from '@/utils/posthogEvents';
 import './DashboardPanel.css';
 
+// Helper function to get month key for localStorage
+const getMonthKey = (date: Date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+
+// Helper function to get month name
+const getMonthName = (date: Date) => {
+  return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+};
+
 export const DashboardPanel = () => {
   const { internalUserId, telegramUserId, isLoading: userLoading, error: userError } = useUser();
   console.log('💰 [DASHBOARD] User:', internalUserId, telegramUserId);
@@ -15,6 +23,45 @@ export const DashboardPanel = () => {
   const initDataState = useSignal(_initDataState);
   const user = useMemo(() => initDataState?.user, [initDataState]);
   const { trackCalendarDateClicked, trackExpenseAdded } = usePostHogEvents();
+
+  // Shared month state management
+  const [currentMonth, setCurrentMonth] = useState<Date>(() => {
+    // Try to get last viewed month from localStorage
+    const lastViewedMonth = localStorage.getItem('lastViewedMonth');
+    if (lastViewedMonth) {
+      try {
+        const [year, month] = lastViewedMonth.split('-').map(Number);
+        return new Date(year, month - 1, 1); // month is 0-indexed
+      } catch (error) {
+        console.warn('Failed to parse last viewed month, using current month');
+      }
+    }
+    // Default to current month
+    return new Date();
+  });
+
+  // Month navigation functions
+  const goToPreviousMonth = () => {
+    setCurrentMonth(prev => {
+      const newMonth = new Date(prev.getFullYear(), prev.getMonth() - 1, 1);
+      localStorage.setItem('lastViewedMonth', getMonthKey(newMonth));
+      return newMonth;
+    });
+  };
+
+  const goToNextMonth = () => {
+    setCurrentMonth(prev => {
+      const newMonth = new Date(prev.getFullYear(), prev.getMonth() + 1, 1);
+      localStorage.setItem('lastViewedMonth', getMonthKey(newMonth));
+      return newMonth;
+    });
+  };
+
+  // Update localStorage when currentMonth changes
+  useEffect(() => {
+    localStorage.setItem('lastViewedMonth', getMonthKey(currentMonth));
+    console.log('💰 [DASHBOARD] Current month changed to:', getMonthName(currentMonth));
+  }, [currentMonth]);
 
   const [budgetData, setBudgetData] = useState<any>(null);
   const [loadingBudget, setLoadingBudget] = useState(false);
@@ -125,9 +172,8 @@ export const DashboardPanel = () => {
       setLoadingDates(true);
       setDatesError(null);
       try {
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = today.getMonth() + 1;
+        const year = currentMonth.getFullYear();
+        const month = currentMonth.getMonth() + 1;
         const apiUrl = import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app';
         const requestUrl = `${apiUrl}/api/user/${user.id}/expenses/dates?year=${year}&month=${month}`;
         console.log('💰 [DATES] Fetching from URL:', requestUrl);
@@ -157,7 +203,7 @@ export const DashboardPanel = () => {
       }
     };
     fetchEntryDates();
-  }, [initDataRaw, user, refreshTrigger]); // Added refreshTrigger dependency
+  }, [initDataRaw, user, refreshTrigger, currentMonth]); // Added currentMonth dependency
 
   useEffect(() => {
     if (!initDataRaw || !user) return;
@@ -165,9 +211,8 @@ export const DashboardPanel = () => {
       setLoadingBudget(true);
       setBudgetError(null);
       try {
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = today.getMonth() + 1;
+        const year = currentMonth.getFullYear();
+        const month = currentMonth.getMonth() + 1;
         const apiUrl = import.meta.env.VITE_API_URL || 'https://telegram-api-production-b3ef.up.railway.app';
         const requestUrl = `${apiUrl}/api/user/${user.id}/budget/current-month?year=${year}&month=${month}`;
         const controller = new AbortController();
@@ -193,14 +238,13 @@ export const DashboardPanel = () => {
       }
     };
     fetchBudgetData();
-  }, [initDataRaw, user]);
+  }, [initDataRaw, user, currentMonth]); // Added currentMonth dependency
 
-  const today = new Date();
-  const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+  const daysInMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate();
 
   // Construct selected date string for API
   const selectedDateString = selectedDate ? 
-    `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}` : 
+    `${currentMonth.getFullYear()}-${String(currentMonth.getMonth() + 1).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}` : 
     null;
 
   // Show loading state while user data is being fetched
@@ -230,7 +274,7 @@ export const DashboardPanel = () => {
         <BudgetView
           totalExpenses={budgetData?.totalExpenses || 0}
           budget={budgetData?.budget || null}
-          currentDate={budgetData?.currentDate || today.getDate()}
+          currentDate={budgetData?.currentDate || new Date().getDate()}
           daysInMonth={budgetData?.daysInMonth || daysInMonth}
           budgetPercentage={budgetData?.budgetPercentage || 0}
           datePercentage={budgetData?.datePercentage || 0}
@@ -239,6 +283,9 @@ export const DashboardPanel = () => {
           customPeriod={budgetData?.customPeriod || false}
           periodStart={budgetData?.periodStart}
           periodEnd={budgetData?.periodEnd}
+          currentMonth={currentMonth}
+          onPreviousMonth={goToPreviousMonth}
+          onNextMonth={goToNextMonth}
         />
       )}
       
@@ -255,7 +302,13 @@ export const DashboardPanel = () => {
         />
       )}
       
-      <Calendar entryDates={entryDates} onDateClick={handleDateClick} />
+      <Calendar 
+        entryDates={entryDates} 
+        onDateClick={handleDateClick}
+        currentMonth={currentMonth}
+        onPreviousMonth={goToPreviousMonth}
+        onNextMonth={goToNextMonth}
+      />
       
       {/* ExpensesTable - Show when a date is selected */}
       {showExpensesComponents && internalUserId && initDataRaw && (

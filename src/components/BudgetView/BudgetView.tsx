@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { usePostHogEvents } from '@/utils/posthogEvents';
 import './BudgetView.css';
 
@@ -14,6 +14,9 @@ interface BudgetViewProps {
   customPeriod?: boolean;
   periodStart?: string;
   periodEnd?: string;
+  currentMonth: Date;
+  onPreviousMonth: () => void;
+  onNextMonth: () => void;
 //   currency: string;
 }
 
@@ -29,11 +32,23 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
   customPeriod = false,
   // periodStart,
   // periodEnd,
+  currentMonth,
+  onPreviousMonth,
+  onNextMonth,
 //   currency
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(() => {
+    // Initialize from localStorage if available
+    const saved = localStorage.getItem('budgetViewExpanded');
+    return saved ? JSON.parse(saved) : false;
+  });
   const [isPressed, setIsPressed] = useState(false);
   const { trackBudgetViewExpanded } = usePostHogEvents();
+  
+  // Save expanded state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('budgetViewExpanded', JSON.stringify(isExpanded));
+  }, [isExpanded]);
 
   if (!budget || budget <= 0) {
     return (
@@ -73,6 +88,16 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
     setIsPressed(false);
   };
 
+  const handlePreviousMonth = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering the budget expand/collapse
+    onPreviousMonth();
+  };
+
+  const handleNextMonth = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering the budget expand/collapse
+    onNextMonth();
+  };
+
   // Build CSS classes
   const cardClasses = [
     'budgetview-root',
@@ -91,24 +116,50 @@ export const BudgetView: React.FC<BudgetViewProps> = ({
     >
       {/* Header */}
       <div className="budgetview-header">
-        <h3 className="budgetview-title">
-          {isFamily ? (
-            <>
-              👨‍👩‍👧‍👦 Family Budget
-            </>
-          ) : (
-            <>Budget Progress</>
-          )}
-        </h3>
-        <span className="budgetview-day">
-          {customPeriod ? (
-            <>
-              Day {currentDate} of {daysInMonth} <small className="budgetview-period-info"> (Custom period) </small>
-            </>
-          ) : (
-            <>Day {currentDate} of {daysInMonth}</>
-          )}
-        </span>
+        <div className="budgetview-title-row">
+          <button 
+            className="budgetview-nav-button budgetview-nav-prev"
+            onClick={handlePreviousMonth}
+            aria-label="Previous month"
+          >
+            ‹
+          </button>
+          <h3 className="budgetview-title">
+            {isFamily ? (
+              <>
+                👨‍👩‍👧‍👦 Family Budget
+              </>
+            ) : (
+              <>Budget Progress</>
+            )}
+          </h3>
+          <button 
+            className="budgetview-nav-button budgetview-nav-next"
+            onClick={handleNextMonth}
+            aria-label="Next month"
+          >
+            ›
+          </button>
+        </div>
+        <div className="budgetview-subtitle-row">
+          <span className="budgetview-month">
+            {currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}
+          </span>
+          <span className="budgetview-day">
+            {customPeriod ? (
+              <>
+                Day {currentDate} of {daysInMonth} <small className="budgetview-period-info"> (Custom period) </small>
+              </>
+            ) : (
+              <>
+                {currentMonth.getMonth() === new Date().getMonth() && currentMonth.getFullYear() === new Date().getFullYear() 
+                  ? `Day ${currentDate} of ${daysInMonth}`
+                  : `Month of ${daysInMonth} days`
+                }
+              </>
+            )}
+          </span>
+        </div>
       </div>
 
       {/* Progress Bar Container */}
