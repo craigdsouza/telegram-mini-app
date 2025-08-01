@@ -26,16 +26,6 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
     required: true,
     skipable: false,
     estimatedTime: 30
-  },
-  {
-    id: 1,
-    key: 'pledge',
-    title: 'Take the Pledge',
-    description: 'Commit to financial responsibility',
-    component: 'PledgePage',
-    required: true,
-    skipable: false,
-    estimatedTime: 45
   }
 ];
 
